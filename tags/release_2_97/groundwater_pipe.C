@@ -1,0 +1,297 @@
+// groundwater_pipe.C
+// 
+// Copyright 1996-2001 Per Abrahamsen and Søren Hansen
+// Copyright 2000-2001 KVL.
+//
+// This file is part of Daisy.
+// 
+// Daisy is free software; you can redistribute it and/or modify
+// it under the terms of the GNU Lesser Public License as published by
+// the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+// 
+// Daisy is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser Public License
+// along with Daisy; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+#include "groundwater.h"
+#include "log.h"
+#include "soil.h"
+#include "soil_heat.h"
+#include "soil_water.h"
+#include "tmpstream.h"
+#include "treelog.h"
+#include "mathlib.h"
+#include "check.h"
+
+class GroundwaterPipe : public Groundwater
+{
+  // Parameters
+  const double L;		// Distance between pipes. [cm]
+  const double x;		// Distance to nearest pipe. [cm]
+  const double pipe_position;	// Height pipes are placed above surface. [cm]
+  const double K_aquitard_;	// Conductivity of the aquitard [cm h^-1]
+  /*const*/ double Z_aquitard_;	// Vertical length of the aquitard [cm]
+  const double h_aquifer;	// Pressure potential in the aquifer [cm]
+  int i_drain;			// Node, drain
+
+  // Accessors.
+  double Z_aquitard () const
+  { return Z_aquitard_; }
+  double K_aquitard () const
+  { return K_aquitard_; }
+  void set_Z_aquitard (double value)
+  { Z_aquitard_ = value; }
+
+  // Data.
+  double height;		// Groundwater table height above surface. [cm]
+  double EqDrnFlow;
+  double DrainFlow;		// Drain flow [cm/h]
+  vector<double> S;		// Pipe drainage. [cm^3/cm^3/h]
+  double deep_percolation;	// [cm^3/cm^2/h]
+
+
+  // UZbottom.
+public:
+  type_t type () const
+  { 
+#ifdef USE_UPDATE_WATER
+    return pressure; 
+#else // !USE_UPDATE_WATER
+    return forced_flux;
+#endif // !USE_UPDATE_WATER
+  }
+  double q_bottom () const
+  { return -deep_percolation; }
+
+  bool accept_bottom (double)
+  { return true; }
+
+  // Identity
+  bool is_pipe () const
+  { return true; }
+  double pipe_height () const
+  { return pipe_position; }
+
+  // Simulation.
+public:
+  void tick (const Soil&, SoilWater&, double,
+	     const SoilHeat&, const Time&, Treelog&);
+  void output (Log& log) const;
+
+private:
+  double DeepPercolation (const Soil&);
+  double EquilibriumDrainFlow (const Soil&, const SoilHeat&);
+
+  // Accessors.
+  double table () const
+  { return height; }
+
+  // Create and Destroy.
+public:
+  void initialize (const Soil& soil, const Time&, Treelog& treelog)
+  {
+    const int size = soil.size ();
+    double largest = 0.0;
+    for (unsigned int i = 0; i < size; i++)
+      if (soil.dz (i) > largest)
+	largest = soil.dz (i);
+    if (largest > 10.0)
+      {
+	Treelog::Open nest (treelog, "Groundwater pipe");
+	TmpStream tmp;
+	tmp () << "WARNING: drained soil needs soil intervals < 10.0 cm; "
+	       << "largest is " << largest << "";
+	treelog.warning (tmp.str ());
+      }
+
+    i_drain = soil.interval_plus (pipe_position);
+    daisy_assert (i_drain > 0);
+    S.insert (S.end (), size, 0.0);
+  }
+  GroundwaterPipe (const AttributeList& al)
+    : Groundwater (al),
+      L (al.number ("L")),
+      x (al.check ("x") ? al.number ("x") : L / 2.0),
+      pipe_position (al.number ("pipe_position")),
+      K_aquitard_ (al.number ("K_aquitard")),
+      Z_aquitard_ (al.number ("Z_aquitard")),
+      h_aquifer (al.check ("h_aquifer") 
+		 ? al.number ("h_aquifer") 
+		 : Z_aquitard_),
+      height (al.check ("height") ? al.number ("height") : pipe_position)
+  { }
+  ~GroundwaterPipe ()
+  { }
+};
+
+void 
+GroundwaterPipe::tick (const Soil& soil, SoilWater& soil_water, 
+		       const double h_surface,
+		       const SoilHeat& soil_heat, const Time&, Treelog& msg)
+{
+  Treelog::Open nest (msg, "Groundwater " + name);
+
+  // Empty source.
+  fill (S.begin (), S.end (), 0.0);
+  
+  // Find groundwater height.
+  height = h_surface;
+  for (int i = soil.size () - 1; i >= 0; i--)
+    {
+      const double h = soil_water.h (i);
+      if (h < 0)
+	{
+	  const double zplus = soil.zplus (i);
+	  const double z = (i == 0) ? 0.0 : soil.zplus (i-1);
+	  const double zx = z - zplus; 
+	  if (h + zx > 0)
+	    // Groundwater in this node.
+	    height = zplus + h + zx;
+	  else
+	    // Groundwater between nodes.
+	    height = zplus;
+	  break;
+	}
+    }
+
+  // Find sink term.
+  EqDrnFlow = EquilibriumDrainFlow (soil, soil_heat);
+  DrainFlow= soil.total (S);
+  soil_water.drain (S);
+
+  // Find deep percolation.
+  deep_percolation = DeepPercolation (soil);
+}
+
+
+double
+GroundwaterPipe::DeepPercolation(const Soil& soil)
+{
+  const int size = soil.size ();
+  daisy_assert (size > 0);
+  const double hb = height - soil.zplus (size - 1);
+  if (hb > 0)
+    return K_aquitard_ * (1.0 + (hb - h_aquifer) / Z_aquitard_);
+  else
+    return 0;
+}
+
+double
+GroundwaterPipe::EquilibriumDrainFlow (const Soil& soil, 
+				       const SoilHeat& soil_heat)
+{
+  const int size = soil.size ();
+  const int i_GWT = soil.interval_plus (height) + 1;
+  daisy_assert (i_drain > 0);
+  if (height >= soil.zplus(i_drain-1))
+    {
+      // GWT located above drain
+      double Ha = 0;
+      double Ka = 0;
+      for (unsigned int i = i_GWT; i <= i_drain; i++)
+	{
+	  Ha += soil.dz (i);
+	  Ka += soil.dz (i) 
+	    * soil.K (i, 0.0, 0.0, soil_heat.T (i))
+	    * soil.anisotropy (i);
+	}
+      Ka /= Ha;
+
+      // GWT located below drain
+      double Hb = 0;
+      double Kb = 0;
+      for (unsigned int i = i_drain+1; i < size; i++)
+	{
+	  Hb += soil.dz (i);
+	  Kb += soil.dz (i) 
+	    * soil.K (i, 0.0, 0.0, soil_heat.T (i))
+	    * soil.anisotropy (i);
+	}
+      Kb /= Hb;
+      const double Flow = (4*Ka*Ha*Ha + 2*Kb*Hb*Ha) / (L*x - x*x);
+
+      // Distribution of drain flow among numeric soil layers
+      const double a = Flow / (Ka*Ha + Kb*Hb);
+      for (unsigned int i = i_GWT; i < size; i++)
+	{
+          S[i] = a * soil.K (i, 0.0, 0.0, soil_heat.T (i))
+	    * soil.anisotropy (i);
+	}
+      daisy_assert (isfinite (Flow));
+      return Flow;
+    }
+  return 0.0;
+}
+void
+GroundwaterPipe::output (Log& log) const
+{
+  Groundwater::output (log);
+  output_variable (DrainFlow, log);
+  output_variable (EqDrnFlow, log);
+  output_value (deep_percolation, "DeepPercolation", log);
+  output_variable (S, log);
+}
+
+static struct GroundwaterPipeSyntax
+{
+  static Groundwater& make (const AttributeList& al)
+    {
+      return *new GroundwaterPipe (al);
+    }
+  GroundwaterPipeSyntax ()
+    {
+      Syntax& syntax = *new Syntax ();
+      AttributeList& alist = *new AttributeList ();
+      alist.add ("description", "Groundwater for pipe (tile) drained soil.\n\
+If you specify this groundwater model, and does not specify the 'zplus' Soil\n\
+discretion parameter, an extra aquitard soil horizon approximately a third\n\
+of the size of 'Z_aquitart' will be added.  This will allow the grounwater\n\
+level to sink into the aquitart.  The model cannot handle groundwater levels\n\
+below the last node, or above the soil surface.");
+      Groundwater::load_syntax (syntax, alist);
+
+      syntax.add ("L", "cm", Check::positive (), Syntax::Const,
+		  "Distance between pipes.");
+      alist.add ("L", 1800.0);
+      syntax.add ("x", "cm", Check::positive (), Syntax::OptionalConst,
+		  "Horizontal distance to nearest pipe.\n\
+By default, this is 1/2 L.");
+      syntax.add ("pipe_position", "cm", Check::negative (), Syntax::Const,
+		  "Height pipes are placed in the soil (a negative number).");
+      alist.add ("pipe_position", -110.0);
+      syntax.add ("K_aquitard", "cm/h", Check::non_negative (), Syntax::Const,
+		  "Conductivity of the aquitard.");
+      alist.add ("K_aquitard", 1e-4);
+      syntax.add ("Z_aquitard", "cm", Check::positive (), Syntax::Const,
+		  "Thickness of the aquitard.\n\
+The aquitard begins below the bottommost soil horizon.");
+      alist.add ("Z_aquitard", 200.0);
+      syntax.add ("h_aquifer", "cm", Check::positive (), Syntax::OptionalConst,
+		  "Pressure potential in the aquifer below the aquitard.\n\
+By default. this is Z_aquitard.");
+
+      syntax.add ("height", "cm", Check::non_positive (), 
+		  Syntax::OptionalState,
+		  "Current groundwater level (a negative number).");
+      syntax.add ("DrainFlow", "cm/h", Syntax::LogOnly,
+		  "Drain flow to pipes.");
+      syntax.add ("EqDrnFlow", "cm/h", Syntax::LogOnly,
+		  "Equilibrium drain flow to pipes.");
+      syntax.add ("deficit", "cm", Syntax::LogOnly,
+		  "Deficit.");
+      syntax.add ("DeepPercolation", "cm/h", Syntax::LogOnly,
+		  "Deep percolation to aquifer.");
+      syntax.add ("S", "cm^3/cm^3/h", Syntax::LogOnly, Syntax::Sequence,
+		  "Pipe drainage.");
+      Librarian<Groundwater>::add_type ("pipe", alist, syntax, &make);
+    }
+} GroundwaterPipe_syntax;
+
+
