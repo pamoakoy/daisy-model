@@ -1,0 +1,54 @@
+ // crop.C
+
+#include "crop.h"
+
+const double Crop::DSremove = -5001.0;
+
+Librarian<Crop>::Content* Librarian<Crop>::content = NULL;
+
+double 
+Crop::water_stress () const
+{ assert (false); }
+
+double 
+Crop::nitrogen_stress () const
+{ assert (false); }
+
+double 
+Crop::rs_min () const
+{ assert (false); }
+
+double 
+Crop::rs_max () const
+{ assert (false); }
+
+void
+Crop::kill (const string& name, const Time& time, const Geometry& geometry,
+	    OrganicMatter& organic_matter)
+{ harvest (name, time, geometry, organic_matter, 0.0, 0.0, 0.0, 0.0, true); }
+
+bool
+Crop::ds_remove (const Crop* crop)
+{ return crop->DS () == Crop::DSremove; }
+
+Crop::Crop (const string& n)
+  : name (n)
+{ }
+
+Crop::~Crop ()
+{ }
+
+CropList::CropList (const vector<AttributeList*>& sequence)
+{
+  for (vector<AttributeList*>::const_iterator i = sequence.begin ();
+       i != sequence.end ();
+       i++)
+    push_back (&Librarian<Crop>::create (**i));
+}
+
+CropList::~CropList ()
+{
+  // Borland C++ don't want a const iterator here.
+  for (iterator i = begin (); i != end (); i++)
+    delete *i;
+}
