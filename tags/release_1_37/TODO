@@ -1,0 +1,88 @@
+* Organic/N switch-off
+
+** Make old and sold crop models use "root_system".
+
+** Make vegetation use "root_system" for N and water uptake.
+
+** Make default crop not use `organic_matter'.
+
+** Make crops not use soil heat and bioclimate.
+
+* Management:
+
+** `repeat' action til brug ved græsning
+
+** Gød efter hvor meget N der mangler i jorden 
+
+** Gød efter hvor meget DM der er høstet fra jorden
+
+* Daisy new user guide.
+
+* CVS
+
+** Nyt `misc' katalog med de to dhi scripts.
+
+* Merge små AM til særlig "rest-am" pulje som ikke forsvinder.
+
+* CheckPoint: Sørg for at inkludere `def*' og `input' automatisk.
+
+* Cloning.
+
+** Check af clone af vegetation virker.
+
+** Sørg for at cdaisy bruger de nye funktion til clone og merge.
+
+** Implementer merge.
+
+* GodeGuard errors
+
+* Døde blade skal tælle med i lysfordelingen.
+
+* Daisy som subsystem
+
+** System til rename af duplicate object ved parsing.
+
+** daisy_alist_check skal ikke altid skrive fejl ud på cout.
+
+* Native GUI 
+
+** Try out "SWIFT"
+
+** Plot retentionskurve fra gdaisy.
+
+** tkdaisy:
+
+  Create pseudo TkDaisyEntry top level as an syntax+alist containing a
+  single "daisy" element.  Use this make the step function always
+  contain the syntax/alist whe name belongs to.
+
+  Lav function til at browse en syntax, alist par.
+
+  Lav function til at loade en dai fil
+
+  Lav function(er) til at instantiere, test, og køre daisy object.
+
+  Lav filter/log som sender data tilbage til tcl.
+
+  Lav functioner der viser data statisk og dynamisk.
+
+* Make it possible to specify Soil geometry with dz.
+
+* Output syntax.
+
+Having multiple output statements that all added to a single list
+might be nice.  Create a Syntax::size `Multiple' for this.  Use it on
+Input as well to be consistent.  
+
+Consider how this fits into the desired ability to add rules to a
+Manager. 
+
+* Split Crop in submodules the same way as is done with Soil.
+
+* Make CSMP::find use binary search.
+
+* Rename Daisy to Simulation.
+
+This will allow us to ship Condition and Action as part of the Daisy
+independent library.
+
