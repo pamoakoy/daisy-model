@@ -1,0 +1,323 @@
+TODO --- things that needs done with Daisy -*- outline -*-
+
+* Make it possible to specify texture using different systems
+
+Different sizes for sand, silt, and clay, plus allow other types.
+
+* Irrigation
+
+** Deficit
+
+Start ved specifik dato.
+
+* biomod: G+P74 rootdens model hvor a er en parameter
+
+Og Lz (DensRtTip) er en fri variabel.
+
+plus line;r fra LZ til 0, hvor MaxRootDepth er 70% af total root depth.
+
+* Partit komponent
+
+Skal kunne være afhængig af kvælstof og temperatur.
+
+* Lav superklimafil
+
+** SH: forklaring
+
+* OrganicMatter
+
+** Akademisk bekrivelse?
+
+Til referencemanual?
+
+* Idea: Ignore "ordered" when creating a derived parameterization.
+
+I.e. 
+
+(defaction fertiligation irrigate_subsoil (from -5) (to -10))
+
+instead of 
+
+(defaction fertiligation irrigate_subsoil 0.0 (from -5) (to -10))
+
+* min, max og average log select models skal opføre sig som fluxe.
+
+* Ny (set foo 3.4) pseudo-attribut.
+
+* seperate harvest and cut actions
+
+* SH: Salg af referencemanual på www-siden?
+
+* UZmodel top_t
+
+* Ny summary model
+
+Opdel den i tre
+
+Inputs, Outputs og Pool changes
+
+Balance = Input - Output - Pool changes
+
+* Carbon balance.
+
+* Select::method { current, sum, max, min, average }
+
+Use by summary.
+
+* SH: PowerPoint validation slides på hjemmeside.
+
+* Check let at bruge GUI version of CVS til Windows.
+
+* Cleanup: Get rid of Path:Output and Path:Input
+
+or use them everywhere.
+
+* Gør det muligt at udefinere parametre 
+
+(deffoo super default
+  (bar 42))
+
+(deffoo sub super
+  ;; Undo the setting of bar.
+  (bar #undef))
+
+* append / prepend command to parse
+
+(append output "N Balance")
+
+will append "N Balance" to the end of the "output" parameter.
+
+* horizon texture
+
+Gør det muligt at give fejl hvis summen er forskellig fra 1.0 (100%).
+
+* Dokumentation for output filer.
+
+* SH: genvækst af græs
+
+* WWW: make seperate page for programmers.
+
+Move cvs, dll, cdaisy, api, programmers guide, header, source.
+
+Explain about different compilers, and making me update.
+
+* top level stop kommando.
+
+* split common.h op i sysdeps.h, stlutils.h og timestep.h
+
+* saml check.? og check_range.?
+
+* units doc
+
+** kapitel med konverteringer til ref.manual
+
+** Foreslå aternativer ved fejl? (højde i pF?)
+
+* Check af PLF'er.
+
+** LeafAIMod skal altid være > 0.0
+
+* User Manual
+
+** Tillage
+
+*** Soil Compaction
+
+** Pesticides
+
+*** To partielle parameteriseringer, "canopy" og "soil"?
+
+SH: Streiby.
+
+*** New pesticides.
+
+*** SH: file name change?
+
+*** Transform
+
+** Log parameterizations.
+
+Udbyg.
+
+*** Transform
+
+** Appendix listing features not mentioned otherwise.
+
+*** Gennemgå referencemanualen og kig efter ting der bør listes.
+
+** Permanent vegetation
+
+** Simple Crop Types
+
+* Parser & Printer.
+
+** Don't order attributes when defining paramterizations.
+
+** Add long description for each column in a table log file.
+
+I.e. a new select parameter named "description", plus a table option
+of whether to add it to preamble of the dlf file.
+
+** Use new log table spec parameter
+
+*** Default descriptions in ref-doc.
+
+* New 'spec' log model.
+
+Select attribute with
+
+    library type submodel* attribute
+
+Use filters like
+
+    library type
+
+cutting of branch if it encounter an object from library not derived
+from type.
+
+* Paramerization library documentation
+
+** syntax.add_printer ("LaTeX", log_table_pp_LaTeX)
+
+** Differences from superclass.
+
+* N respiration
+
+En standard parameterisering på
+
+    N_fixate_respiration    6.5 [g CH2O-C/g N]
+    NO3_uptake_respiration  3.0 [g CH2O-C/g NO3-N]
+
+ville være biologisk korrekt.
+
+Henning Hoeg.
+
+Bloker for begge når der ikke er assimilat nok.
+
+    NO3_uptake_respiration  0.0 [g CH2O-C/g NO3-N]
+
+for nogen planter, i følge Søren.
+
+** Add DOM pool
+
+Dissolved Organic Matter, feed by all the OM pool transformations.
+
+** Phosphor
+
+** Pesticides
+
+* Add user defineable convertions.
+
+* QDaisy.
+
+** Copy/Inherit: Rebuild model.
+
+** Menu -> Edit -> Inputs
+
+Tilføj inputs til træ?
+
+** Insert child, insert after.
+
+** Menu -> File -> Run
+
+Maybe show events in tree, like BCC?
+
+** Filter setup
+
+Only show a few buildin libraries and models.
+
+** Treelog_Qt
+
+** EditPLFs
+
+** Specialiced model view.
+
+** View model as text.
+
+** Interest groups
+
+libraries, models, parameterizations and parameters should belong to a
+number of "interest groups", which can be use by QDaisy for filtering.
+
+** Make drag and drop of "file.dai" work.
+
+** Use radio buttons for filters in menu.
+
+** Move Filters from QDaisy to Daisy.
+
+** Redirect error messages
+
+for weather std, file, hourly, and for hydraulic old, old2
+
+** Beskriv fordele ved min GUI implementation.
+
+- Virker med næsten alle `.dai' filer.
+
+- Automatisk up-to-date med seneste daisy version.
+
+* Daisy new user guide.
+
+* CVS
+
+** Nyt `misc' katalog med de to dhi scripts.
+
+* Cloning.
+
+** Check af clone af vegetation virker.
+
+** Sørg for at cdaisy bruger de nye funktion til clone og merge.
+
+** Implementer merge.
+
+* GodeGuard errors
+
+* Døde blade skal tælle med i lysfordelingen.
+
+* Daisy som subsystem
+
+** System til rename af duplicate object ved parsing.
+
+** daisy_alist_check skal ikke altid skrive fejl ud på cout.
+
+* Native GUI 
+
+** Try out "SWIFT"
+
+** Plot retentionskurve fra gdaisy.
+
+** tkdaisy:
+
+  Create pseudo TkDaisyEntry top level as an syntax+alist containing a
+  single "daisy" element.  Use this make the step function always
+  contain the syntax/alist whe name belongs to.
+
+  Lav function til at browse en syntax, alist par.
+
+  Lav function til at loade en dai fil
+
+  Lav function(er) til at instantiere, test, og køre daisy object.
+
+  Lav filter/log som sender data tilbage til tcl.
+
+  Lav functioner der viser data statisk og dynamisk.
+
+* Make it possible to specify Soil geometry with dz.
+
+* Output syntax.
+
+Having multiple output statements that all added to a single list
+might be nice.  Create a Syntax::size `Multiple' for this.  Use it on
+Input as well to be consistent.  
+
+Consider how this fits into the desired ability to add rules to a
+Manager. 
+
+* Make PLF::find use binary search.
+
+* Rename Daisy to Simulation.
+
+This will allow us to ship Condition and Action as part of the Daisy
+independent library.
+
+* Flyt astronomic utilities til seperat fil.
+
