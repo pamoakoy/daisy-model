@@ -1,0 +1,91 @@
+// action_sow.C
+// 
+// Copyright 1996-2001 Per Abrahamsen and Søren Hansen
+// Copyright 2000-2001 KVL.
+//
+// This file is part of Daisy.
+// 
+// Daisy is free software; you can redistribute it and/or modify
+// it under the terms of the GNU Lesser Public License as published by
+// the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+// 
+// Daisy is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser Public License
+// along with Daisy; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+#include "action.h"
+#include "daisy.h"
+#include "field.h"
+#include "chemical.h"
+#include "check.h"
+
+struct ActionSpray : public Action
+{
+  const string chemical;
+  const double amount;
+
+  void doIt (Daisy& daisy, Treelog& out)
+    {
+      out.message (string (" [Spraying ") + chemical + "]");
+      daisy.field.spray (chemical, amount); 
+    }
+
+  ActionSpray (const AttributeList& al)
+    : Action (al),
+      chemical (al.name ("chemical")),
+      amount (al.number ("amount"))
+    { }
+};
+
+// Add the ActionSpray syntax to the syntax table.
+static struct ActionSpraySyntax
+{
+  static Action& make (const AttributeList& al)
+  { return *new ActionSpray (al); }
+
+  static bool check_alist (const AttributeList& al, Treelog& err)
+    {
+      bool ok = true;
+      const string chemical = al.name ("chemical");
+
+      const Library& library = Librarian<Chemical>::library ();
+      if (!library.check (chemical))
+	{
+	  err.entry (string ("Unknown chemical '") + chemical + "'");
+	  ok = false;
+	}
+      else
+	{
+	  const Syntax& syntax = library.syntax (chemical);
+	  const AttributeList& alist = library.lookup (chemical);
+	  if (!syntax.check (alist, err))
+	    {
+	      err.entry (string ("Incomplete chemical '") + chemical + "'");
+	      ok = false;
+	    }
+	}
+      return ok;
+    }
+  ActionSpraySyntax ()
+  { 
+    Syntax& syntax = *new Syntax ();
+    syntax.add_check (check_alist);
+    AttributeList& alist = *new AttributeList ();
+    alist.add ("description", "\
+Spray a chemical (typically a pesticide) on the field.");
+    syntax.add ("chemical", Syntax::String, Syntax::Const,
+		"Name of pesticide to spray.");
+    syntax.add ("amount", "g/ha", Check::non_negative (), Syntax::Const,
+		"Amount of pesticide to spray.");
+    syntax.order ("chemical", "amount");
+    Librarian<Action>::add_type ("spray", alist, syntax, &make);
+  }
+} ActionSpray_syntax;
+
