@@ -1,0 +1,119 @@
+TODO --- things that needs done with Daisy -*- outline -*-
+
+* Rodfordeling.
+
+* Adsorption
+
+* Check dræn + makro porer, specielt makroporer ned i grundvand.
+
+* QDaisy.
+
+** Copy/Inherit: Rebuild model.
+
+** Menu -> Edit -> Inputs
+
+Tilføj inputs til træ?
+
+** Insert child, insert after.
+
+** Menu -> File -> Run
+
+Maybe show events in tree, like BCC?
+
+** Filter setup
+
+Only show a few buildin libraries and models.
+
+** Treelog_Qt
+
+** EditPLFs
+
+** Specialiced model view.
+
+** View model as text.
+
+** Interest groups
+
+libraries, models, parameterizations and parameters should belong to a
+number of "interest groups", which can be use by QDaisy for filtering.
+
+** Make drag and drop of "file.dai" work.
+
+** Use radio buttons for filters in menu.
+
+** Move Filters from QDaisy to Daisy.
+
+** Redirect error messages
+
+for weather std, file, hourly, and for hydraulic old, old2
+
+** Beskriv fordele ved min GUI implementation.
+
+- Virker med næsten alle `.dai' filer.
+
+- Automatisk up-to-date med seneste daisy version.
+
+* Daisy new user guide.
+
+* CVS
+
+** Nyt `misc' katalog med de to dhi scripts.
+
+* Cloning.
+
+** Check af clone af vegetation virker.
+
+** Sørg for at cdaisy bruger de nye funktion til clone og merge.
+
+** Implementer merge.
+
+* GodeGuard errors
+
+* Døde blade skal tælle med i lysfordelingen.
+
+* Daisy som subsystem
+
+** System til rename af duplicate object ved parsing.
+
+** daisy_alist_check skal ikke altid skrive fejl ud på cout.
+
+* Native GUI 
+
+** Try out "SWIFT"
+
+** Plot retentionskurve fra gdaisy.
+
+** tkdaisy:
+
+  Create pseudo TkDaisyEntry top level as an syntax+alist containing a
+  single "daisy" element.  Use this make the step function always
+  contain the syntax/alist whe name belongs to.
+
+  Lav function til at browse en syntax, alist par.
+
+  Lav function til at loade en dai fil
+
+  Lav function(er) til at instantiere, test, og køre daisy object.
+
+  Lav filter/log som sender data tilbage til tcl.
+
+  Lav functioner der viser data statisk og dynamisk.
+
+* Make it possible to specify Soil geometry with dz.
+
+* Output syntax.
+
+Having multiple output statements that all added to a single list
+might be nice.  Create a Syntax::size `Multiple' for this.  Use it on
+Input as well to be consistent.  
+
+Consider how this fits into the desired ability to add rules to a
+Manager. 
+
+* Make CSMP::find use binary search.
+
+* Rename Daisy to Simulation.
+
+This will allow us to ship Condition and Action as part of the Daisy
+independent library.
+
