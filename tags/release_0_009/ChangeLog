@@ -1,0 +1,226 @@
+1998-03-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 0.009 released.
+
+1998-03-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* library.h (derive_function): New typedef.
+	* library.C, library.h (Library): Add `derive' argument.
+	(load_syntax): New function.
+	* cdaisy.C (daisy_load): Call it.
+	* main.C (main): Ditto.
+	* tkmain.C (class TkDaisyState): Ditto.
+	* daisy.C (load_syntax): Don't load library syntax here.
+	* library.h (Implementation): Store it here.
+	* librarian.h (class Librarian::Librarian): Pass `derive_type' to
+	`Content'.
+	(class Librarian::Content::Content): Pass `derive' to `Library'. 
+	* am.C (AM_init): Pass `derive_type' to `Library'.
+	* organic_matter.C (output): Use `AM::library' instead of creating
+	a dummy library.
+	* syntax.C, syntax.h (derive, derive_fun): Removed.
+	(add_library): Don't take derive argument.
+	* parser_file.C (load_list): Don't call `Syntax::derive'.
+	* library.C, library.h (add_derived): New function.
+	* parser_file.C (add_derived): Call it.
+	* librarian.h (Librarian::add_library): Removed.
+
+	* printer_file.C (PrinterFileSyntax): Add `PrinterFile' to
+	`Printer' library.
+
+	* Parser.C, parser.h: Use `Librarian' to manage.
+	* parser_file.C, parser_file.h: Change derived.
+	* daisy.C (load_syntax): Change callers.
+
+	* printer.C: Don't include "alist.h".
+
+1998-03-20  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* event.C: Removed warnings.
+
+	* frame.C, frame.h (class Frame): New files.
+	* Makefile (INTERFACES): Added them.
+	* condition.C, condition.h: Use it.
+	* action.C, action.h: Use it.  Convert to standard library.
+	* minimanager.h, minimanager.C: Adjusted.
+	* cdaisy.C (daisy_library_derive): Adjusted.
+	(daisy_daisy_tick_action): Pass dummy `Frame' to `Action::doIt'.
+	* log_file.C (match): Pass dummy `Frame' to `condition::match'.
+	* action_fertilize.C, action_harvest.C, action_irrigate.C,
+	action_lisp.C, action_sow.C, action_stop.C, action_tillage.C,
+	action_with.C, condition_logic.C, condition_time.C: Adjusted
+	derived objects.
+
+	* condition_logic.C (class ConditionAnd): Fixed logic.
+
+	* Version 0.008 released.
+
+1998-03-20  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* cdaisy.C, cdaisy.h (daisy_version): New function.
+
+	* crop.C, crop.h: Use librarian to manage Crop.
+	* crop_std.C, crop_old.C, crop_sold.C: Updated derived classes.
+	* column_std.C, daisy.C, action_sow.C, event.C: Updated callers.
+
+	* crop_std.C (CanopyStructure): Reverted previous change.  They
+	already started at the ground.
+	* bioclimate_std.C (RadiationDistribution): Enabled assertions.
+
+1998-03-19  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 0.007 released.
+
+1998-03-19  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* parser_file.C (get_number, get_integer): Read one character a
+	time in order to know the column number.
+
+	* crop_std.C (CanopyStructure): Make LAIvsH start from the ground
+	instead of the top.
+	(CanopyPhotosynthesis): Adjust.
+	* bioclimate_std.C (BioclimateStandard): Ditto.
+	(RadiationDistribution): Ditto.
+
+	* printer_file.C: Include <algorithm>.
+
+1998-03-18  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* weather.C, weather.h (cloudiness, vaporpressure, wind): New
+	functions. 
+
+	* parser_file.C, parser_file.h (class ParserFile): Pass strings by
+	reference.
+
+	* crop_std.C (var.RootSys.nitrogen_stress): New log variable.
+	(NetProduction): Use it.
+	(par.Devel.defined_until_ds): New parameter.
+	(CropHeight): Use it.
+	(par.Canopy.rs_min, par.Canopy.rs_max): New parameters.
+
+	* crop.C, crop.h, crop_std.C (water_stress, nitrogen_stress,
+	rs_min, rs_max): New functions. 
+
+	* lib/sbarley.dai: Fixed parameters.
+
+	* lib/grass.dai: New file.
+	* lib/wwheat.dai: New file.
+	* lib/crop.dai: New file.
+	* lib/Makefile (DAISY): Added.
+
+1998-03-17  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* bioclimate.C, bioclimate.h: Converted to library.
+	* bioclimate_std.C: New file.
+	* Makefile (COMPONENTS): Add it.
+	* column_std.C: Update caller.
+	* daisy.C (load_syntax): Add it.
+
+	* Makefile (daisy-src.zip): Added `tlink32.ini'.
+
+	* Version 0.006 released.
+
+1998-03-17  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* crop_std.C (CanopyPhotosynthesis): Added assertions.
+
+	* csmp.C (integrate_stupidly): Add 10 extra intervals.
+
+1998-03-13  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* filter.C, filter.h (check_derived): New function.
+	(lookup_derived): New function.
+	* log.h (output_derived): use them
+	(output_list): Ditto, add library argument.
+	* daisy.C (tick_logs): Ovey new calling convention.
+	* organic_matter.C (output): Ditto.
+	* column_std.C (output): Ditto.
+	Filter names can now match superclasses as well.
+	
+	* filter.h, filter.C, filter_all.C, filter_array.C,
+	filter_checkpoint.C, filter_none.C, filter_some.C: Pass strings
+	per reference. 
+
+	* cdaisy.C, cdaisy.h (daisy_alist_clone): New function.
+
+	* crop_old.C (output): Don't checkpoint `LogPotCanopyAss' and
+	`LogCanopyAss'.
+
+	* crop_std.C: Added `enable_water_stress', 
+	`enable_N_stress', `LogPotCanopyAss', and `LogCanopyAss'.
+
+1998-03-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* log_file.C (output_point): Removed.
+	(output (CSMP)): Don't call.  Use csmp directly instead.
+	(class LogFile): Removed from interface.
+	* log.h (class Log): Ditto.
+	* csmp.C (output): Removed.
+	* csmp.C: Removed unnecessary includes.
+	* csmp.h: Ditto.
+
+1998-03-10  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* crop_old.C: (Parameters): Added `enable_water_stress' and
+	`enable_N_stress'.
+	(CropOldSyntax): Ditto.
+	(tick): Obey `enable_water_stress'.
+	(NetProduction): Obey `enable_N_stress'.
+	(Variables): Added `LogPotCanopyAss' and `LogCanopyAss'.
+	(output): Ditto.
+	(RecCrpAux): Ditto.
+	(CropOldSyntax): Ditto.
+	(tick): Ditto.
+
+	* crop_old.C: Removed compile time flag `USE_HOURLY_PHOTO'.
+
+	* snow.C (tick): Use `approximate' to compare floating point
+	values. 
+
+	* cdaisy.h: Typo.
+
+	* Version 0.005 released.
+
+1998-03-10  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* alist.C: Removed exception handling.
+
+	* filter_some.C (lookup): Replace THROW with assert (false).
+	* library.C (lookup): Ditto.
+	(syntax): Ditto.
+
+	* Version 0.004 released.
+
+1998-03-10  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* printer_file.C (print_comment): Support multiline comments.
+
+	* printer.h (class Printer): Added `print_comment', `print_alist',
+	`print_library_file', and `good' as pure virtual members.
+
+	* cdaisy.C, cdaisy.h (daisy_alist_save): Deleted.
+	(daisy_library_save_file): Ditto.
+	(daisy_printer_create_file): New function.
+	(daisy_printer_comment): Ditto.
+	(daisy_printer_alist): Ditto.
+	(daisy_printer_library_file): Ditto.
+	(daisy_printer_delete): Ditto.
+	(daisy_printer_good): Ditto.
+
+1998-03-09  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Makefile (cvs): Add version to ChangeLog.
+	(TEXT): Add `TODO' and `ChangeLog'.
+	(wc): Only count sources.
+
+	* solute.C (initialize): Initialize M from ppm and
+	dry_bulk_density. 
+
+	* horizon.C (dry_bulk_density): New function.
+	* horizon.h: Ditto.
+	* soil.h: Ditto.
+
+	* Makefile: Removed DHI comments.
+
+	* ChangeLog: New file.
+
