@@ -1,0 +1,94 @@
+* Test initialization layers below lowest node.
+
+* Test Lysimeter Grundvand rand
+
+* Lav "Crop" Manager.
+
+* Earthworms and AM
+
+* Stof chemicals ned i jord via macropores.
+
+1. Lav setup + log for surface chemicals.  gem resultat af kørsel.
+
+2. Flyt surface chemcials fra bioclimate til surface.
+
+3. opdater log, check at resultat er det samme.
+
+4. Implementer matrix indtrænging.  sammenlign resultat.
+
+5. Implementer macro indtrænging. sammenlign resultat.
+
+6. Implementer mixture.  sammenlign resultat.
+
+* Transpiration/Water Uptake component
+
+* CVS
+
+** Nyt `misc' katalog med de to dhi scripts.
+
+** Slet DaisyAll
+
+* Merge små AM til særlig "rest-am" pulje som ikke forsvinder.
+
+* CheckPoint: Sørg for at inkludere `def*' og `input' automatisk.
+
+* Cloning.
+
+** Check af clone af vegetation virker.
+
+** Sørg for at cdaisy bruger de nye funktion til clone og merge.
+
+** Implementer merge.
+
+* GodeGuard errors
+
+* Døde blade skal tælle med i lysfordelingen.
+
+* Daisy som subsystem
+
+** System til rename af duplicate object ved parsing.
+
+** daisy_alist_check skal ikke altid skrive fejl ud på cout.
+
+* Native GUI 
+
+** Try out "SWIFT"
+
+** Plot retentionskurve fra gdaisy.
+
+** tkdaisy:
+
+  Create pseudo TkDaisyEntry top level as an syntax+alist containing a
+  single "daisy" element.  Use this make the step function always
+  contain the syntax/alist whe name belongs to.
+
+  Lav function til at browse en syntax, alist par.
+
+  Lav function til at loade en dai fil
+
+  Lav function(er) til at instantiere, test, og køre daisy object.
+
+  Lav filter/log som sender data tilbage til tcl.
+
+  Lav functioner der viser data statisk og dynamisk.
+
+* Make it possible to specify Soil geometry with dz.
+
+* Output syntax.
+
+Having multiple output statements that all added to a single list
+might be nice.  Create a Syntax::size `Multiple' for this.  Use it on
+Input as well to be consistent.  
+
+Consider how this fits into the desired ability to add rules to a
+Manager. 
+
+* Split Crop in submodules the same way as is done with Soil.
+
+* Make CSMP::find use binary search.
+
+* Rename Daisy to Simulation.
+
+This will allow us to ship Condition and Action as part of the Daisy
+independent library.
+
