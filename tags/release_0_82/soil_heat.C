@@ -1,0 +1,717 @@
+// soil_heat.C
+
+#include "soil_heat.h"
+#include "alist.h"
+#include "surface.h"
+#include "groundwater.h"
+#include "weather.h"
+#include "soil_water.h"
+#include "soil.h"
+#include "syntax.h"
+#include "time.h"
+#include "mathlib.h"
+#include "log.h"
+#include "submodel.h"
+
+struct SoilHeat::Implementation
+{
+  // Parameters
+  const double h_frozen;
+  const bool enable_ice;
+
+  // State
+  vector<double> T;
+  double T_top;
+  vector<double> T_freezing;
+  vector<double> T_thawing;
+  vector<double> freezing_rate;
+
+  enum state_t
+  { liquid, freezing, frozen, thawing };
+  vector<state_t> state;
+
+  /* const */ double delay;	// Period delay [ cm/rad ??? ]
+
+  // Simulation.
+  void tick (const Time&, const Soil&, SoilWater&, 
+	     const Surface&, const Groundwater&, const Weather&);
+  void update_freezing_points (const Geometry& geometry,
+			       const SoilWater& soil_water);
+  bool update_state (const Soil& soil, const SoilWater& soil_water);
+  bool check_state (const Soil& soil) const;
+  void force_state (const Geometry& geometry);
+  void solve (const Time&, const Soil&, const SoilWater&, 
+	      const Surface&, const Groundwater&, const Weather&);
+  double energy (const Soil&, const SoilWater&, double from, double to) const;
+  void set_energy (const Soil&, const SoilWater&, 
+		   double from, double to, double energy);
+  double bottom (const Time&, const Weather& weather) const;
+
+  // Create & Destroy.
+  bool check (unsigned n) const;
+  void initialize (const AttributeList& al, 
+		   const Soil& soil, const Time& time, const Weather& weather);
+  Implementation (const AttributeList&);
+};
+
+static const double latent_heat_of_fussion = 3.35e9; // [erg/g]
+static const double gravity = 982.; // [cm/s^2]
+
+void
+SoilHeat::Implementation::tick (const Time& time,
+				const Soil& soil,
+				SoilWater& soil_water,
+				const Surface& surface,
+				const Groundwater& 
+				groundwater,
+				const Weather& weather)
+{
+  // Update freezing and melting points.
+  update_freezing_points (soil, soil_water);
+
+  // Solve with old state.
+  const vector<double> T_old = T;
+  solve (time, soil, soil_water, surface, groundwater, weather);
+
+  // Check if ice is enabled.
+  if (!enable_ice)
+    return;
+
+  // Update state according to new temperatures.
+  const bool changed = update_state (soil, soil_water);
+
+  if (changed)
+    {
+      // Solve again with new state.
+      T = T_old;
+      solve (time, soil, soil_water, surface, groundwater, weather);
+
+      // Check if state match new temperatures.
+      const bool changed_again = check_state (soil);
+      
+      if (changed_again)
+	// Force temperatures to match state.
+	force_state (soil);
+    }
+
+  // Update ice in water.
+  soil_water.freeze (soil, freezing_rate);
+}
+  
+void
+SoilHeat::Implementation::update_freezing_points (const Geometry& geometry,
+						  const SoilWater& soil_water)
+{
+  for (unsigned int i = 0; i < geometry.size (); i++)
+    {
+      const double h = soil_water.h (i);
+      const double h_ice = soil_water.h_ice (i);
+
+      T_freezing[i] 
+	= min (0.0, 273. *  h / (latent_heat_of_fussion / gravity - h));
+      T_thawing[i] 
+	= min (0.0, 273. *  h_ice / (latent_heat_of_fussion /gravity - h_ice));
+      // assert (T_freezing[i] <= T_thawing[i]);
+    }
+} 
+
+bool
+SoilHeat::Implementation::update_state (const Soil& soil, 
+					const SoilWater& soil_water)
+{
+  bool changed = false;
+
+  for (unsigned int i = 0; i < soil.size (); i++)
+    {
+      switch (state[i])
+	{
+	case freezing:
+	  if (T[i] < T_freezing[i])
+	    {
+	      // Find freezing rate.
+	      const double delta_T = T[i] - T_freezing[i];
+	      const double delta_q 
+		= (soil_water.q (i) - soil_water.q (i+1)) / soil.dz (i);
+	      const double h = soil_water.h (i);
+	      freezing_rate[i] = - delta_q 
+		- (latent_heat_of_fussion * soil.Cw2 (i, h)
+		   / (273. * gravity)) 
+		* delta_T / dt;
+
+	      if (freezing_rate[i] < 0.0)
+		freezing_rate[i] = 0.0;
+
+	      // Check if there are sufficient water.
+	      const double Theta_min = soil.Theta (i, h_frozen, 0.0);
+	      assert (Theta_min >= soil.Theta_res (i));
+	      const double available_water = soil_water.Theta (i) - Theta_min;
+	      if (freezing_rate[i] * dt > available_water)
+		{
+		  freezing_rate[i] = max (0.0, available_water / dt);
+		  state[i] = frozen;
+		}
+	      
+#if 0
+	      // Check if ice can expand.
+	      const double Theta_max = soil_water.Theta (soil, i, 0.0);
+	      const double Theta = soil_water.Theta (i);
+	      const double available_space = Theta_max - Theta;
+	      if ((rho_water / rho_ice - 1.0) * freezing_rate[i] * dt
+		  > available_space)
+		{
+		  freezing_rate[i]
+		    = available_space / (rho_water / rho_ice - 1.0) / dt;
+		  assert (freezing_rate[i] >= 0.0);
+		  // No state change.
+		}
+#endif
+
+	      // We have used the energy.
+	      T[i] = T_freezing[i];
+	    }
+	  else
+	    {
+	      if (soil_water.X_ice (i) > 0.0)
+		state[i] = thawing;
+	      else
+		state[i] = liquid;
+	      changed = true;
+	      freezing_rate[i] = 0.0;
+	    }
+	  assert (-freezing_rate[i] * rho_water / rho_ice
+		  <= soil_water.X_ice (i));
+	  break;
+	case frozen:
+	  freezing_rate[i] = 0.0;
+	  if (T[i] > T_thawing[i])
+	    {
+	      if (soil_water.X_ice (i) > 0.0)
+		state[i] = thawing;
+	      else
+		state[i] = liquid;
+	      changed = true;
+	    }
+	  else if (soil_water.h (i) > h_frozen + 1000.0)
+	    {
+	      state[i] = freezing;
+	      changed = true;
+	    }
+
+	  assert (-freezing_rate[i] * rho_water / rho_ice
+		  <= soil_water.X_ice (i));
+	  break;
+	case thawing:
+	  if (T[i] > T_thawing[i])
+	    {
+	      const double delta_T = T[i] - T_thawing[i];
+	      const double delta_q 
+		= (soil_water.q (i) - soil_water.q (i+1)) / soil.dz (i);
+	      const double h_ice = soil_water.h_ice (i);
+	      freezing_rate[i] = - delta_q 
+		- (latent_heat_of_fussion * soil.Cw2 (i, h_ice)
+		   / (273. * gravity)) 
+		* delta_T / dt;
+	      if (freezing_rate[i] > 0.0)
+		freezing_rate[i] = 0.0;
+
+	      const double X_ice = soil_water.X_ice (i);
+	      const double ice_water = X_ice * rho_ice / rho_water;
+	      if (-freezing_rate[i] * dt >= ice_water)
+		{
+		  freezing_rate[i] = -ice_water / dt;
+		  assert (freezing_rate[i] <= 0.0);
+		  state[i] = liquid;
+		  assert (-freezing_rate[i] * rho_water / rho_ice
+			  <= soil_water.X_ice (i));
+		}
+	      assert (-freezing_rate[i] * rho_water / rho_ice
+		      <= soil_water.X_ice (i));
+	      // We have used the energy.
+	      T[i] = T_thawing[i];
+	    }
+	  else
+	    {
+	      state[i] = freezing;
+	      changed = true;
+	      freezing_rate[i] = 0.0;
+	    }
+	  assert (-freezing_rate[i] * rho_water / rho_ice
+		  <= soil_water.X_ice (i));
+	  break;
+	case liquid:
+	  freezing_rate[i] = 0.0;
+	  if (T[i] < T_freezing[i])
+	    {
+	      state[i] = freezing;
+	      changed = true;
+	    }
+	  assert (-freezing_rate[i] * rho_water / rho_ice
+		  <= soil_water.X_ice (i));
+	  break;
+	}
+      assert (-freezing_rate[i] * rho_water / rho_ice
+	      <= soil_water.X_ice (i));
+
+      const double Theta_sat = soil.Theta (i, 0.0, 0.0);
+      const double Theta_res = soil.Theta_res (i);
+      assert (Theta_sat - Theta_res
+	      >= soil_water.X_ice (i)
+	      + freezing_rate[i] * rho_water / rho_ice);
+    }
+  return changed;
+}
+
+bool
+SoilHeat::Implementation::check_state (const Soil& soil) const
+{
+  for (unsigned int i = 0; i < soil.size (); i++)
+    {
+      switch (state[i])
+	{
+	case freezing:
+	  if (T[i] > T_freezing[i])
+	    return true;
+	  break;
+	case frozen:
+	  if (T[i] > T_thawing[i])
+	    return true;
+	  break;
+	case thawing:
+	  if (T[i] < T_thawing[i])
+	    return true;
+	  break;
+	case liquid:
+	  if (T[i] < T_freezing[i])
+	    return true;
+	  break;
+	}
+    }
+  return false;
+}
+
+void
+SoilHeat::Implementation::force_state (const Geometry& geometry)
+{
+  for (unsigned int i = 0; i < geometry.size (); i++)
+    {
+      switch (state[i])
+	{
+	case freezing:
+	  T[i] = T_freezing[i];
+	  break;
+	case frozen:
+	  if (T[i] > T_thawing[i])
+	    T[i] = T_thawing[i];
+	  break;
+	case thawing:
+	  T[i] = T_thawing[i];
+	  break;
+	case liquid:
+	  if (T[i] < T_freezing[i])
+	    T[i] = T_freezing[i];
+	  break;
+	}
+    }
+}
+
+void
+SoilHeat::Implementation::solve (const Time& time,
+				 const Soil& soil,
+				 const SoilWater& soil_water,
+				 const Surface& surface,
+#ifdef WATER_FLUX_HEAT
+				 const Groundwater& groundwater,
+#else
+				 const Groundwater&,
+#endif
+				 const Weather& weather)
+{
+#ifdef WATER_FLUX_HEAT
+  const double water_heat_capacity = 4.2e7; // [erg/cm³/K]
+#endif
+
+  // Border conditions.
+  const double T_bottom = bottom (time, // BUGLET: Should be time - 1 hour.
+				  weather);
+  const double T_top_new = surface.temperature ();
+  
+  if (T_top < -400.0)
+    T_top = T_top_new;
+
+  int size = soil.size ();
+#if 0
+  // Limit for groundwater table.
+  if (!groundwater.flux_bottom ())
+    {
+      if (groundwater.table () < soil.z (size - 1))
+	throw ("Groundwater table below lowest node.");
+      size = soil.interval (groundwater.table ()) + 1;
+    }
+  // Maybe the groundwater module lied...
+  while (size > 0 && soil_water.h (size - 1) >= 0)
+    size--;
+#endif
+
+  // Tridiagonal matrix.
+  vector<double> a (size, 0.0);
+  vector<double> b (size, 0.0);
+  vector<double> c (size, 0.0);
+  vector<double> d (size, 0.0);
+
+  // Inner nodes.
+  for (int i = 0; i < size; i++)
+    {
+      // Soil Water
+      const double Theta = soil_water.Theta (i);
+      const double X_ice = soil_water.X_ice (i);
+      const double h = soil_water.h (i);
+      const double h_ice = soil_water.h_ice (i);
+
+      // Calculate new freezing and thawing points.
+      T_freezing[i] 
+	= min (0.0, 273. *  h / (latent_heat_of_fussion / gravity - h));
+      T_thawing[i] 
+	= min (0.0, 273. *  h_ice / (latent_heat_of_fussion /gravity - h_ice));
+
+      const int prev = i - 1;
+      const int next = i + 1;
+
+      // Calculate average heat capacity and conductivity.
+      const double capacity = soil.heat_capacity (i, Theta, X_ice);
+      const double conductivity = soil.heat_conductivity (i, Theta, X_ice);
+
+      // Calculate distances.
+      const double dz_next 
+	= (i == size - 1)
+	? soil.z (i) - soil.z (prev)
+	: soil.z (next) - soil.z (i);
+      const double dz_prev 
+	= (i == 0)
+	? soil.z (i) - 0.0
+	: soil.z (i) - soil.z (prev);
+      const double dz_both = dz_prev + dz_next;
+
+      // Calculate temperature differences.
+      const double dT_next = ((i == size - 1)
+			      ? T_bottom - T[i] 
+			      : T[next] - T[i]);
+      const double dT_prev = (i == 0) ? T[i] - T_top : T[i] - T[prev];
+      const double dT_both = dT_prev + dT_next;
+      
+      // Calculate conductivity gradient.
+      double gradient;
+      if (i == 0)
+	gradient = 0.0;
+      else if (i == size - 1)
+	gradient 
+	  = (soil.heat_conductivity (i, 
+				     soil_water.Theta (i),
+				     soil_water.X_ice (i))
+	     - soil.heat_conductivity (prev, 
+				       soil_water.Theta (prev),
+				       soil_water.X_ice (prev)))
+	  / dz_prev;
+      else
+	gradient 
+	  = (soil.heat_conductivity (next, 
+				     soil_water.Theta (next),
+				     soil_water.X_ice (next))
+	     - soil.heat_conductivity (prev, 
+				       soil_water.Theta (prev),
+				       soil_water.X_ice (prev)))
+	  / dz_both;
+      
+      // Computational,
+      const double Cx = gradient
+#ifndef WATER_FLUX_HEAT
+	// BUG!
+	;
+#else
+	+ water_heat_capacity
+	* (soil_water.q (i) + soil_water.q (next)) / 2.0;
+#endif
+
+      // Heat capacity including thawing/freezing.
+      double C_apparent = capacity;
+      switch (state[i])
+	{
+	case freezing:
+	  C_apparent += (latent_heat_of_fussion * latent_heat_of_fussion
+			 * rho_water * soil.Cw2 (i, h) / (273. * gravity));
+	  break;
+	case thawing:
+	  C_apparent += (latent_heat_of_fussion * latent_heat_of_fussion
+			 * rho_water * soil.Cw2 (i, h_ice) / (273. * gravity));
+	  break;
+	case liquid:
+	case frozen:
+	  break;
+	}
+
+      // Setup tridiagonal matrix.
+      a[i] = - conductivity / dz_both / dz_prev + Cx / 2.0 / dz_both;
+      b[i] = C_apparent / dt
+	+ conductivity / dz_both * (1.0 / dz_next + 1.0 / dz_prev);
+      c[i] = - conductivity / dz_both / dz_next - Cx / 2.0 / dz_both;
+      const double x2 = dT_next / dz_next - dT_prev/ dz_prev;
+      if (i == 0)
+	d[i] = T[i] * C_apparent / dt
+	  + conductivity / soil.z (1) * (x2 + T_top_new / soil.z (0))
+	  + Cx * (T[1] - T_top + T_top_new) / (2.0 * soil.z (1));
+      else
+	d[i] = T[i] * C_apparent / dt + (conductivity / dz_both) * x2
+	  + Cx * dT_both / dz_both / 2.0;
+      
+      if (state[i] == freezing || state[i] == thawing)
+	d[i] -= latent_heat_of_fussion * rho_water
+	  * (soil_water.q (i) - soil_water.q (next)) / soil.dz (i) / dt;
+    }
+  d[size - 1] = d[size - 1] - c[size - 1] * T_bottom;
+  tridia (0, size, a, b, c, d, T.begin ());
+  T_top = T_top_new;
+  assert (T[0] < 50.0);
+
+  // Temperature is constant in the groundwater.
+  for (unsigned int i = size; i < soil.size (); i++)
+    T[i] = T_bottom;
+}
+
+double 
+SoilHeat::Implementation::energy (const Soil& soil,
+				  const SoilWater& soil_water,
+				  double from, double to) const
+{
+  double amount = 0.0;
+  double old = 0.0;
+
+  for (unsigned int i = 0; i < soil.size () && old > to ; i++)
+    {
+      if (soil.zplus (i) < from)
+	{
+	  const double height = (min (old, from) - max (soil.zplus (i), to));
+	  const double C = soil.heat_capacity (i, soil_water.Theta (i), soil_water.X_ice (i));
+	  amount += C * T[i] * height;
+	}
+      old = soil.zplus (i);
+    }
+  return amount;
+}
+
+void
+SoilHeat::Implementation::set_energy (const Soil& soil,
+				      const SoilWater& soil_water, 
+				      double from, double to, double energy)
+{
+  // Find total energy capacity.
+  double capacity = 0.0;
+  double old = 0.0;
+
+  for (unsigned int i = 0; i < soil.size () && old > to ; i++)
+    {
+      if (soil.zplus (i) < from)
+	{
+	  const double height = (min (old, from) - max (soil.zplus (i), to));
+	  capacity += soil.heat_capacity (i, soil_water.Theta (i), 
+					  soil_water.X_ice (i)) * height;
+	}
+      old = soil.zplus (i);
+    }
+  
+  // Distribute temperature evenly.
+  const double average = energy / capacity / (to - from);
+  old = 0.0;
+
+  for (unsigned int i = 0; i < soil.size () && old > to ; i++)
+    {
+      if (soil.zplus (i) < from)
+	{
+	  const double height = (min (old, from) - max (soil.zplus (i), to));
+	  T[i] = (height * average + (soil.dz (i) - height)* T[i]) 
+	    / soil.dz (i);
+	}
+      old = soil.zplus (i);
+    }
+}
+
+double 
+SoilHeat::Implementation::bottom (const Time& time, 
+				  const Weather& weather) const 
+{
+  // Fetch average temperatur.
+  const double average = weather.average ();
+  const double amplitude = weather.amplitude (); 
+  const double omega = weather.omega (); 
+  const double max_Ta_yday = weather.max_Ta_yday (); 
+
+  return average 
+    + amplitude 
+    * exp (delay)
+    * cos (omega * (time.yday () - max_Ta_yday) + delay);
+}
+
+bool
+SoilHeat::Implementation::check (unsigned n) const
+{
+  bool ok = true;
+  if (T.size () != n)
+    {
+      CERR << "You have " << n << " intervals but " 
+	   << T.size () << " T values\n";
+      ok = false;
+    }
+  return ok;
+}
+
+SoilHeat::Implementation::Implementation (const AttributeList& al)
+  : h_frozen (al.number ("h_frozen")),
+    enable_ice (al.flag ("enable_ice")),
+    T_top (al.check ("T_top") ? al.number ("T_top") : -500.0)
+{ }
+
+void
+SoilHeat::Implementation::initialize (const AttributeList& al, 
+				      const Soil& soil, 
+				      const Time& time, 
+				      const Weather& weather)
+{
+  // Freezing point.
+  T_freezing.insert (T_freezing.end (), soil.size (), 0.0);
+  T_thawing.insert (T_thawing.end (), soil.size (), 0.0);
+  state.insert (state.end (), soil.size (), liquid);
+  freezing_rate.insert (freezing_rate.end (), soil.size (), 0.0);
+
+  // Fetch average temperatur.
+  const double omega = weather.omega (); 
+
+  // Fetch initial T.
+  soil.initialize_layer (T, al, "T");
+
+  // Calculate delay.
+  const double pF_2_0 = -100.0;
+  double k = 0;
+  double C = 0;
+  
+  for (unsigned int i = 0; i < soil.size (); i++)
+    {
+      const double Theta_pF_2_0 = soil.Theta (i, pF_2_0, 0.0);
+      k += soil.dz (i) * soil.heat_conductivity (i, Theta_pF_2_0, 0.0);
+      C += soil.dz (i) * soil.heat_capacity (i, Theta_pF_2_0, 0.0);
+      const double a = k / C;
+      delay = soil.zplus (i) / sqrt (24.0 * 2.0 * a / omega);
+
+      // Fill out T if necessary.
+      if (T.size () <= i)
+	T.push_back (bottom (time, weather));
+    }
+#if 0
+  // We check for this in SoilHeat::check ().
+  assert (T.size () == soil.size ());
+#endif
+}
+
+
+double 
+SoilHeat::top_flux (const Soil& soil, const SoilWater& soil_water) const
+{
+  const double k 
+    = soil.heat_conductivity (0, soil_water.Theta (0), soil_water.X_ice (0))
+    * 1e-7 * 1e4 / 3600.0;	// erg/h/ cm/ K -> W/m^2/K
+  return k * (T (0) - T (1)) / (soil.z (0) - soil.z (1));
+}
+
+void 
+SoilHeat::tick (const Time& time, 
+		const Soil& soil,
+		SoilWater& soil_water,
+		const Surface& surface,
+		const Groundwater& groundwater,
+		const Weather& weather)
+{
+  impl.tick (time, soil, soil_water, surface, groundwater, weather);
+}
+
+double 
+SoilHeat::energy (const Soil& soil,
+		  const SoilWater& soil_water,
+		  double from, double to) const
+{
+  return impl.energy (soil, soil_water, from, to);
+}
+
+void
+SoilHeat::set_energy (const Soil& soil,
+		      const SoilWater& soil_water, 
+		      double from, double to, double energy)
+{
+  impl.set_energy (soil, soil_water, from, to, energy);
+}
+
+void
+SoilHeat::swap (const Soil& soil, double from, double middle, double to)
+{
+  // This will only work right if the water is also swaped.
+  // There *might* be a small error on the top and bottom nodes, but I
+  // believe it should work as long as the energy is directly
+  // proportional with the water content.
+  soil.swap (impl.T, from, middle, to);
+}
+  
+double
+SoilHeat::T (unsigned int i) const
+{
+  assert (i < impl.T.size ());
+  return impl.T[i]; 
+}
+
+void
+SoilHeat::output (Log& log) const
+{
+  log.output ("T", impl.T);
+  log.output ("T_freezing", impl.T_freezing);
+  log.output ("T_thawing", impl.T_thawing);
+}
+
+bool
+SoilHeat::check (unsigned n) const
+{
+  return impl.check (n);
+}
+
+void
+SoilHeat::load_syntax (Syntax& syntax, AttributeList& alist)
+{ 
+  alist.add ("submodel", "SoilHeat");
+  alist.add ("description", "Temperature and heat flux in soil.");
+  Geometry::add_layer (syntax, "T", "dg C", "Soil temperature.");
+  syntax.add ("h_frozen", "cm^-1", Syntax::Const,
+	      "Pressure below which no more water will freeze.");
+  alist.add ("h_frozen", -15000.0);
+  syntax.add ("enable_ice", Syntax::Boolean, Syntax::Const,
+	      "Disable this to prevent water from freezing.");
+  alist.add ("enable_ice", true);
+  syntax.add ("T_top", "dg C", Syntax::OptionalState, 
+	      "Surface temperature at previous time step.");
+  syntax.add ("T_freezing", "dg C", Syntax::LogOnly, Syntax::Sequence,
+	      "Freezing point depression for freezing.");
+  syntax.add ("T_thawing", "dg C", Syntax::LogOnly, Syntax::Sequence,
+	      "Freezing point depression for thawing.");
+}
+
+SoilHeat::SoilHeat (const AttributeList& al)
+  : impl (*new Implementation (al))
+{ }
+
+
+void
+SoilHeat::initialize (const AttributeList& al, 
+		      const Soil& soil, const Time& time, 
+		      const Weather& weather)
+{ impl.initialize (al, soil, time, weather); }
+
+SoilHeat::~SoilHeat ()
+{
+  delete &impl;
+}
+
+static Submodel::Register 
+soil_heat_submodel ("SoilHeat", SoilHeat::load_syntax);
