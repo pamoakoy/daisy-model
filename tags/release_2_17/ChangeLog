@@ -1,0 +1,550 @@
+2002-03-14  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.17 released.
+
+2002-03-14  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log.dai ("Chemical"): Fix dimension.
+	("Chemicals"): New parameterization.
+
+2002-03-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* soil_chemicals.C (find): Add to 'all'.
+
+	* lib/chemistry.dai (solid): Obey range checks.
+
+	* chemical_std.C (ChemicalStandardSyntax): Added range checks.
+
+	* partition.h (Root, Leaf, Stem, RSR): Made them non-references.
+
+	* librarian.h (Librarian, ~Librarian): Pointless change in
+	handling content.
+
+	* action_irrigate.C: Fix memory leak.
+
+2002-03-11  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* library.C (~Implementation): More agressive cleanup.
+
+	* organic_matter.C, organic_matter.h (initialize): New 'Treelog'
+	argument. Use it.
+	Fix SMB from SOM substraction.
+
+	* lib/*.dai (LAIDist0): Fixed for new crops.
+
+	* library.C (Implementation::all_count): New variable.
+	(Implementation) Increment.
+	(~Implementation) Decrement and delete all when zero.
+
+	* common.h (map_delete): New template.
+	* syntax.C (~Implementation): Use it.
+	* soil_chemicals.C (~Implementation): Use it.
+	* log_extern.C (~LogExternSource): Use it.
+	* units.C (~Content): Use it.
+
+	* log_extern.C (LogExternSource): Delete log_extern_map members.
+
+	* root_system.C (~RootSystem): Delete rootdens.
+
+	* svat_pmsw.C (tick): Commented out some code that used unused
+	variables, and set variables not used afterwards.
+	(SVAT_PMSW): Gave dummy values to some variables that are used,
+	but not set.
+
+2002-03-10  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* groundwater_pipe.C (RaisingGWT): Added assertions.
+
+	* snow.C (Snow): Delete impl.
+	* transform_equil.C (~TransformEquilibrium): New function.
+	* equil_langmuir.C (~EquilibriumLangmuir): New function.
+	* am.C (~AM): Remove bogus assertion.
+	(~Implementation): Delete lock.
+	* select.C (Select): Delete impl.
+	(~Implementation): Delete spec.
+	* field.C (Field): Delete impl.
+	* soil_water.C (SoilWater): Delete reserve and bottom.
+	* solute.C (Solute): Delete last_resort.
+
+	* svat_pmsw.C (SVAT_PMSW): Initialise pstress.
+	Reorder initializations.
+
+	* librarian.h (map_create): Return value, not reference.
+	(map_create_const, map_construct, map_construct_const): Ditto.
+	* action_activity.C: Fix caller.
+	* action_lisp.C (ActionProgn::action): Ditto.
+	* action_while.C (ActionWhile::actions): Ditto.
+	* action_with.C: Ditto.
+	* condition_logic.C (ConditionOr::conditions): Ditto.
+	(ConditionAnd::conditions): Ditto.
+	* daisy.h, daisy.C (Daisy::logs): Ditto.
+	(Daisy::harvest): Ditto.
+
+	* action_lisp.C (~ActionCond, ~ActionIf): Remove CONST_DELETE
+	condition. 
+	* condition_logic.C (~ConditionOr, ~ConditionAnd): Ditto.
+
+	* action_lisp.C (~ActionCond): Delete actions.
+	* action_with.C (~ActionWithColumn): Delete actions.
+	* column_base.C (ColumnBase): Delete transformations.
+	* organic_matter.C (~Implementation): Delete am, smb, and som.
+	
+2002-03-09  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log-old.dai, lib/log.dai ("N Balance 0-100 cm"): Moved. 
+	("Monthly N Balance 100 cm"): Ditto.
+	("Soil Chemicals 0-100 cm"): Ditto.
+	("Soil Chemical 0-100 cm"): Ditto.
+
+	* lib/log.dai ("Soil Chemicals"): Made hourly.
+	("Soil Chemical"): Ditto.
+
+	* select_date.C (SelectDateSyntax): Fix memory leak.
+	* chemicals.C (add_syntax): Ditto.
+	* library.C (Library): Ditto.
+	* soil_chemical.C (load_syntax): Ditto.
+	* action_lisp.C (ActionLispSyntax): Ditto.
+	* crop_old.C (CropOldSyntax): Ditto.
+	* crop_sold.C (CropSoldSyntax): Ditto.
+	* horizon.C (load_syntax): Ditto.
+	* soil_NH4.C (load_syntax): Ditto.
+	* soil_NO3.C (load_syntax): Ditto.
+	* bioclimate_std.C (BioclimateStandardSyntax): Ditto.
+	* alist.C (add): Ditto.
+
+2002-03-08  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log.dai, lib/log-old.dai ("Soil Nitrate Concentration",
+	"Soil Water NO3 Concentration", "Root Zone Water Balance 0-100
+	cm"): Moved. 
+	* lib/log.dai ("Soil NO3 Concentration", "Soil NO3-N
+	Concentration"): New parameterizations.
+	("Root Zone Water Balance", "N Balance"): Made it hourly.
+
+	* uzrichard.C (q_darcy): Cleanup error messages.
+
+	* ridge.C (update_water): Better error message if hydraulic
+	properties are not uniform within ridge.
+
+	* Version 2.16 released.
+
+2002-03-08  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* production.h, production.C (RtDR_T_factor): New parameter.
+
+2002-03-07  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log-old.dai, lib/log.dai. ("Hourly Water Flux", "Daily Water
+	Flux"): Moved to `log-old.dai'.
+	* lib/log.dai ("Soil Temperature", "Surface Water Balance"): Made
+	it hourly. 
+	("Preferential Water Flux"): Store in `pref_water_flux.dlf'.  Fix
+	deminesion. 
+	("Matrix Water Flux"): New model.
+	("Surface Water Balance"): 
+
+	* weather_std.C (PrecipCorrect): New keyword.
+
+	* Version 2.15 released.
+
+2002-03-07  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/all.dai: New file.
+	* lib/Makefile (TEXT): Added it.
+
+2002-03-06  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* nitrification_soil.C (NitrificationSoilSyntax): Added range checks.
+	* nitrification_solute.C (NitrificationSoluteSyntax): Ditto.
+
+	* lib/log.dai: Changed sign for solute drainage.
+
+2002-03-05  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* solute.C (tick): Added more assertions.
+	(tick): Fixed bogus drainage calculation.
+
+	* transport_cd.C (tick): Reset M when lowering timestep.
+
+	* mactrans_std.C, mactrans.h (tick): Added `M' parameter.
+
+	* solute.C (last_resort): Transport model if reserve fails.
+
+	* transport_convection.C (tick): Decrease timestep if we get
+	negative values.
+
+2002-03-04  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* library.C, library.h (is_derived_from, base_model): New member
+	functions. 
+	* document.C (ModelCompare): New class.
+	(print_component): Use it.
+	* document_LaTeX.C (print_index): New function.
+	(print_model_header): Use it.
+	(print_fixed_header): Use it.
+	(print_component_header): Use it.
+	(print_submodel_entry): Use it.
+	(print_entry_category): Don't print index here.
+	* document_LaTeX.C, document.h: (print_parameterization_header(
+	(print_parameterization_file) 
+	(print_parameterization_no_file) 
+	(print_parameterization_description) 
+	(print_parameterization_trailer): New virtual functions.
+	* document.C (print_model): Use them.
+
+	* options.C (Options): Don't run simulation if we printed a manual.
+
+	* organic_matter.C (tick): Allow zero NH4 or NO3.
+
+2002-03-03  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* select.C (Spec): New member.
+
+	* library.C, library.h (exist): New function.
+
+	* lib/log.dai ("Total Soil Content"): Gave it a description and
+	made it hourly. 
+
+2002-03-01  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/crop-old.dai: New file..
+	* lib/crop.dai: Moved old V1 crop parameterizations to
+	crop/old.dai. 
+	* lib/log-old.dai: New file.
+	* lib/Makefile (DAISY): Added them.
+
+	* net_radiation.C (NetRadiationSyntax): Spelling error.
+
+	* units.C (standard_conversions): Added convertions used by
+	`weather_std.C'. 
+	* weather_std.C: Converted to use `units.h'.
+
+2002-02-28  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* parser_file.C (get_string): Ignore escaped newlines, and let \n
+	mean newline.
+
+	* lib/maize.dai ("Pioneer Maize"): Renamed from "Maize Pioneer".
+
+2002-02-27  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* action_fertilize.C (ActionFertilizeSyntax): Added range checks.
+
+	* soil_water.C, soil_water.h (content): New function.
+	* column_base.C, column_base.h, column.h (soil_water_content): New
+	function. 
+	* field.C, field.h (soil_water_content): New function.
+	* condition_soil.C (ConditionSoilWater): New condition. 
+
+2002-02-26  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/chemistry.dai (Pendimethalin): New chemical.
+
+	* lib/fertilizer.dai (cattle_slurry): Updated.
+	(pig_slurry): Updated.
+	(cattle_manure): New.
+	(pig_manure): New.
+	(horse_manure): New.
+
+	* lib/rye.dai ("Rye"): Update from hsv.
+	* lib/sugarbeet.dai ("Sugar Beet"): Ditto.
+	* lib/srape.dai ("Spring Rape"): Ditto.
+	* lib/potato.dai: New file.
+	* lib/Makefile (NEWCROPS): Added it.
+	* lib/crop.dai: Input it.
+	* lib/maize.dai ("Maize"): Use "Roskilde" parameterizations.
+	("Maize Pioneer"): Renamed from "Maize".
+
+2002-02-24  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* am.C (AM_Syntax): Use `add_fraction' for "first_year_utilization".
+
+2002-02-23  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.14 released.
+
+2002-02-23  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* solute.C (tick): Fix check for mass balance.
+
+2002-02-22  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* solute.C (tick): Don't give mass balance errors if transported
+	mass is 10 orders of magnitude smaller than total mass.
+
+	* mactrans_std.C (tick): Fix bug that prevented macropores from
+	being activated. 
+	Made mass balance check work for low conetrations as well.
+
+2002-02-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.12 released.
+
+2002-02-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* mactrans_std.C (tick): Made it more robust.
+
+	* production.C (tick): Substract ReMobilResp from CH2OPool.
+
+	* Version 2.11 released.
+
+2002-02-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* transport_cd.C: Decrease timestep if we get negative results.
+	* solute.C: Added reserve transport model.
+	(tick): Added checks.
+
+2002-02-20  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* hydraulic_Cosby.C (initialize): Use pow (10, x), not exp (x) for
+	K_sat and h_b.
+
+	* om.C (tick): Really fix the mass balance bug.
+
+2002-02-19  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.10 released.
+
+2002-02-19  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* om.C (tick): Fixed mass balance error.
+
+	* organic_matter.C (total_N, total_C): New functions.
+	(tick): Added mass balance check.
+
+2002-02-18  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* macro_std.C (MacroStandardSyntax): Added checks.
+
+	* groundwater_pipe.C (GroundwaterPipeSyntax): Added checks.
+
+	* Version 2.09 released.
+
+2002-02-16  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* harvesting.h (DSnew): Made it public.
+	* harvesting.C 	(load_syntax): Made it optional.
+	(operator ()): Don't set DS to DSnew here.
+	(load_syntax): Added range checks to DSmax and DSnew.
+	* plf.C, plf.h (inverse_safe): New function.
+	* canopy_std.C, canopy_std.h (DS_at_height): New function.
+	* crop_std.C (harvest): Call it.
+
+2002-02-15  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* document_LaTeX.C (print_entry_category): Add index.
+	* Makefile (txt/reference/reference.dvi): Ditto.
+	(txt/reference/reference.pdf): Ditto.
+
+2002-02-09  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* column_base.C (ColumnBase, load_syntax): Made "Bioclimate"
+	optional. 
+
+	* bioclimate_std.C (BioclimateStandardSyntax): Fix minor memory leak.
+
+2002-02-08  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.08 released.
+
+2002-02-07  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* hydraulic.C, hydraulic.h, hydraulic_Cosby.C (initialize): Take
+	clay, sand and silt parameters instead of horizon.
+	* horizon.C (Horizon): Update caller.
+
+	* transport_cd.C (tick): Only complain if the error is above mg/ha
+	in the root zone.
+
+	* parser_file.C (convert): Added support for [%].
+	(check_dimension): Ditto.
+
+	* units.C (standard_conversions): Added "[d^-1]" -> "[h^-1]"
+	conversion. 
+
+	* groundwater_pipe.C (initialize): Fix 'Treelog::Open' nesting
+	bug.  
+	Added some assertions.
+
+	* vernalization.C (output): Don't output if not required (need for
+	checkpoints).
+	* crop_std.C (output): Ditto.
+
+	* hydraulic_Cosby.C (check_alist): Don't complain if 'Theta_sat'
+	is specified, it will be after a checkpoint.
+
+2002-02-06  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.07 released.
+
+2002-02-06  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* horizon.C (Implementation::hydraulic): Removed member.
+	(DepolationsFactor): Take it as an argument.
+	(ThermalConductivity): Update caller.
+	(initialize): Update caller.
+
+	* hydraulic_M_C.C (HydraulicM_CSyntax): Better range checking.
+	* hydraulic_B_C.C (HydraulicB_CSyntax): Ditto.
+	* hydraulic_mod_C.C (Hydraulic_mod_CSyntax): Ditto.
+
+	* horizon.C (Horizon): Initialize 'hydraulic' before 'impl'.
+	(~Horizon): Delete 'impl' and 'hydraulic'.
+
+	* parser_file.C (load_list): Give error of 'directory' directive
+	fails. 
+
+2002-02-05  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* hydraulic.C (initialize): New virtual function.
+	* horizon.C (Horizon): Call it.
+	(silt, sand): New functions.
+	(load_syntax): Gave SOM_C_per_N a default value (11 11).
+	* hydraulic_Cosby.C: New model.
+	* Makefile (MODELS): Added it.
+	* horizon.C (load_syntax): Make it default.
+
+2002-01-30  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.06 released.
+
+2002-01-30  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* horizon.C (load_syntax): Added checks.
+	* soil.C (load_syntax): Added checks.
+	* geometry.C (add_layer): Added check.
+	(load_syntax): Ditto.
+
+	* lexer.h, lexer.C (Lexer::Position): New class member.
+	* lexer.h, lexer.C (error): Use it.
+	* parser_file.C (load_list, convert, get_number, error): Use it.
+
+
+	* units.C, units.h: New utility.
+	* Makefile (OTHER): Add it.
+	* parser_file.C (check_dimention, convert): Use it.
+
+2002-01-25  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.05 released.
+
+2002-01-24  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* pedo_linear.C: New model.
+	* Makefile (MODELS): Added it.
+
+	* Version 2.04 released.
+
+2002-01-24  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log.dai ("N Balance"): Accumulate fixation.
+
+2002-01-23  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* transform_equil.C (S_AB): New log variable.
+
+	* soil.h, horizon.h, horizon.C (get_attribute, has_attribute): New
+	member functions. 
+
+	* mathlib.C (single_positive_root_of_square_equation): Fix error
+	in caculating discriminant.
+
+2002-01-22  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.03 released.
+
+2002-01-22  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* lib/log.dai ("Soil Chemical"): New log model.
+	("Soil Chemical 0-100 cm"): Ditto.
+
+	* parser_file.C (check_dimention): Use ? for entries with unknown
+	syntax. 
+
+	* adsorption_full.C: New model.
+	* Makefile (MODELS): Added it.
+	* solute.C (check_alist): New function.
+	(load_syntax): Use it.
+	* lib/chemistry.dai (solid): New parameterization.
+
+2002-01-21  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* equil_langmuir.C: New model.
+	* Makefile (MODELS): Added it.
+
+2002-01-18  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* soil_chemicals.C, soil_chemicals.h (find): New function.
+	* equil.h, equil.C: New component.
+	* pedo.h, pedo.C: New component.
+	* Makefile (COMPONENTS): Added them.
+	* transform_equil.C: New model.
+	* Makefile (MODELS): Added it.
+
+2002-01-16  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* transform.h, transform.C: New component.
+	* column_base.h, column_base.C: Use it.
+	* Makefile (COMPONENTS): Added it.
+
+	* condition_soil.C (ConditionSoilSyntax): Fixed dimension.
+
+	* parser_file.C (get_dimension): New function.
+	(get_number): New overloaded function.
+	(check_dimention): New function.
+	(convert): New function.
+	(load_list): Use them.
+
+2002-01-15  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.02 released.
+
+2002-01-15  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* column_base.C, column_base.h, column.h (daily_air_temperatur):
+	New member function. 
+	* field.C, field.h (daily_air_temperatur): New member function.
+	* condition.h, condition.C (tick): New virtual member function.
+	* condition_logic.C (ConditionOr::tick, ConditionAnd::tick,
+	ConditionNot::tick, ConditionIf::tick): Define it.
+	* action.h, action.C (tick): New virtual member function.
+	* action_activity.C (tick): Define it.
+	* action_crop.C (tick): Ditto.
+	* action_lisp.C (ActionProgn::tick, ActionCond::tick,
+	ActionIf::tick): Ditto.
+	* action_message.C (tick): Ditto.
+	* action_repeat.C (tick): Ditto.
+	* action_wait.C (ActionWait::tick): Ditto.
+	* action_while.C (tick): Ditto.
+	* action_with.C (tick): Ditto.
+	* daisy.C (tick): Call it.
+	* log_checkpoint.C (match): Ditto.
+	* log_select.C (match): Ditto.
+	* log_table1.C (LogTable1::match, LogEntry::match): Dittto.
+	* select.C (match): Ditto.
+	* condition_weather.C (TSum): New model.
+
+2001-12-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.01 released.
+
+2001-12-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* vegetation.C (load_syntax): Don't use "\(".
+	* om.C (load_syntax): Ditto.
+	* bioincorporation.C (load_syntax): Ditto.
+
+	* librarian.h (class Librarian): Use 'make_pair' instead of
+	'map_type::value_type'. 
+
+2001-12-11  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Makefile (MODELS): Added it.
+	* rootdens_PLF.C: New file.
+
+2001-12-05  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Changelog.1: Renamed from Changelog.
+	* Changelog: New file.
+	* Makefile (TEXT): Added it.
+
