@@ -1,0 +1,190 @@
+// weather_old.C --- Common code for old weather models.
+
+#include "weather_old.h"
+#include "time.h"
+
+struct WeatherOld::Implementation
+{
+  // Snow Model.
+  const double T_rain;
+  const double T_snow;
+
+  // State.
+  double daily_global_radiation; // [W/m²]
+  double Prain;
+  double Psnow;
+  Time time;
+
+  // Create and Destroy.
+  Implementation (const AttributeList& al)
+    : T_rain (al.number ("T_rain")),
+      T_snow (al.number ("T_snow")),
+      daily_global_radiation (-42.42e42),
+      Prain (0.0),
+      Psnow (0.0),
+      time (1, 1, 1, 1)
+    { }
+};
+
+void 
+WeatherOld::tick (const Time& time)
+{
+  Weather::tick (time);
+  impl.time = time;
+}
+
+void
+WeatherOld::output (Log& log) const
+{ Weather::output (log); }
+
+double
+WeatherOld::hourly_global_radiation () const
+{ return (day_cycle () * 24.0) * daily_global_radiation (); }
+
+double
+WeatherOld::daily_global_radiation () const
+{ return impl.daily_global_radiation; }
+
+double
+WeatherOld::rain () const
+{
+  return impl.Prain;
+}
+
+double
+WeatherOld::snow () const
+{
+  return impl.Psnow;
+}
+
+void 
+WeatherOld::distribute (double precipitation)
+{
+  const double T = hourly_air_temperature ();
+  if (T < impl.T_snow)
+    impl.Psnow = precipitation;
+  else if (impl.T_rain < T)
+    impl.Psnow = 0.0;
+  else
+    impl.Psnow
+      = precipitation * (impl.T_rain - T) / (impl.T_rain - impl.T_snow);
+
+  impl.Prain = precipitation - snow ();
+}
+
+double
+WeatherOld::hourly_air_temperature () const
+{
+  // BUG: Should add some kind of day cycle.  
+  return daily_air_temperature (); 
+}
+
+double
+WeatherOld::reference_evapotranspiration () const
+{
+  return Weather::Makkink (hourly_air_temperature (),
+			   hourly_global_radiation ());
+}
+
+double 
+WeatherOld::vapor_pressure () const
+{ 
+  const double T_min = daily_air_temperature () - 5.0;
+  return SaturationVapourPressure (T_min);
+}
+
+double 
+WeatherOld::wind () const
+{ return 3.0; }
+
+void 
+WeatherOld::put_precipitation (double prec)
+{ distribute (prec / 24.0); }
+
+void 
+WeatherOld::put_air_temperature (double)
+{ assert (false); }
+
+void 
+WeatherOld::put_reference_evapotranspiration (double)
+{ assert (false); }
+
+void
+WeatherOld::put_global_radiation (double radiation) // [W/m²]
+{ impl.daily_global_radiation = radiation; }
+
+WeatherOld::WeatherOld (const AttributeList& al)
+  : Weather (al),
+    impl (*new Implementation (al))
+{ 
+  latitude = al.number ("Latitude");
+  longitude = al.number ("Longitude");
+  elevation = al.number ("Elevation");
+  timezone = al.number ("TimeZone");
+  screen_height = al.number ("ScreenHeight");
+  T_average = al.number ("average");
+  T_amplitude = al.number ("amplitude");
+  max_Ta_yday = al.number ("max_Ta_yday");
+  DryDeposit = IM (al.alist ("DryDeposit"));
+  WetDeposit = IM (al.alist ("WetDeposit"));
+}
+
+WeatherOld::~WeatherOld ()
+{ 
+  delete &impl;
+}
+
+#ifdef BORLAND_TEMPLATES
+template class add_submodule<IM>;
+#endif
+
+void
+WeatherOld::load_syntax (Syntax& syntax, AttributeList& alist)
+{
+  Weather::load_syntax (syntax, alist);
+  // Where in the world are we?
+  syntax.add ("Latitude", "dg North", Syntax::Const,
+	      "The position of the weather station on the globe.");
+  alist.add ("Latitude", 56.0);
+  syntax.add ("Longitude", "dg East", Syntax::Const,
+	      "The position of the weather station on the globe.");
+  alist.add ("Longitude", 10.0);
+  syntax.add ("Elevation", "m", Syntax::Const,
+	      "Height above sea level.");
+  alist.add ("Elevation", 0.0);
+  syntax.add ("TimeZone", "dg East", Syntax::Const,
+	      "Time zone in effect (no DST).");
+  alist.add ("TimeZone", 15.0);
+  syntax.add ("ScreenHeight", "m", Syntax::Const,
+	      "Measurement height above ground.");
+  alist.add ("ScreenHeight", 2.0);
+  syntax.add ("UTM_x", Syntax::Unknown (), Syntax::OptionalConst,
+	      "X position of weather station."); // Unused.
+  syntax.add ("UTM_y", Syntax::Unknown (), Syntax::OptionalConst,
+	      "Y position of weather station."); // Unused.
+
+  add_submodule<IM> ("DryDeposit", syntax, alist, Syntax::Const, "\
+Dry atmospheric deposition of nitrogen [kg N/year/ha].");
+  add_submodule<IM> ("WetDeposit", syntax, alist, Syntax::Const, "\
+Deposition of nitrogen solutes with precipitation [ppm].");
+
+  // Division between Rain and Snow.
+  syntax.add ("T_rain", "dg C", Syntax::Const, 
+	      "Above this air temperature all precipitation is rain.");
+  alist.add ("T_rain", 2.0);
+  syntax.add ("T_snow", "dg C", Syntax::Const,
+	      "Below this air temperature all precipitation is snow.");
+  alist.add ("T_snow", -2.0);
+
+  // Yearly average temperatures.
+  syntax.add ("average", "dg C", Syntax::Const,
+	      "Average temperature at this location.");
+  alist.add ("average", 7.8);
+  syntax.add ("amplitude", "dg C", Syntax::Const,
+	      "How much the temperature change during the year.");
+  alist.add ("amplitude", 8.5);
+  syntax.add ("max_Ta_yday", "d", Syntax::Const,
+	      "Julian day where the highest temperature is expected.");
+  alist.add ("max_Ta_yday", 209.0);
+}
+
