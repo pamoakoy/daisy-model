@@ -1,0 +1,24 @@
+2001-12-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Version 2.01 released.
+
+2001-12-12  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* vegetation.C (load_syntax): Don't use "\(".
+	* om.C (load_syntax): Ditto.
+	* bioincorporation.C (load_syntax): Ditto.
+
+	* librarian.h (class Librarian): Use 'make_pair' instead of
+	'map_type::value_type'. 
+
+2001-12-11  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Makefile (MODELS): Added it.
+	* rootdens_PLF.C: New file.
+
+2001-12-05  Per Abrahamsen  <abraham@dina.kvl.dk>
+
+	* Changelog.1: Renamed from Changelog.
+	* Changelog: New file.
+	* Makefile (TEXT): Added it.
+
