@@ -1,0 +1,149 @@
+// hydraulic_old.C
+//
+// Read hydraulic parameters from file.
+
+#include "hydraulic.h"
+#include "mathlib.h"
+#include "plf.h"
+#include <fstream.h>
+
+class HydraulicOld : public Hydraulic
+{
+  // We cheat and use h_minus instead of h in all the PLF except M_.
+  PLF Thetam_;
+  PLF hm_;
+  PLF Cw2_;
+  PLF K_;
+  PLF M_;
+
+public:
+  double Theta (double h) const;
+  double K (double h) const;
+  double Cw2 (double h) const;
+  double h (double Theta) const;
+  double M (double h) const;
+
+  // Create and Destroy.
+private:
+  friend class HydraulicOldSyntax;
+  static Hydraulic& make (const AttributeList& al);
+  HydraulicOld (const AttributeList&);
+public:
+  virtual ~HydraulicOld ();
+};
+
+double 
+HydraulicOld::Theta (const double h) const
+{
+  if (h >= -1.0e-20)
+    return Theta_sat;
+  else
+    return -Thetam_ (-h);
+}
+
+double 
+HydraulicOld::K (const double h) const
+{
+  return K_ (-h);
+}
+
+double 
+HydraulicOld::Cw2 (const double h) const
+{
+  return Cw2_ (-h);
+}
+
+double 
+HydraulicOld::h (const double Theta) const
+{
+  assert (Theta <= Theta_sat);
+  return -hm_ (-Theta);
+}
+
+double 
+HydraulicOld::M (double h) const
+{
+  return M_ (h);
+}
+
+HydraulicOld::HydraulicOld (const AttributeList& al)
+  : Hydraulic (al)
+{ 
+  const int M_intervals (al.integer ("M_intervals"));
+  const string name (al.name ("file"));
+  
+  ifstream file (Options::find_file (name));
+  if (!file.good ())
+    throw (name + ": read error");
+  while (file.good () && file.get () != '\n')
+    ;
+
+  int line = 0;
+  double pF;
+  double Theta;
+  double Cw2;
+  double K;
+  while (file.good ())
+    {
+      file >> pF >> Theta >> Cw2 >> K;
+      line++;
+
+      if (Theta_sat < 0.0)
+	const_cast<double&> (Theta_sat) = Theta;
+      
+      const double h_minus = (pF < 1.0e-10) ? 0.0 : - pF2h (pF);
+      
+      Thetam_.add (h_minus, -Theta);
+      Cw2_.add (h_minus, Cw2 * 1.0e-2);
+      K_.add (h_minus, K * 3.6e5);
+    }
+  
+  if (!file.eof ())
+    {
+#if 0
+      throw (name + ":" + line + ": file error");
+#else
+      throw (name + ": file error");
+#endif
+      
+    }
+  hm_ = Thetam_.inverse ();
+  K_to_M (M_, M_intervals);
+
+  close (file.rdbuf ()->fd ());
+}
+
+HydraulicOld::~HydraulicOld ()
+{ }
+
+// Add the HydraulicOld syntax to the syntax table.
+
+Hydraulic&
+HydraulicOld::make (const AttributeList& al)
+{
+  return *new HydraulicOld (al);
+}
+
+static struct HydraulicOldSyntax
+{
+  HydraulicOldSyntax ();
+} hydraulicOld_syntax;
+
+HydraulicOldSyntax::HydraulicOldSyntax ()
+{ 
+  Syntax& syntax = *new Syntax ();
+  AttributeList& alist = *new AttributeList ();
+  alist.add ("description", "\
+Reads a file of lines in the format < pF Theta Cw2 K >, where pF is the\n\
+water pressure, Theta is the water content at that  pressure, cw2 is\n\
+dTheta/dh at that pressure [m^-1], and K is the water conductivity at\n\
+that pressure [m/s].");
+  Hydraulic::load_syntax (syntax, alist);
+  syntax.add ("M_intervals", Syntax::Integer, Syntax::Const,
+	      "Number of intervals for numeric integration of K.");
+  alist.add ("M_intervals", 500);
+  alist.add ("Theta_sat", -42.42e42);
+  syntax.add ("file", Syntax::String, Syntax::Const, "The file to read.");
+  syntax.order ("file");
+  Librarian<Hydraulic>::add_type ("old", alist, syntax, &HydraulicOld::make);
+}
