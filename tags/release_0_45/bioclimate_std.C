@@ -1,0 +1,669 @@
+// bioclimate_std.C --- The default biclimate model
+
+#include "bioclimate.h"
+#include "surface.h"
+#include "weather.h"
+#include "crop.h"
+#include "csmp.h"
+#include "alist.h"
+#include "soil.h"
+#include "common.h"
+#include "syntax.h"
+#include "snow.h"
+#include "log.h"
+#include "filter.h"
+#include "mathlib.h"
+#include "pet.h"
+#include "pt.h"
+
+struct BioclimateStandard : public Bioclimate
+{ 
+  // Canopy State.
+  const long No;		// No of intervals in canopy discretation.
+  double MxH;			// Max crop Hieght in canopy [cm].
+  double LAI_;			// Total LAI of all crops on this column.
+  vector<double> Height;	// Height in cm of each endpoint in c.d.
+  vector<double> PAR_;		// PAR of each interval of c.d.
+  CSMP LAIvsH;			// LAI below given height [f: cm -> R]
+  CSMP HvsLAI;			// Height with LAI below [f: R -> cm]
+  double crop_cover;		// Fraction of soil covered by crops.
+
+  // Canopy Utilities.
+  double CanopySum (const CropList& crops, double (Crop::*fun) () const);
+  double CanopyAverage (const CropList& crops, double (Crop::*fun) () const);
+
+  // Canopy Tick.
+  void CanopyStructure (const CropList&);
+
+  // External water sinks and sources.
+  Pet& pet;			// Potential Evapotranspiration model.
+  double total_ep;		// Potential evapotranspiration [mm/h]
+  double total_ea;		// Actual evapotranspiration [mm/h]
+
+  double irrigation_top;	// Irrigation above canopy [mm/h]
+  double irrigation_top_old;	// Old value for logging.
+  double irrigation_top_temperature; // Water temperature [dg C]
+  double irrigation_surface;	// Irrigation below canopy [mm/h]
+  double irrigation_surface_old; // Old value for logging.
+  double irrigation_surface_temperature; // Water temperature [dg C]
+
+  // Water intercepted on canopy.
+  double canopy_ep;		// Potential canopy evaporation [mm/h]
+  double canopy_ea;		// Actual canopy evaporation [mm/h]
+  double canopy_water_capacity;	// Water storage capacity [mm]
+  double canopy_water_storage;	// Intercepted water on canopy [mm]
+  double canopy_water_temperature; // Temperature of incomming water [dg C]
+  double canopy_water_in;	// Water entering canopy [mm/h]
+  double canopy_water_out;	// Canopy drip throughfall [mm/h]
+  double canopy_water_bypass;	// Water from above bypassing the canopy [mm/h]
+  
+  // Water in snowpack.
+  Snow snow;
+  double snow_ep;		// Potential snow evaporation [mm/h]
+  double snow_ea;		// Actual snow evaporation [mm/h]
+  double snow_water_in;		// Water entering snow pack [mm/h]
+  double snow_water_in_temperature; // Incomming water temperature [dg C]
+  double snow_water_out;	// Water leaving snow pack [mm/h]
+  double snow_water_out_temperature; // Temperature of water leaving [dg C]
+  // Water in pond.
+  double pond_ep;		// Potential evaporation from pond [mm/h]
+  double pond_ea;		// Actual evaporation from pond [mm/h]
+  double pond_water_in;		// Water entering pond [mm/h]
+  double pond_water_in_temperature; // Temperature of water entering [dg C]
+
+  // Water going through soil surface.
+  double soil_ep;		// Potential exfiltration. [mm/h]
+  double soil_ea;		// Actual exfiltration. [mm/h]
+
+  // Water transpirated through plant roots.
+  PT& pt;			// Potential transpiration model.
+  double crop_ep;		// Potential transpiration. [mm/h]
+  double crop_ea;		// Actual transpiration. [mm/h]
+
+  void WaterDistribution (Surface& surface, const Weather& weather, 
+			  const CropList& crops, const Soil& soil, 
+			  SoilWater& soil_water, const SoilHeat&);
+
+  // Radiation.
+  void RadiationDistribution (const Weather&, const CropList&);
+  void IntensityDistribution (double Rad0, double Ext, 
+			      vector <double>& Rad) const;
+
+  // Weather.
+  double daily_air_temperature_; // Air temperature in canopy. [dg C]
+  double day_length_;		// From weather (does not belong here) [h].
+  double daily_global_radiation_; // From weather [W/m2].
+
+  // Simulation
+  void tick (Surface&, const Weather&, const Time&, 
+	     const CropList&, 
+	     const Soil&, SoilWater&, const SoilHeat&);
+  void output (Log&, Filter&) const;
+
+  // Canopy.
+  int NumberOfIntervals () const
+    { return No; }
+  double height (int i) const
+    { return Height[i]; }
+  double PAR (int i) const
+    { return PAR_[i]; }
+  double LAI () const
+    { return LAI_; }
+
+  // Weather.
+  double daily_air_temperature () const
+    { return daily_air_temperature_; }
+  double day_length () const
+    { return day_length_; }
+  double daily_global_radiation () const
+    { return daily_global_radiation_; }
+
+  // Manager.
+  void irrigate_top (double flux, double temp);
+  void irrigate_surface (double flux, double temp);
+  
+  // Communication with external model.
+  double get_evap_interception () const // [mm/h]
+    { return canopy_ea; }
+  double get_intercepted_water () const // [mm]
+    { return canopy_water_storage; }
+  double get_net_throughfall () const // [mm/h]
+    { return pond_water_in; }
+  double get_snow_storage () const // [mm]
+    { return snow.get_storage (); }
+
+  // Create.
+  BioclimateStandard (const AttributeList&);
+  ~BioclimateStandard ();
+};
+
+BioclimateStandard::BioclimateStandard (const AttributeList& al)
+  : Bioclimate (al.name ("type")),
+    No (al.integer ("NoOfIntervals")),
+    MxH (0.0),
+    LAI_ (0.0),
+    Height (al.integer ("NoOfIntervals") + 1),
+    PAR_ (al.integer ("NoOfIntervals") + 1),
+    LAIvsH (),
+    HvsLAI (),
+    crop_cover (0.0),
+    pet (Librarian<Pet>::create (al.alist ("pet"))),
+    total_ep (0.0),
+    total_ea (0.0),
+    irrigation_top (0.0),
+    irrigation_top_old (0.0),
+    irrigation_top_temperature (0.0),
+    irrigation_surface (0.0),
+    irrigation_surface_old (0.0),
+    irrigation_surface_temperature (0.0),
+    canopy_ep (0.0),
+    canopy_ea (0.0),
+    canopy_water_capacity (0.0),
+    canopy_water_storage (al.number ("canopy_water_storage")),
+    canopy_water_temperature (0.0),
+    canopy_water_in (0.0),
+    canopy_water_out (0.0),
+    canopy_water_bypass (0.0),
+    snow (al.alist ("Snow")),
+    snow_ep (0.0),
+    snow_ea (0.0),
+    snow_water_in (0.0),
+    snow_water_in_temperature (0.0),
+    snow_water_out (0.0),
+    snow_water_out_temperature (0.0),
+    pond_ep (0.0),
+    pond_ea (0.0),
+    pond_water_in (0.0),
+    pond_water_in_temperature (0.0),
+    soil_ep (0.0),
+    soil_ea (0.0),
+    pt (Librarian<PT>::create (al.alist ("pt"))),
+    crop_ep (0.0),
+    crop_ea (0.0),
+    daily_air_temperature_ (0.0),
+    day_length_ (0.0),
+    daily_global_radiation_ (0.0)
+{ }
+
+BioclimateStandard::~BioclimateStandard ()
+{ 
+  delete &pet;
+  delete &pt;
+}
+
+double
+BioclimateStandard::CanopySum (const CropList& crops, double (Crop::*fun) () const)
+{
+  if (LAI_ == 0.0)
+    return 0.0;
+
+  return crops.CanopySum (fun);
+}
+
+double
+BioclimateStandard::CanopyAverage (const CropList& crops,
+			      double (Crop::*fun) () const)
+{
+  if (LAI_ == 0.0)
+    return 0.0;
+
+  return CanopySum (crops, fun) / LAI_;
+}
+
+void
+BioclimateStandard::CanopyStructure (const CropList& crops)
+  // Calculate values for the total crop canopy.
+{
+
+  // Clear old values.
+  LAIvsH.clear ();		
+  HvsLAI.clear ();
+  LAI_ = crops.LAI ();
+  MxH = crops.height ();
+  fill (Height.begin (), Height.end (), 0.0);
+  crop_cover = 0.0;
+
+  // Only calculate LAI distribution, if there is any.
+  if (LAI_ == 0.0)
+    return;
+
+  // Calculate the total Leaf Area Density as a function of the height
+  // above the ground.
+  for (CropList::const_iterator crop = crops.begin();
+       crop != crops.end();
+       crop++)
+    {
+      if ((*crop)->LAI () > 0.0)
+	{
+	  (*crop)->CanopyStructure ();
+	  LAIvsH += (*crop)->LAIvsH ();
+	}
+    }
+  // There are no leafs below the ground.
+  assert (LAIvsH (0.0) == 0.0);
+  // All leafs are located below the top of the highest crop.
+  assert (approximate (LAI_, LAIvsH (MxH)));
+
+  // Find H as a function of LAI.
+  HvsLAI = LAIvsH.inverse ();
+  // Check that the end points still match.
+  if (!approximate (MxH, HvsLAI (LAI_)))
+    CERR << "BUG: MxH = " << MxH 
+	 << ", but HvsLAI (LAI) = " << HvsLAI (LAI_) << "\n"; 
+
+  assert (HvsLAI (0.0) == 0.0);
+  
+  // Count height of each interval.  Interval 0 is the top of the crop
+  // and interval "No" is group zero (no bomb intended).
+  double dLAI = LAI_ / No;
+  for (int i = 0; i <= No; i++)
+    Height[i] = HvsLAI ((No - i) * dLAI);
+
+  assert (Height[No] == 0.0);
+  //  assert (approximate (Height[0], MxH));
+  Height[0] = MxH;
+
+  // Calculate fraction of soil covered by the canopy.
+  crop_cover = crops.cover ();
+}
+
+void 
+BioclimateStandard::RadiationDistribution (const Weather& weather, 
+				      const CropList& crops)
+{
+  if (LAI () == 0.0)
+    {
+      fill (&PAR_[0], &PAR_[No+1], 0.0);
+      return;
+    }
+
+  // Fraction of Photosynthetically Active Radiation in Shortware
+  // incomming radiation. 
+  static const double PARinSi = 0.50;	
+
+  // Average Canopy Extinction coefficient
+  // (how fast the light dim as a  function of LAI passed).
+  const double ACExt = CanopyAverage (crops, &Crop::PARext);
+
+  // Average Canopy Reflection coefficient 
+  const double ACRef =  CanopyAverage (crops, &Crop::PARref);
+
+#if 0
+  // Average Radiation Extinction coefficient
+  // (like ACExt, but for all radiation, not just light).
+  const double ARExt = CanopyAverage (crops, &Crop::EPext);
+#endif 
+
+  const double PAR0 
+    = (1 - ACRef) * PARinSi * weather.hourly_global_radiation ();
+  IntensityDistribution (PAR0, ACExt, PAR_);
+}
+
+void
+BioclimateStandard::IntensityDistribution (const double Rad0,
+				      const double Ext,
+				      vector <double>& Rad) const
+{
+  assert (Rad.size () == No + 1);
+  const double dLAI = (LAI_ / No);
+    
+  for (int i = 0; i <= No; i++)
+    Rad[i] = Rad0 * exp (- Ext * dLAI * i);
+}
+
+void
+BioclimateStandard::WaterDistribution (Surface& surface,
+				  const Weather& weather, 
+				  const CropList& crops,
+				  const Soil& soil, 
+				  SoilWater& soil_water,
+				  const SoilHeat& soil_heat)
+{
+  // Overview.
+  //
+  // First we calculate the external water sources (precipitation,
+  // irrigation) and sinks (potential evapotranspiration).  Then we
+  // update the sources, sinks and storage for each of the following
+  // four "containers": The snow pack, water intercepted on the canopy, 
+  // pond, and soil surface.  It is assumed that each the flows for
+  // each container only depends on the container above, so we
+  // calculate the changes from the top and downwards.
+  //
+  // A final and fifth "container" is the crop transpiration.
+
+  // 1 External water sinks and sources. 
+
+  // 1.1 Evapotranspiration
+  pet.tick (weather, crops, surface, soil, soil_heat, soil_water);
+  total_ep = pet.wet ();
+  total_ea = 0.0;		// To be calculated.
+
+  // 1.2 Irrigation
+  //
+  // Already set by manager.
+
+  // 1.3 Weather.
+  double rain = weather.rain ();
+  double air_temperature = weather.hourly_air_temperature ();
+
+  // 2 Snow Pack
+
+  snow_ep = total_ep - total_ea;
+  snow_water_in = rain + irrigation_top;
+  if (irrigation_top > 0.01)
+    snow_water_in_temperature 
+      = (irrigation_top * irrigation_top_temperature
+	 + rain * air_temperature) / snow_water_in;
+  else
+    snow_water_in_temperature = air_temperature;
+  snow.tick (soil, soil_water, soil_heat, 
+	     weather.hourly_global_radiation (), 0.0,
+	     snow_water_in, weather.snow (),
+	     snow_water_in_temperature, snow_ep);
+  snow_ea = snow.evaporation ();
+  total_ea += snow_ea;
+  snow_water_out = snow.percolation ();
+  snow_water_out_temperature = snow.temperature ();
+
+  // 3 Water intercepted on canopy
+
+  canopy_water_capacity = CanopySum (crops, &Crop::IntcpCap);
+  canopy_ep = (total_ep - snow_ea) * crop_cover;
+  canopy_water_in = snow_water_out * crop_cover;
+  canopy_water_bypass = snow_water_out - canopy_water_in;
+  
+  if (canopy_water_in > 0.01)
+    canopy_water_temperature 
+      = (canopy_water_storage * air_temperature 
+	 + canopy_water_in * snow_water_out_temperature)
+      / (canopy_water_storage + canopy_water_in);
+  else
+    canopy_water_temperature = air_temperature;
+
+  canopy_ea = min (canopy_ep, canopy_water_storage / dt + canopy_water_in);
+  total_ea += canopy_ea;
+
+  canopy_water_storage += (canopy_water_in - canopy_ea) * dt;
+  
+  if (canopy_water_storage > canopy_water_capacity + 1e-8)
+    {
+      canopy_water_out = canopy_water_storage - canopy_water_capacity;
+      canopy_water_storage = canopy_water_capacity;
+    }
+  else
+    {
+      canopy_water_out = 0.0;
+    }
+
+  // 4 Ponding
+
+  pond_ep = (total_ep - snow_ea) * (1.0 - crop_cover);
+  pond_water_in = canopy_water_out + canopy_water_bypass;
+  if (pond_water_in > 0.01)
+    pond_water_in_temperature 
+      = (canopy_water_bypass * snow_water_out_temperature
+	 + canopy_water_out * canopy_water_temperature)
+      / pond_water_in;
+  else
+    pond_water_in_temperature = air_temperature;
+
+  surface.tick (pond_ep, 
+		pond_water_in, pond_water_in_temperature, 
+		soil, soil_water);
+  pond_ea = surface.evap_pond ();
+  total_ea += pond_ea;
+
+  // 5 Soil
+
+  soil_ep = pond_ep - pond_ea;
+  soil_ea = surface.exfiltration ();
+  total_ea += soil_ea;
+
+  // 6 Transpiration
+
+  // Potential transpiration
+  pt.tick (weather, crops, surface, soil, soil_heat, soil_water, pet,
+	   canopy_ea, snow_ea, pond_ea, soil_ea);
+  crop_ep = pt.potential_transpiration ();
+  assert (crop_ep < total_ep - total_ea + 1e-8);
+				
+  // Actual transpiration
+  crop_ea = 0.0;		// Water uptake by crops.
+  
+  if (LAI_ > 0.0)
+    {
+      // Distribute potential transpiration on crops.
+      const double PotTransPerLAI = crop_ep / LAI_;
+      
+      for (CropList::const_iterator crop = crops.begin();
+	   crop != crops.end();
+	   crop++)
+	{
+	  crop_ea 
+	    += (*crop)->ActualWaterUptake (PotTransPerLAI * (*crop)->LAI (), 
+					   soil, soil_water, canopy_ea);
+	}
+    }
+  total_ea += crop_ea;
+  
+  // 7 Reset irrigation
+  irrigation_top_old = irrigation_top;
+  irrigation_top = 0.0;
+  irrigation_surface_old = irrigation_surface;
+  irrigation_surface = 0.0;
+
+  // 8 Check
+  assert (total_ea < total_ep + 1e-8);
+  assert (approximate (total_ea,
+		       snow_ea + canopy_ea + pond_ea + soil_ea + crop_ea));
+}  
+
+void 
+BioclimateStandard::tick (Surface& surface, const Weather& weather, 
+			  const Time&,
+			  const CropList& crops, const Soil& soil, 
+			  SoilWater& soil_water, const SoilHeat& soil_heat)
+{
+  // Keep weather information during time step.
+  // Remember this in case the crops should ask.
+  daily_global_radiation_ = weather.daily_global_radiation ();
+  daily_air_temperature_ = weather.daily_air_temperature ();
+  day_length_ = weather.day_length ();
+
+  // Add nitrogen deposit. 
+  surface.fertilize (weather.deposit ());
+
+  // Update canopy structure.
+  CanopyStructure (crops);
+
+  // Calculate total canopy, divide it intervalsm, and distribute PAR.
+  RadiationDistribution (weather, crops);
+
+  // Distribute water among canopy, snow, and soil.
+  WaterDistribution (surface, weather, crops,
+		     soil, soil_water, soil_heat);
+
+}
+
+void 
+BioclimateStandard::output (Log& log, Filter& filter) const
+{
+  log.output ("MxH", filter, MxH, true);
+  log.output ("LAI", filter, LAI_, true);
+  log.output ("LAIvsH", filter, LAIvsH, true);
+  log.output ("HvsLAI", filter, HvsLAI, true);
+  log.output ("crop_cover", filter, crop_cover, true);
+  output_derived (pet, "pet", log, filter);
+  log.output ("total_ep", filter, total_ep, true);
+  log.output ("total_ea", filter, total_ea, true);
+  log.output ("irrigation_top", filter, irrigation_top_old, true);
+  log.output ("irrigation_top_temperature", filter,
+	      irrigation_top_temperature, true);
+  log.output ("irrigation_surface", filter, irrigation_surface_old, true);
+  log.output ("irrigation_surface_temperature", filter,
+	      irrigation_surface_temperature, true);
+  log.output ("canopy_ep", filter, canopy_ep, true);
+  log.output ("canopy_ea", filter, canopy_ea, true);
+  log.output ("canopy_water_capacity", filter, canopy_water_capacity, true);
+  log.output ("canopy_water_storage", filter, canopy_water_storage);
+  log.output ("canopy_water_temperature", filter,
+	      canopy_water_temperature, true);
+  log.output ("canopy_water_in", filter, canopy_water_in, true);
+  log.output ("canopy_water_out", filter, canopy_water_out, true);
+  log.output ("canopy_water_bypass", filter, canopy_water_bypass, true);
+  output_submodule (snow, "Snow", log, filter);
+  log.output ("snow_ep", filter, snow_ep, true);
+  log.output ("snow_ea", filter, snow_ea, true);
+  log.output ("snow_water_in", filter, snow_water_in, true);
+  log.output ("snow_water_in_temperature", 
+	      filter, snow_water_in_temperature, true);
+  log.output ("snow_water_out", filter, snow_water_out, true);
+  log.output ("snow_water_out_temperature", 
+	      filter, snow_water_out_temperature, true);
+  log.output ("pond_ep", filter, pond_ep, true);
+  log.output ("pond_ea", filter, pond_ea, true);
+  log.output ("pond_water_in", filter, pond_water_in, true);
+  log.output ("pond_water_in_temperature", 
+	      filter, pond_water_in_temperature, true);
+  log.output ("soil_ep", filter, soil_ep, true);
+  log.output ("soil_ea", filter, soil_ea, true);
+  output_derived (pt, "pt", log, filter);
+  log.output ("crop_ep", filter, crop_ep, true);
+  log.output ("crop_ea", filter, crop_ea, true);
+}
+
+void
+BioclimateStandard::irrigate_top (double flux, double temp)
+{
+  double new_top = irrigation_top + flux;
+  irrigation_top_temperature 
+    = (temp * flux + irrigation_top * irrigation_top_temperature) / new_top;
+  irrigation_top = new_top;
+}
+
+void
+BioclimateStandard::irrigate_surface (double flux, double temp)
+{
+  double new_surface = irrigation_surface + flux;
+  irrigation_surface_temperature 
+    = (temp * flux
+       + irrigation_surface * irrigation_surface_temperature) / new_surface;
+  irrigation_surface = new_surface;
+}
+
+#ifdef BORLAND_TEMPLATES
+template class add_submodule<Snow>;
+#endif
+
+static struct BioclimateStandardSyntax
+{
+  static Bioclimate& make (const AttributeList& al)
+    { return *new BioclimateStandard (al); }
+  
+  BioclimateStandardSyntax ()
+    {
+      Syntax& syntax = *new Syntax ();
+      AttributeList& alist = *new AttributeList ();
+  
+      // Canopy structure.
+      syntax.add ("NoOfIntervals", Syntax::Integer, Syntax::Const, "\
+Number of vertical intervals in which we partition the canopy");
+      alist.add ("NoOfIntervals", 30);
+      syntax.add ("MxH", "cm", Syntax::LogOnly,
+		  "Canopy height");
+      syntax.add ("LAI", Syntax::None (), Syntax::LogOnly,
+		  "Leaf area index for total canopy");
+      syntax.add ("LAIvsH", Syntax::CSMP, Syntax::LogOnly,
+		  "Total canopy LAI below given height (cm)");
+      syntax.add ("HvsLAI", Syntax::CSMP, Syntax::LogOnly, "\
+Height (cm) in which there is a given LAI below in total canopy");
+      syntax.add ("crop_cover", "0-1", Syntax::LogOnly,
+		  "Fraction of soil covered by crops.");
+
+      // External water sources and sinks.
+      syntax.add ("pet", Librarian<Pet>::library (), 
+		  "Potential Evapotranspiration component");
+      AttributeList& pet_alist = *new AttributeList;
+      pet_alist.add ("type", "makkink");
+      alist.add ("pet", pet_alist);
+      syntax.add ("total_ep", "mm/h", Syntax::LogOnly,
+		  "Potential evapotranspiration");
+      syntax.add ("total_ea", "mm/h", Syntax::LogOnly,
+		  "Actual evapotranspiration");
+      syntax.add ("irrigation_top", "mm/h", Syntax::LogOnly,
+		  "Irrigation above canopy");
+      syntax.add ("irrigation_top_temperature", "dg C", Syntax::LogOnly,
+		  "Water temperature");
+      syntax.add ("irrigation_surface", "mm/h", Syntax::LogOnly,
+		  "Irrigation below canopy");
+      syntax.add ("irrigation_surface_temperature", "dg C", Syntax::LogOnly,
+		  "Water temperature");
+
+      // Water intercepted on canopy.
+      syntax.add ("canopy_ep", "mm/h", Syntax::LogOnly,
+		  "Potential canopy evaporation");
+      syntax.add ("canopy_ea", "mm/h", Syntax::LogOnly,
+		  "Actual canopy evaporation");
+      syntax.add ("canopy_water_capacity", "mm", Syntax::LogOnly,
+		  "Water storage capacity");
+      syntax.add ("canopy_water_storage", "mm", Syntax::State,
+		  "Intercepted water on canopy");
+      alist.add ("canopy_water_storage", 0.0);
+      syntax.add ("canopy_water_temperature", "dg C", Syntax::LogOnly,
+		  "Temperature of incomming water");
+      syntax.add ("canopy_water_in", "mm/h", Syntax::LogOnly,
+		  "Water entering canopy");
+      syntax.add ("canopy_water_out", "mm/h", Syntax::LogOnly,
+		  "Canopy drip throughfall");
+      syntax.add ("canopy_water_bypass", "mm/h", Syntax::LogOnly,
+		  "Water from above bypassing the canopy");
+  
+      // Water in snowpack.
+      add_submodule<Snow> ("Snow", syntax, alist, Syntax::State, 
+			   "Surface snow pack");
+      syntax.add ("snow_ep", "mm/h", Syntax::LogOnly,
+		  "Potential snow evaporation");
+      syntax.add ("snow_ea", "mm/h", Syntax::LogOnly,
+		  "Actual snow evaporation");
+      syntax.add ("snow_water_in", "mm/h", Syntax::LogOnly,
+		  "Water entering snow pack");
+      syntax.add ("snow_water_in_temperature", "dg C", Syntax::LogOnly,
+		  "Temperature of water entering snow pack");
+      syntax.add ("snow_water_out", "mm/h", Syntax::LogOnly,
+		  "Water leaving snow pack");
+      syntax.add ("snow_water_out_temperature", "dg C", Syntax::LogOnly,
+		  "Temperature of water leaving snow pack");
+
+      // Water in pond.
+      syntax.add ("pond_ep", "mm/h", Syntax::LogOnly,
+		  "Potential evaporation from pond");
+      syntax.add ("pond_ea", "mm/h", Syntax::LogOnly,
+		  "Actual evaporation from pond");
+      syntax.add ("pond_water_in", "mm/h", Syntax::LogOnly,
+		  "Water entering pond");
+      syntax.add ("pond_water_in_temperature", "dg C", Syntax::LogOnly,
+		  "Temperature of water entering pond");
+
+      // Water going through soil surface.
+      syntax.add ("pt", Librarian<PT>::library (), 
+		  "Potential Transpiration component");
+      AttributeList& pt_alist = *new AttributeList;
+      pt_alist.add ("type", "default");
+      alist.add ("pt", pt_alist);
+      syntax.add ("soil_ep", "mm/h", Syntax::LogOnly,
+		  "Potential exfiltration.");
+      syntax.add ("soil_ea", "mm/h", Syntax::LogOnly,
+		  "Actual exfiltration.");
+
+      // Water transpirated through plant roots.
+      syntax.add ("crop_ep", "mm/h", Syntax::LogOnly,
+		  "Potential transpiration.");
+      syntax.add ("crop_ea", "mm/h", Syntax::LogOnly,
+		  "Actual transpiration.");
+
+      // Add to library.
+      Librarian<Bioclimate>::add_type ("default", alist, syntax, &make);
+    }
+} BioclimateStandard_syntax;
+
+// bioclimate_std.C ends here
