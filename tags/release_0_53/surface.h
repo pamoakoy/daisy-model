@@ -1,0 +1,71 @@
+// surface.h
+
+#include "uzmodel.h"
+#include "im.h"
+
+struct AttributeList;
+struct Log;
+struct Filter;
+struct SoilWater;
+struct Soil;
+
+class Surface : public UZtop
+{
+  const double minimal_matter_flux;
+  const bool total_matter_flux;
+  const double EpFactor_;
+  const double EpInterchange_;
+  const double albedo_wet;
+  const double albedo_dry;
+  const double lake;
+  double pond;
+  bool flux;
+  double EvapSoilSurface;
+  double Eps;
+  double T;
+  IM im;
+  IM im_flux;
+
+public:
+
+  // Communication with soil.
+  bool flux_top () const;	// From UZtop.
+  double q () const;
+  void flux_top_on ();
+  void flux_top_off ();
+  bool accept_top (double);
+  double ponding () const;
+  double temperature () const;
+
+  const IM& matter_flux ();
+
+  void SoilSurfaceConditions (double Theta, double h);
+
+  void clear ();
+
+  // Manager.
+  void fertilize (const IM&);
+
+  // Simulation.
+  void output (Log&, Filter&) const;
+  void tick (double PotSoilEvaporation, double Water, double temp,
+	     const Soil&, const SoilWater&);
+
+  // Communication with bioclimate.
+  double EpFactor () const;
+  double EpInterchange () const;
+  double albedo (const Soil& soil, const SoilWater& soil_water) const;
+  double exfiltration () const; // [mm/h]
+  double evap_soil_surface () const; // [mm/h]
+  double evap_pond () const; // [mm/h]
+
+  // Communication with external model.
+  void put_ponding (double pond);	// [mm]
+  void put_no3 (double no3); // [g/cm^2]
+  double get_no3 () const; // [g/cm^2]
+
+  // Create.
+  static void load_syntax (Syntax&, AttributeList&);
+  Surface (const AttributeList& par);
+};
+
