@@ -1,0 +1,370 @@
+;;; dk-horizon.dai -- Danish soil types.
+;;
+;; Data from the DJF "Profil Database", median values.
+
+(defhorizon Ap_JB1 default
+  ;; Observations: 206.
+  (clay 3.7)
+  (silt 7.3)
+  (fine_sand 68.8)
+  (coarse_sand 11.5)
+  (humus 2.60)
+  ;; Total = 93.9.
+  (dry_bulk_density 1.45 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.40)
+            (alpha 0.032 [cm^-1])
+            (n 1.426)
+            (K_sat 52.9 [cm/d])
+            (l -0.160)))
+
+(defhorizon Ap_JB2 default
+  ;; Observations: 47.
+  (clay 4.1)
+  (silt 15.7)
+  (fine_sand 69.7)
+  (coarse_sand 2.2)
+  (humus 2.50)
+  ;; Total = 94.2.
+  (dry_bulk_density 1.42 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.39)
+            (alpha 0.018 [cm^-1])
+            (n 1.445)
+            (K_sat 16.6 [cm/d])
+            (l 0.148)))
+
+(defhorizon Ap_JB3 default
+  ;; Observations: 164.
+  (clay 6.6)
+  (silt 15.9)
+  (fine_sand 60.1)
+  (coarse_sand 11.5)
+  (humus 2.70)
+  ;; Total = 96.8.
+  (dry_bulk_density 1.44 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.39)
+            (alpha 0.021 [cm^-1])
+            (n 1.408)
+            (K_sat 20.4 [cm/d])
+            (l -0.381)))
+
+(defhorizon Ap_JB4 default
+  ;; Observations: 171.
+  (clay 7.7)
+  (silt 25.8)
+  (fine_sand 54.9)
+  (coarse_sand 6.8)
+  (humus 2.60)
+  ;; Total = 97.8.
+  (dry_bulk_density 1.41 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.40)
+            (alpha 0.013 [cm^-1])
+            (n 1.434)
+            (K_sat 10.7 [cm/d])
+            (l -0.084)))
+
+(defhorizon Ap_JB5 default
+  ;; Observations: 56.
+  (clay 12.2)
+  (silt 25.9)
+  (fine_sand 49.5)
+  (coarse_sand 8.8)
+  (humus 2.50)
+  ;; Total = 98.9.
+  (dry_bulk_density 1.51 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.38)
+            (alpha 0.010 [cm^-1])
+            (n 1.441)
+            (K_sat 4.8 [cm/d])
+            (l -0.338)))
+
+(defhorizon Ap_JB6 default
+  ;; Observations: 127.
+  (clay 12.3)
+  (silt 29.6)
+  (fine_sand 48)
+  (coarse_sand 6.8)
+  (humus 2.50)
+  ;; Total = 99.2.
+  (dry_bulk_density 1.53 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.37)
+            (alpha 0.008 [cm^-1])
+            (n 1.469)
+            (K_sat 3.3 [cm/d])
+            (l -0.096)))
+
+(defhorizon Ap_JB7 default
+  ;; Observations: 114.
+  (clay 17.2)
+  (silt 30)
+  (fine_sand 42.6)
+  (coarse_sand 6.1)
+  (humus 2.40)
+  ;; Total = 98.3.
+  (dry_bulk_density 1.54 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.04)
+            (Theta_sat 0.38)
+            (alpha 0.006 [cm^-1])
+            (n 1.474)
+            (K_sat 2.1 [cm/d])
+            (l -0.101)))
+
+(defhorizon B_JB1 default
+  ;; Observations: 284.
+  (clay 3.5)
+  (silt 3.9)
+  (fine_sand 71)
+  (coarse_sand 11.8)
+  (humus 0.80)
+  ;; Total = 91.
+  (dry_bulk_density 1.5 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.39)
+            (alpha 0.046 [cm^-1])
+            (n 1.531)
+            (K_sat 38.1 [cm/d])
+            (l 0.480)))
+
+(defhorizon B_JB2 default
+  ;; Observations: 48.
+  (clay 3.8)
+  (silt 12.1)
+  (fine_sand 74.8)
+  (coarse_sand 2.2)
+  (humus 0.90)
+  ;; Total = 93.8.
+  (dry_bulk_density 1.45 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.39)
+            (alpha 0.033 [cm^-1])
+            (n 1.433)
+            (K_sat 28.5 [cm/d])
+            (l 0.497)))
+
+(defhorizon B_JB3 default
+  ;; Observations: 139.
+  (clay 6.5)
+  (silt 13.5)
+  (fine_sand 62.3)
+  (coarse_sand 12.8)
+  (humus 1.00)
+  ;; Total = 96.1.
+  (dry_bulk_density 1.44 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.40)
+            (alpha 0.036 [cm^-1])
+            (n 1.421)
+            (K_sat 23.8 [cm/d])
+            (l -0.295)))
+
+(defhorizon B_JB4 default
+  ;; Observations: 139.
+  (clay 6.8)
+  (silt 23.1)
+  (fine_sand 59)
+  (coarse_sand 6.0)
+  (humus 0.80)
+  ;; Total = 95.7.
+  (dry_bulk_density 1.51 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.37)
+            (alpha 0.022 [cm^-1])
+            (n 1.413)
+            (K_sat 11.7 [cm/d])
+            (l 0.418)))
+
+(defhorizon B_JB5 default
+  ;; Observations: 41.
+  (clay 11.7)
+  (silt 19.6)
+  (fine_sand 55)
+  (coarse_sand 11.0)
+  (humus 0.50)
+  ;; Total = 97.8.
+  (dry_bulk_density 1.62 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.36)
+            (alpha 0.018 [cm^-1])
+            (n 1.410)
+            (K_sat 3.9 [cm/d])
+            (l -0.214)))
+
+(defhorizon B_JB6 default
+  ;; Observations: 87.
+  (clay 12.2)
+  (silt 25.9)
+  (fine_sand 51.9)
+  (coarse_sand 6.5)
+  (humus 0.50)
+  ;; Total = 97.
+  (dry_bulk_density 1.64 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.35)
+            (alpha 0.012 [cm^-1])
+            (n 1.421)
+            (K_sat 2.8 [cm/d])
+            (l 0.150)))
+
+(defhorizon B_JB7 default
+  ;; Observations: 290.
+  (clay 19.5)
+  (silt 25.8)
+  (fine_sand 44.9)
+  (coarse_sand 7.0)
+  (humus 0.40)
+  ;; Total = 97.6.
+  (dry_bulk_density 1.68 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.04)
+            (Theta_sat 0.35)
+            (alpha 0.008 [cm^-1])
+            (n 1.421)
+            (K_sat 0.9 [cm/d])
+            (l 0.059)))
+
+(defhorizon C_JB1 default
+  ;; Observations: 359.
+  (clay 2.6)
+  (silt 2.3)
+  (fine_sand 71.9)
+  (coarse_sand 12.4)
+  (humus 0.20)
+  ;; Total = 89.4.
+  (dry_bulk_density 1.56 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.37)
+            (alpha 0.049 [cm^-1])
+            (n 1.652)
+            (K_sat 24.9 [cm/d])
+            (l 2.068)))
+
+(defhorizon C_JB2 default
+  ;; Observations: 97.
+  (clay 3.1)
+  (silt 7.4)
+  (fine_sand 80.8)
+  (coarse_sand 0.7)
+  (humus 0.20)
+  ;; Total = 92.2.
+  (dry_bulk_density 1.55 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.37)
+            (alpha 0.037 [cm^-1])
+            (n 1.503)
+            (K_sat 17.7 [cm/d])
+            (l 1.733)))
+
+(defhorizon C_JB3 default
+  ;; Observations: 58.
+  (clay 7.0)
+  (silt 13.3)
+  (fine_sand 60.6)
+  (coarse_sand 12.1)
+  (humus 0.20)
+  ;; Total = 93.2.
+  (dry_bulk_density 1.63 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.35)
+            (alpha 0.029 [cm^-1])
+            (n 1.441)
+            (K_sat 6.2 [cm/d])
+            (l 1.150)))
+
+(defhorizon C_JB4 default
+  ;; Observations: 104.
+  (clay 7.3)
+  (silt 21.6)
+  (fine_sand 57.3)
+  (coarse_sand 4.6)
+  (humus 0.30)
+  ;; Total = 91.1.
+  (dry_bulk_density 1.65 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.02)
+            (Theta_sat 0.34)
+            (alpha 0.017 [cm^-1])
+            (n 1.430)
+            (K_sat 4.9 [cm/d])
+            (l 1.255)))
+
+(defhorizon C_JB5 default
+  ;; Observations: 75.
+  (clay 12.3)
+  (silt 21.8)
+  (fine_sand 41.1)
+  (coarse_sand 7.4)
+  (humus 0.20)
+  ;; Total = 82.8.
+  (dry_bulk_density 1.79 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.32)
+            (alpha 0.009 [cm^-1])
+            (n 1.416)
+            (K_sat 0.9 [cm/d])
+            (l 0.573)))
+
+(defhorizon C_JB6 default
+  ;; Observations: 89.
+  (clay 11.9)
+  (silt 26.7)
+  (fine_sand 45.7)
+  (coarse_sand 5.2)
+  (humus 0.20)
+  ;; Total = 89.7.
+  (dry_bulk_density 1.72 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.03)
+            (Theta_sat 0.33)
+            (alpha 0.010 [cm^-1])
+            (n 1.430)
+            (K_sat 1.4 [cm/d])
+            (l 1.007)))
+
+(defhorizon C_JB7 default
+  ;; Observations: 216.
+  (clay 18.5)
+  (silt 26.6)
+  (fine_sand 42)
+  (coarse_sand 6.2)
+  (humus 0.20)
+  ;; Total = 93.5.
+  (dry_bulk_density 1.73 [g/cm^3])
+  (hydraulic M_vG
+            (Theta_res 0.04)
+            (Theta_sat 0.34)
+            (alpha 0.008 [cm^-1])
+            (n 1.424)
+            (K_sat 0.6 [cm/d])
+            (l 0.491)))
+
+;;; Original data:
+;; 
+;; 	"Data from the DJF ""Profil Database"" Median values"															
+;; 												Van Genuchten Parameters				
+;; 			Texture									Theta				
+;; JB	Horizon	Obs	Clay	F. Silt	C. Silt	F. Sand			C. Sand	Humus	DBD	Res	Sat	alpha	n	Ksat
+;; 			2	20	63	125	200	500	>500		g/cm3			1/cm		cm/d
+
+;;; dk-horizon.dai ends here.
