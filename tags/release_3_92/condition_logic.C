@@ -1,0 +1,263 @@
+// condition_logic.C
+// 
+// Copyright 1996-2001 Per Abrahamsen and Søren Hansen
+// Copyright 2000-2001 KVL.
+//
+// This file is part of Daisy.
+// 
+// Daisy is free software; you can redistribute it and/or modify
+// it under the terms of the GNU Lesser Public License as published by
+// the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+// 
+// Daisy is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser Public License
+// along with Daisy; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+//
+// Logical operators.
+
+#include "condition.h"
+#include "memutils.h"
+#include <memory>
+
+using namespace std;
+
+struct ConditionFalse : public Condition
+{
+  bool match (const Daisy&) const
+  { return false; }
+  void output (Log&) const
+  { }
+
+  ConditionFalse (const AttributeList& al)
+    : Condition (al)
+  { }
+
+  ~ConditionFalse ()
+  { }
+};
+
+struct ConditionTrue : public Condition
+{
+  bool match (const Daisy&) const
+  { return true; }
+  void output (Log&) const
+  { }
+
+  ConditionTrue (const AttributeList& al)
+    : Condition (al)
+  { }
+
+  ~ConditionTrue ()
+  { }
+};
+
+struct ConditionOr : public Condition
+{
+  const vector<Condition*> conditions;
+
+  void tick (const Daisy& daisy, Treelog& out)
+  {
+    for (vector<Condition*>::const_iterator i = conditions.begin ();
+	 i != conditions.end ();
+	 i++)
+      {
+	(*i)->tick (daisy, out);
+      }
+  }
+  bool match (const Daisy& daisy) const
+  {
+    for (vector<Condition*>::const_iterator i = conditions.begin ();
+	 i != conditions.end ();
+	 i++)
+      {
+	if ((*i)->match (daisy))
+	  return true;
+      }
+    return false;
+  }
+  void output (Log&) const
+  { }
+
+  ConditionOr (const AttributeList& al)
+    : Condition (al),
+      conditions (map_create<Condition> (al.alist_sequence ("operands")))
+  { }
+
+  ~ConditionOr ()
+  { sequence_delete (conditions.begin (), conditions.end ()); }
+};
+
+struct ConditionAnd : public Condition
+{
+  const vector<Condition*> conditions;
+
+  void tick (const Daisy& daisy, Treelog& out)
+  {
+    for (vector<Condition*>::const_iterator i = conditions.begin ();
+	 i != conditions.end ();
+	 i++)
+      {
+	(*i)->tick (daisy, out);
+      }
+  }
+  bool match (const Daisy& daisy) const
+  {
+    for (vector<Condition*>::const_iterator i = conditions.begin ();
+	 i != conditions.end ();
+	 i++)
+      {
+	if (!(*i)->match (daisy))
+	  return false;
+      }
+    return true;
+  }
+  void output (Log&) const
+  { }
+
+  ConditionAnd (const AttributeList& al)
+    : Condition (al),
+      conditions (map_create<Condition> (al.alist_sequence ("operands")))
+  { }
+
+  ~ConditionAnd ()
+  { sequence_delete (conditions.begin (), conditions.end ()); }
+};
+
+struct ConditionNot : public Condition
+{
+  auto_ptr<Condition> condition;
+
+  bool match (const Daisy& daisy) const
+  { return !condition->match (daisy); }
+
+  void tick (const Daisy& daisy, Treelog& out)
+  { condition->tick (daisy, out); }
+
+  void output (Log&) const
+  { }
+
+  ConditionNot (const AttributeList& al)
+    : Condition (al),
+      condition (Librarian<Condition>::create (al.alist ("operand")))
+  { }
+
+  ~ConditionNot ()
+  { }
+};
+
+struct ConditionIf : public Condition
+{
+  auto_ptr<Condition> if_c;
+  auto_ptr<Condition> then_c;
+  auto_ptr<Condition> else_c;
+
+  void tick (const Daisy& daisy, Treelog& out)
+  { 
+    if_c->tick (daisy, out);
+    then_c->tick (daisy, out);
+    else_c->tick (daisy, out);
+  }
+  bool match (const Daisy& daisy) const
+  { 
+    if (if_c->match (daisy))
+      return then_c->match (daisy);
+    else
+      return else_c->match (daisy); 
+  }
+  void output (Log&) const
+  { }
+
+  ConditionIf (const AttributeList& al)
+    : Condition (al),
+      if_c (Librarian<Condition>::create (al.alist ("if"))),
+      then_c (Librarian<Condition>::create (al.alist ("then"))),
+      else_c (Librarian<Condition>::create (al.alist ("else")))
+  { }
+
+  ~ConditionIf ()
+  { }
+};
+
+static struct ConditionLogicSyntax
+{
+  static Condition& make_false (const AttributeList& al)
+  { return *new ConditionFalse (al); }
+  static Condition& make_true (const AttributeList& al)
+  { return *new ConditionTrue (al); }
+  static Condition& make_or (const AttributeList& al)
+  { return *new ConditionOr (al); }
+  static Condition& make_and (const AttributeList& al)
+  { return *new ConditionAnd (al); }
+  static Condition& make_not (const AttributeList& al)
+  { return *new ConditionNot (al); }
+  static Condition& make_if (const AttributeList& al)
+  { return *new ConditionIf (al); }
+  ConditionLogicSyntax ();
+} ConditionLogic_syntax;
+
+ConditionLogicSyntax::ConditionLogicSyntax ()
+{
+  // "false", "true".
+  {
+    Syntax& syntax = *new Syntax ();
+    AttributeList& alist_false = *new AttributeList ();
+    alist_false.add ("description", "Always false.");
+    AttributeList& alist_true = *new AttributeList ();
+    alist_true.add ("description", "Always true.");
+    Librarian<Condition>::add_type ("false", alist_false, syntax, &make_false);
+    Librarian<Condition>::add_type ("true", alist_true, syntax, &make_true);
+  }
+
+  // "or", "and".
+  {
+    Syntax& syntax = *new Syntax ();
+    AttributeList& alist_or = *new AttributeList ();
+    alist_or.add ("description", "\
+True iff any of the listed conditions are true.\n\
+The conditions are tested in the sequence listed, until a true is found,\n\
+or the end of the list is reached.");
+    AttributeList& alist_and = *new AttributeList ();
+    alist_and.add ("description", "\
+True iff all the listed conditions are true.\n\
+The conditions are tested in the sequence listed, until a false is found,\n\
+or the end of the list is reached.");
+    syntax.add ("operands", Librarian<Condition>::library (), 
+		Syntax::State, Syntax::Sequence, "Conditions to test.");
+    syntax.order ("operands");
+    Librarian<Condition>::add_type ("or", alist_or, syntax, &make_or);
+    Librarian<Condition>::add_type ("and", alist_and, syntax, &make_and);
+  }
+  // "not".
+  {
+    Syntax& syntax = *new Syntax ();
+    AttributeList& alist = *new AttributeList ();
+    alist.add ("description", "True iff the operand is not true.");
+    syntax.add ("operand", Librarian<Condition>::library (), 
+		"Condition to test.");
+    syntax.order ("operand");
+    Librarian<Condition>::add_type ("not", alist, syntax, &make_not);
+  }
+  // "if".
+  {
+    Syntax& syntax = *new Syntax ();
+    AttributeList& alist = *new AttributeList ();
+    alist.add ("description", "\
+If the first condition is true, return the value of the second condition,\n\
+else return the value of the third condition.");
+    syntax.add ("if", Librarian<Condition>::library (), 
+		"Condition to test for.");
+    syntax.add ("then", Librarian<Condition>::library (), 
+		"Condition to use of the 'if' test was true.");
+    syntax.add ("else", Librarian<Condition>::library (), 
+		"Condition to use if the 'if' test was false.");
+    syntax.order ("if", "then", "else");
+    Librarian<Condition>::add_type ("if", alist, syntax, &make_if);
+  }
+}
