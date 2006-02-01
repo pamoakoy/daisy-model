@@ -1,0 +1,613 @@
+TODO --- things that needs to be done with Daisy -*- outline -*-
+
+* Tirdag aften
+
+** LaTeX det
+
+** Se CZ errorbars...
+
+** Upload rap og setups
+
+** Send brev
+
+Hi FertOrgaNic!
+
+It was nice seeing you all in Warsaw.  Now I have more work to you.
+
+You can download the latest version of the WP5 report and the setup
+files.  I now need each of you to skim the introduction, and carefully
+study the chapter for your site.  Please alert me of any errors in the
+graphs and tables.
+
+Also you need to add text to the chapters.  Each chapter has three
+sections.  The first is "WP1 data".  Here should be the information a
+calibrator should know, but is not directly clear from the measured
+numbers in the database.  For example, if some measurements are less
+reliable than others, or if some treatments has been affected by
+factors that Daisy cannot simulate, or is not clear from the database.
+
+The calibration section should contain a story about the calibration
+process.  The Polish story found in the appendix can be used as
+inspiration, but you should probably write in a less chatty style than
+I did.
+
+Finally, there are the results section.  What we want here is to know
+two things.  First, why are there differences between measured and
+simulated agronomy (irrigation and fertilization)?  [ Simulated
+irrigation is always a few mm larger than measured fo fertilized
+plots, because of water content of fertilizer.  You don't have to
+explain that. ]
+
+Second, given the differences in DM and N yield, do we trust the
+calibration?  Do we believe the soil and crop calibration wnough to
+use them for scenarios?  And do we believe the simulated leaching and
+percolation for the experimental years, given the diffences in those
+numbers we have measured?
+
+For Rain and Evapotranspiration, simulated and measured numbers refer
+to different things, and the difference does not need to be explained.
+
+---
+
+You are welcome to refer to the existing tables and figures in the
+text.  We can add new figures and tables, if you think they are needed
+to explain specific things for your site not covered by the existing
+figures, but please keep it to a minimum.  I don't want to remove any
+figures or tables.
+
+We have written some bits and pieces of text when generating the
+graphs and tables.  You are welcome to use, add to, or replace this
+text.
+
+Please indicate where you want your text pieces located, for example
+in the beginning of the section, in a subsection (like "2004"), or
+before or efter existing text.
+
+---
+
+If you find it makes the text easier to write, you *can* still make
+changes to both the database, and the setup files.  But we will not
+have time to iterate over this process.  If you make changes to the
+database, do it directly at the Trials database on the fertorganic.org
+webpage, and let us know.  I don't want any database updates in the
+form of Excel sheets.
+
+If you make changes to the setup files, use the version of the setup
+files uploaded to the fertorgnic.org page as reference, not your own
+original version.  We have made minor changes to all the setups, and
+don't want to redo those.
+
+---
+
+We need all the text form all partners by the end of February, in
+order to finish this deliverable in Marts.
+
+Regards, 
+
+  Per A.
+
+* Onsdag
+
+** make dist TAG=4.00
+
+** WP5: Hent, udskriv og læs rapporter.
+
+** Lav plan for det arbejde der skal laves i rapporterne.
+
+* Februar
+
+** Send bidrag til andre WP (hvis der er nogen)
+
+** Indsæt bidrag til WP5.
+
+** Skriv bidrag til Partner 10.
+
+* Marts
+
+** Inkorporer tekst.
+
+** fælles kartoffel
+
+** Kør PT 2004 med fælles kartoffel.
+
+** publiser endelig rapport
+
+* Hvis jeg får tid...
+
+** ETc fra DB vs ETa fra Daisy
+
+Har lav prioritet, i følge Søren.
+
+** Profilplot med gravimetric sampling for SK og CZ.
+
+--------------------------------------------------
+
+* Omorganiser Daisy kode så omsætning er uafhængig af transport
+
+2D Daisy har brug for det
+
+--------------------------------------------------
+
+* IDE: CT laver "sample setups" for hvert FON land 
+
+De skal bruges på Daisy hjemmesiden, og er en del af "dissemination"
+(wp7) af FON.
+
+* Distribution
+
+** Indsæt mmo grøntsager i lib (og sample?).
+
+** Ny plone baseret web side!
+
+* Programmering
+
+** Generering af zplus
+
+Det skal kun være tre intervaller mellem hver "border", hvis de
+representerer horizonter.  Ikke hvis de representer log grænser.
+
+** Check at "Field nitrogen" virker med checkpoints (local variable!)
+
+** block
+
+*** program_document should include local variables in parameterizations.
+
+*** Vi kan ikke bruge checkpoints, fordi context har ændret sig.
+
+En local variabel vil ikke længere være i scope, og ekspansioner vil
+derfor fejle.
+
+Checkpoints SKAL virke når vi vi logger!
+
+** command
+
+Hav et command bibliotek, hvis elementer bliver kørt straks af
+parseren.  For eksempel 'directory', 'input', 'run' og 'path' kunne
+være kommandoer.
+
+Måske skal command bare være program?
+
+Hvis en attribut ikke er fundet i syntaksen, prøv at se om det er
+navnet på et program.  Og i så fald, kør der.
+
+Vi har måske brug for to sådanne biblioteker, et der kun virker på
+top-level, og et der virker alle steder (til "declare", "append")?
+
+** gnuplot
+
+*** Vælg y-akse efter hvad brugeren har specificeret af dim i ymax
+
+*** lmargin, rmargin?
+
+*** automatisk find passende "ticks" på x-akse
+
+*** monochrome?
+
+*** Escape string for tex output
+
+Use FormatLaTeX to escape dimensions and tags in plot when outputting
+LaTeX.
+
+*** Generelt fascilitet til at læse dwf/dlf/ddf filer?
+
+** Farquhar photo
+
+** Program document
+
+*** Support bibliography attribute...
+
+** Logging
+
+*** log_arithmetics
+
+En log model der bygger på log select, men hvor man i stedet for at
+skrive select ud direkte, har en "efterbehandlingssystem, en liste af
+output columns der har select column tags og værdier i en Scope, og
+laver beregninger på dem med en Number.
+
+*** from og to support for select_array
+
+*** output column weather
+
+Weather should always be a column property for log purposes.
+
+Eller skal søjlerne summeres op til > 1? 
+
+*** check border
+
+check kun de søjler der matcher log'en.
+
+*** Vi skal have en måde at ændre log options globalt.  
+
+Det gælder også udskrivning af tid i excel format.
+
+
+*** Det skal være muligt at logge indhold i dynamisk rodzone.
+
+Rodzonen afhænger af roddybden.
+
+*** Gør det muligt at skifte enhed i en log fil.
+
+*** Oprydning af log filer
+
+**** Solute log 
+
+C -> Vl (Volume liquid) [g/cm^3]
+
+M -> Vs (Volume soil)   [g/cm^3]
+
+     Ms (Mass soil)     []
+
+**** lib/log-general.dai
+
+{ System, Soil } x { Pesticides, Carbon, Nitrogen, Water }
+
+{ Content, Flux } x { Water, NH4-N, NO3-N, NO3, Pest }
+
+Water Pressure, Water Pressure (pF)
+
+Crop Production
+
+**** lib/log-extra.dai
+
+Crop Extra
+  Carbon
+  day_length
+
+AOM
+DOM 
+Bioclimate
+Weather
+
+**** sample/log-measured.dai
+
+Water Content in intervals
+
+Water Pressure in intervals
+
+N content in intervals (per soil)
+
+** Inkluder liste af filer (og dato) i daisy.log
+
+** Automisk udregning af partitioning?
+
+Angiv stem/leaf/sorg på forskellige datoer
+
+** action fertigate
+
+(irrigate (duration 12 [h])
+          (flux 10 [mm/h])
+          (water amount 120 [mm])
+          (water target_content 100 [mm] (from 0 [cm]) (to 50 [cm]))
+          (type overhead)
+          (type surface)
+          (type subsoil (from -5 [cm]) (to -10 [cm]))
+          (N concentration 1 [mg N/l])
+          (N amount 20 [kg N/ha])
+          (N target 80 [kg N/ha] (from 0 [cm]) (to 50 [cm]))
+          (NH4_fraction concentration 1 [mg N/l]))
+
+** min_intensity parameter for default weather
+
+Hvis dagsregn er mindre end 24 * min_intensity, start timeregn med
+min_intensite kl. 8 
+
+** crop simple med nit
+
+** Add user defineable convertions.
+
+** memutils.h -- add auto_vector
+
+Derived from vector, deletes its content on destruction.
+
+* Dokumentation
+
+** Reference
+
+*** Dokumenter '&old' keyword.
+
+** Tutorial
+
+*** Dokumenter groundwater file og pressure table
+
+Omskriv dem evt. til at bruge source.
+
+*** Batch programming
+
+*** hydraulic table program
+
+*** Dokumenter source combine.
+
+** Organic Matter Article
+
+*** Status
+
+Tilsyneladende er input nu rigtigt 
+
+(med aom -> som2 = 0 
+ & bioinc + root + tillage målt i zone 
+ & numerisk lag ved zone)
+
+Gennemsnitlig abiotic (vand + temp) er målt
+
+høj input giver for høj humus på både ler og sand
+
+lav input giver for lav humus på både ler og sand
+
+*** næste ting
+
+prøv at køre med "rigeligt mineralsk kvælstof", så der aldrig er
+kvælstofbegrænsning (måske en "disable N om stress")
+
+prøv at disable abitioc factors...
+
+prøv at køre ler med sandsædskifte, og sand med lersædskift.
+
+*** Forsøg emperisk sammenhæng mellem input/humus -> som1/som2
+
+Virker ikke!  Afhænger af startniveau!
+
+*** Plot initialisering med background_mineralization = 0.
+
+*** Find referencer.
+
+*** Publicer.
+
+** Agronomy for Daisy Users  / Model overview
+
+New chapter for reference manual?  
+
+=== OLD STUFF ===
+
+* spec + dimension giver ikke fejl hvis der ikke kan konverteres
+
+* Ny phenology model 
+
+En liste af stages, hver med sit eget navn og egne parametre.
+
+* Irrigation
+
+** Deficit
+
+Start ved specifik dato.
+
+* Partit komponent
+
+Skal kunne være afhængig af kvælstof og temperatur.
+
+* Lav superklimafil
+
+** SH: forklaring
+
+* DOM/SOM equilibrium (bgj)
+
+** Brug i adsorbtion?
+
+** Generaliser til Number med ScopeSoil?
+
+* seperate harvest and cut actions
+
+* SH: Salg af referencemanual på www-siden?
+
+* UZmodel top_t
+
+* Carbon balance.
+
+Få den til at passe ved høst.
+
+* Select::method { current, sum, max, min, average }
+
+Use by summary.
+
+* SH: PowerPoint validation slides på hjemmeside.
+
+* Check let at bruge GUI version of CVS til Windows.
+
+* Cleanup: Get rid of Path:Output and Path:Input
+
+or use them everywhere.
+
+* Gør det muligt at udefinere parametre 
+
+(deffoo super default
+  (bar 42))
+
+(deffoo sub super
+  ;; Undo the setting of bar.
+  (bar &undef))
+
+* Dokumentation for output filer.
+
+* SH: genvækst af græs
+
+* WWW: make seperate page for programmers.
+
+Move cvs, dll, cdaisy, api, programmers guide, header, source.
+
+Explain about different compilers, and making me update.
+
+* saml check.? og check_range.?
+
+* units doc
+
+** kapitel med konverteringer til ref.manual
+
+** Foreslå aternativer ved fejl? (højde i pF?)
+
+* Check af PLF'er.
+
+** LeafAIMod skal altid være > 0.0
+
+* User Manual
+
+** Tillage
+
+*** Soil Compaction
+
+** Pesticides
+
+*** To partielle parameteriseringer, "canopy" og "soil"?
+
+SH: Streiby.
+
+*** New pesticides.
+
+*** SH: file name change?
+
+*** Transform
+
+** Log parameterizations.
+
+Udbyg.
+
+*** Transform
+
+** Appendix listing features not mentioned otherwise.
+
+*** Gennemgå referencemanualen og kig efter ting der bør listes.
+
+** Permanent vegetation
+
+** Simple Crop Types
+
+* New 'spec' log model.
+
+Select attribute with
+
+    library type submodel* attribute
+
+Use filters like
+
+    library type
+
+cutting of branch if it encounter an object from library not derived
+from type.
+
+* N respiration
+
+En standard parameterisering på
+
+    N_fixate_respiration    6.5 [g CH2O-C/g N]
+    NO3_uptake_respiration  3.0 [g CH2O-C/g NO3-N]
+
+ville være biologisk korrekt.
+
+Henning Hoeg.
+
+Bloker for begge når der ikke er assimilat nok.
+
+    NO3_uptake_respiration  0.0 [g CH2O-C/g NO3-N]
+
+for nogen planter, i følge Søren.
+
+* QDaisy.
+
+** Copy/Inherit: Rebuild model.
+
+** Menu -> Edit -> Inputs
+
+Tilføj inputs til træ?
+
+** Insert child, insert after.
+
+** Menu -> File -> Run
+
+Maybe show events in tree, like BCC?
+
+** Filter setup
+
+Only show a few buildin libraries and models.
+
+** Treelog_Qt
+
+** EditPLFs
+
+** Specialiced model view.
+
+** View model as text.
+
+** Interest groups
+
+libraries, models, parameterizations and parameters should belong to a
+number of "interest groups", which can be use by QDaisy for filtering.
+
+** Make drag and drop of "file.dai" work.
+
+** Use radio buttons for filters in menu.
+
+** Move Filters from QDaisy to Daisy.
+
+** Redirect error messages
+
+for weather std, file, hourly, and for hydraulic old, old2
+
+** Beskriv fordele ved min GUI implementation.
+
+- Virker med næsten alle `.dai' filer.
+
+- Automatisk up-to-date med seneste daisy version.
+
+* Daisy new user guide.
+
+* CVS
+
+** Nyt `misc' katalog med de to dhi scripts.
+
+* Cloning.
+
+** Check af clone af vegetation virker.
+
+** Sørg for at cdaisy bruger de nye funktion til clone og merge.
+
+** Implementer merge.
+
+* Døde blade skal tælle med i lysfordelingen.
+
+* Daisy som subsystem
+
+** System til rename af duplicate object ved parsing.
+
+** daisy_alist_check skal ikke altid skrive fejl ud på cout.
+
+* Native GUI 
+
+** Try out "SWIFT"
+
+** Plot retentionskurve fra gdaisy.
+
+** tkdaisy:
+
+  Create pseudo TkDaisyEntry top level as an syntax+alist containing a
+  single "daisy" element.  Use this make the step function always
+  contain the syntax/alist whe name belongs to.
+
+  Lav function til at browse en syntax, alist par.
+
+  Lav function til at loade en dai fil
+
+  Lav function(er) til at instantiere, test, og køre daisy object.
+
+  Lav filter/log som sender data tilbage til tcl.
+
+  Lav functioner der viser data statisk og dynamisk.
+
+* Make it possible to specify Soil geometry with dz.
+
+* Output syntax.
+
+Having multiple output statements that all added to a single list
+might be nice.  Create a Syntax::size `Multiple' for this.  Use it on
+Input as well to be consistent.  
+
+Consider how this fits into the desired ability to add rules to a
+Manager. 
+
+* Make PLF::find use binary search.
+
+* Rename Daisy to Simulation.
+
+This will allow us to ship Condition and Action as part of the Daisy
+independent library.
+
+* Flyt astronomic utilities til seperat fil.
+
