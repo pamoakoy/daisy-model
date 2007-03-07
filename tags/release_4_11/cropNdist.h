@@ -1,0 +1,63 @@
+// cropNdist.h -- Crop N distribution
+// 
+// Copyright 2006 Birgitte Gjettermann, Per Abrahamsen and KVL
+//
+// This file is part of Daisy.
+// 
+// Daisy is free software; you can redistribute it and/or modify
+// it under the terms of the GNU Lesser Public License as published by
+// the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+// 
+// Daisy is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser Public License
+// along with Daisy; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+#ifndef CROPNDIST_H
+#define CROPNDIST_H
+
+#include "librarian.h"
+#include "alist.h"
+#include <vector>
+
+class CropNdist
+{
+  // Content.
+public:
+  const symbol name;
+  static const char *const description;
+  const AttributeList alist;	// Remember attributes for checkpoint.
+
+  // Simulation.
+public:
+  virtual void tick (std::vector <double>& cropNdist, 
+		     std::vector <double>& cropVmax, 
+		     const double CropN, Treelog&) = 0;
+  virtual void output (Log&) const = 0;
+  virtual void cropN_distribution (const double LAI, 
+				   std::vector <double>& cropNdist, 
+				   std::vector <double>& cropVmax, 
+				   const double cropN, Treelog& msg)=0;
+  // Create and Destroy.
+protected:
+  CropNdist (Block&);
+
+public:
+  static const AttributeList& default_model ();
+  virtual ~CropNdist ();
+};
+
+#ifdef FORWARD_TEMPLATES
+template<>
+Librarian<CropNdist>::Content* Librarian<CropNdist>::content;
+#endif
+
+static Librarian<CropNdist> CropNdist_init ("cropNdist");
+
+#endif // CROPNDIST_H
