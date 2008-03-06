@@ -1,0 +1,12 @@
+#summary SAFIR is a EU project to provide SAFe IRrigation
+#labels SAFIR
+= SAFIR =
+
+SAFIR is an EU project to help provide _saf_e _ir_rigation.  
+
+Some Daisy related tasks include:
+
+  # Support for row crops.
+  # Two dimensional soil description.
+  # One or more tomato parameterization
+  # Much more.
