@@ -1,0 +1,3 @@
+#summary Daisy 4.01 is the latest stable version.
+
+Daisy is currently undergoing a lot of changes, the most significant being support for 2D geometries.
