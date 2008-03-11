@@ -1,4 +1,5 @@
 #summary Configuring TextPad support for Daisy
+#labels Utility
 
 = Introduction =
 
