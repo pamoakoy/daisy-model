@@ -1,0 +1,6 @@
+#summary Information for Linux, MacOS and Unix users
+#labels Description
+
+Most of the information on these pages are directed towards using Daisy on "Wintel" machines, that is, computers based on Intel main architecture (IA32) running MS Windows.  However, Daisy has very few hardware dependencies, and relies only on a few widely ported software libraries.   And in fact, our main development environment is Cygnus, a Unix emulation layer
+
+TODO: add more later
