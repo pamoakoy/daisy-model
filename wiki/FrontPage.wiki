@@ -1,11 +1,15 @@
-#summary This is the "Project Home" content.
+#summary This is the content of the "Project Home" tab.
 
-Daisy is a mechanistic simulation model of the physical and biological processes in an agricultural field.  It traces the fate of water, energy, carbon, nitrogen, and pesticides, both above and below ground.  The model is able to predict production, environmental impact in the form of leaching, and change in soil (carbon) quality over time.  Another common use is as an upper boundary for a groundwater model.
+= Daisy =
 
-The input to Daisy is daily or hourly weather data (at least precipitation, global radiation, and temperature, much more can be used if available), management information (sow/harvest, tillage operations, as well as data and amounts of irrigation, fertilizer and pesticide applications), and finally soil quality (texture, humus content).  
+If you are new here, you may want to start reading our ultra-short [About overview of Daisy] and then may the page about [GettingStarted getting started].
 
-The timescale go from hourly fluxes to changes in soil carbon pools over centuries.
+You can fetch the latest development version of Daisy by following the link in the featured downloads box to the right, or maybe you would rather get the latest [StableVersion stable version] instead.
 
-The Daisy model assumes homogeneous fields, that is no significant horizontal transport, with exceptions made for simulating row crops or drain pipes.  To model larger areas, Daisy should be coupled with a GIS system.
+== News ==
 
-The input to Daisy is through text files.  Output is also text files, with the exception of simple progress messages during the simulation.  The code can be accesses from a command line utility, a simple GUI (Qt based), or from another program through C, C++, C# or OpenMI interfaces.
+  * 2008-03-11:  This is our new home page.  Isn't it cute?
+
+== Content ==
+
+Here will be links to further pages.
