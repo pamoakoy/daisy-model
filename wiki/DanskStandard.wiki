@@ -1,0 +1,4 @@
+#summary Danish language information about Daisy for environmental applications.
+#labels Description
+
+Daisy kan bruges til mangt og meget.
