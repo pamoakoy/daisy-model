@@ -1,4 +1,4 @@
 #summary Scientific descriptions of Daisy.
-#labels Description,Structure
+#labels Description
 
 While the Daisy software is described in the bundled documentation, the scientific description of the models included in Daisy is spread in various scientific publication.  
