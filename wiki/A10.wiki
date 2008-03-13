@@ -1,0 +1,9 @@
+#summary Original report on Daisy
+
+[http://daisy-model.googlecode.com/files/87-503-8790-1.pdf Fetch the report here].
+
+Report A10 from the Danish [NAEP National Agency of Environmental Protection] titled _DAISY  - Soil Plant Atmosphere System Model_ contains the technical documentation for the original FORTRAN version of Daisy (no longer available). Since then, the code has been rewritten from scratch in a new language.   New processes have been added, alternative models for old processes have been added, exiting models have gained additional parameters in order to cope with new situations, and some models have been calibrated to better data sets (in particular turnover of organic matter).
+
+Nonetheless, this report is still the most complete single description of the model.  In general, the processes and models from this report still constitute the "core" of Daisy.  
+
+See also: [Science Daisy for scientists.]
