@@ -4,3 +4,4 @@
 While the Daisy software is described in the bundled documentation, the scientific description of the models included in Daisy is spread in various scientific publication.  
 
   * Daisy was originally described in [NAEP] report [A10], and this is still the most complete single scientific description of the model.
+  * A never but less complete [DaisyDescription description of Daisy] was later started, but never finished.  It does contain good information of many never features.
