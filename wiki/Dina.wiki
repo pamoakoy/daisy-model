@@ -1,0 +1,6 @@
+#summary Danish Informatics Network in the Agricultural Sciences
+#labels Organization
+
+[http://www.dina.dk/ Home page]
+
+The Danish Informatics Network in the Agricultural Sciences (Dina) sponsored the C++ rewrite of Daisy.
