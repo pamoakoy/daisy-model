@@ -1,4 +1,4 @@
 #summary Information for programmers.
 #labels Description
 
-Here will eventually be information about accessing Daisy through C++, C, C#, .net, or OpenMI.
+Here will eventually be information about building Daisy with GNU Make, and about accessing Daisy through C++, C, C#, .net, or OpenMI.
