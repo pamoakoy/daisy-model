@@ -1,0 +1,7 @@
+#summary Scientific Daisy description
+#labels Paper
+
+A scientific description was started after the [Dina] sponsored rewrite in C++, but never finished.  Nonetheless it contain valuable information involving many of the changes made since the original FORTRAN version that was documented in [A10].
+
+  * [http://daisy-model.googlecode.com/files/DaisyDescription.doc Fetch the MS Word 2000 version].
+  * [http://daisy-model.googlecode.com/files/DaisyDescription.doc Fetch PDF version].  The PDF version has been generated from the Word version.
