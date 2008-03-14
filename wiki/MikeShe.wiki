@@ -1,0 +1,6 @@
+#summary MIKE SHE
+#labels Subject-Utility
+
+= MIKE SHE =
+
+MIKE SHE is a groundwater model developed at [DHI].  It can use Daisy for the unsaturated zone through an [OpenMI] coupling.
