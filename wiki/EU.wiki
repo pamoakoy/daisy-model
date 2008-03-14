@@ -1,5 +1,5 @@
 #summary The European Union
-#labels Organization
+#labels Subject-Organization
 
 = European Union =
 
