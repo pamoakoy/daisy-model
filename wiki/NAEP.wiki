@@ -1,5 +1,5 @@
 #summary The Danish National Agency of Environmental Protection
-#labels Organization
+#labels Subject-Organization
 
 [http://www.mst.dk/ Home page].
 
