@@ -1,4 +1,4 @@
 #summary Danish language information about Daisy for environmental applications.
-#labels Description
+#labels Subject-Paper
 
 Daisy kan bruges til mangt og meget.
