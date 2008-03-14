@@ -1,0 +1,6 @@
+#summary DHI -- Water & Environment
+#labels Subject-Organization
+
+[http://www.dhigroup.com/ Home page].
+
+DHI owns the groundwater model [MikeShe MIKE SHE], with which Daisy can communicate through [OpenMI].  [Agrohydrology We] have been collaborating with DHI in many projects.  DHI also owns [DaisyGIS], a graphical user interface for Daisy that is particularly well suited for combination with GIS data.
