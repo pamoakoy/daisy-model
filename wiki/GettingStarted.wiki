@@ -1,4 +1,4 @@
 #summary Information for new users of Daisy.
 #labels Subject-Daisy,Structure
 
-No such help yet.
+Fetch the latest Daisy version from the *Featured Downloads* box at the rigth side of the [http://code.google.com/p/daisy-model/ front page], and then follow the [TextPad instructions for configuring TextPad].
