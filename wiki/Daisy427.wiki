@@ -1,5 +1,5 @@
 #summary What's new in Daisy 4.27
-#labels Release
+#labels Subject-Release
 
 = Changes =
 
