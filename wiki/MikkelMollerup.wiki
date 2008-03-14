@@ -1,11 +1,11 @@
 #summary Hydrology nerd
-#labels Person
+#labels Subject-Person
 
-Mikkel Mollerup is the main responsible scienttist for development of multidimensional transport equations in Daisy.
+Mikkel Mollerup is the main responsible scientist for development of multidimensional transport equations in Daisy.
 
 = Skills =
 
- * Nummerical modelling 
+ * Numerical modeling 
    * Finite Volume Method (FVM)  
    * Finite Element Method (FEM) 
  * Unsaturated zone
