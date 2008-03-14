@@ -1,5 +1,5 @@
 #summary SAFIR is an EU project to provide SAFe IRrigation
-#labels Project
+#labels Subject-Project
 = SAFIR =
 
 SAFIR is an EU project to help provide _saf_e _ir_rigation.  
