@@ -1,4 +1,4 @@
 #summary Information for new users of Daisy.
-#labels Description,Structure
+#labels Subject-Daisy,Structure
 
 No such help yet.
