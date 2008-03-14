@@ -1,5 +1,5 @@
 #summary Original report on Daisy
-#labels Paper
+#labels Subject-Paper
 
 [http://daisy-model.googlecode.com/files/87-503-8790-1.pdf Fetch the report here].
 
