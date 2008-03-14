@@ -2,7 +2,7 @@
 #labels Subject-Project
 = SAFIR =
 
-SAFIR is an EU project to help provide _saf_e _ir_rigation.  
+SAFIR is an [EU] project to help provide _saf_e _ir_rigation.  
 
 Some Daisy related tasks include:
 
