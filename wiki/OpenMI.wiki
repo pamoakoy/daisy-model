@@ -5,4 +5,4 @@
 
 = OpenMI =
 
-OpenMI is a C# framework for coupling hydraulic simulation models.  Support for OpenMI was added to Daisy in the [SAFIR] project], where it was used both for coupling with [MikeShe MIKE SHE] and for communicating with a project specific management model.
+OpenMI is a C# framework for coupling hydraulic simulation models.  Support for OpenMI was added to Daisy in the [SAFIR] project, where it was used both for coupling with [MikeShe MIKE SHE] and for communicating with a project specific management model.
