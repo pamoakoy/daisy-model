@@ -1,5 +1,5 @@
 #summary Scientific Daisy description
-#labels Paper
+#labels Subject-Paper
 
 A scientific description was started after the [Dina] sponsored rewrite in C++, but never finished.  Nonetheless it contain valuable information involving many of the changes made since the original FORTRAN version that was documented in [A10].
 
