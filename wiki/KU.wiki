@@ -1,0 +1,6 @@
+#summary University of Copenhagen
+#labels Subject-Organization
+
+[http://ku.dk/ Home page]
+
+The University of Copenhagen (KU) is the home of Daisy development.
