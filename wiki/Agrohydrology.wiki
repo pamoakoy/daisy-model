@@ -1,0 +1,4 @@
+#summary Agrohydrology is a research group at Copenhagen University.
+#labels Subject-Organization
+
+The stewardship of the Daisy code is at the Agrohydrology group in the [LIFE Faculty of Life Science] at [KU Copenhagen University].
