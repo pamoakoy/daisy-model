@@ -1,4 +1,6 @@
 #summary The Faculty of Life Sciences, University of Copenhagen.
 #labels Subject-Organization
 
+[http://www.life.ku.dk/ Home page].
+
 The The Faculty of Life Sciences (LIFE) at the [KU University of Copenhagen] is where most Daisy development is done.  It was formerly an independent university called KVL (The Agricultural and Veterinary University of Denmark).
