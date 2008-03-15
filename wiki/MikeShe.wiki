@@ -1,4 +1,4 @@
-#summary MIKE SHE
+#summary MIKE SHE Groundwater Model
 #labels Subject-Utility
 
 = MIKE SHE =
