@@ -6,7 +6,7 @@
 Animations from different Daisy projects. The movies available for viewing are very compressed. Thus it is possible to make animations of higher quality.
 
 
-= Details =
+= 1D movement of water and solute =
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
@@ -14,6 +14,10 @@ Add your content here.  Format your content with:
   * Automatic links to other wiki pages
 
 
+== Water movement ==
+
 [http://daisy-model.googlecode.com/files/WaterContent.avi]
+
+== NO3 movement ==
 
 [http://daisy-model.googlecode.com/files/NO3.avi]
