@@ -22,3 +22,9 @@ The two first graphs shows the water content in the upper 250 of a sandy and a c
 The two first graphs shows the nitrate concentration in the upper 250 of a sandy and clayey soil respectively. The last graph shows the precipitation during the year.
 
 [http://daisy-model.googlecode.com/files/NO3.avi]
+
+
+= 2D water movement in a drained soil =
+
+
+Work in progess...
