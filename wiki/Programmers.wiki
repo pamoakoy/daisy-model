@@ -4,4 +4,4 @@
 Here will eventually be information about building Daisy with GNU Make, and about accessing Daisy through C++, C, C#, .net, or OpenMI.
 
 See also:
-* [http://www.ohloh.net/projects/12027 Ohloh source analysis]
+* [http://www.ohloh.net/projects/daisy-model Ohloh source analysis]
