@@ -24,6 +24,9 @@ The two first graphs shows the nitrate concentration in the upper 250 of a sandy
 [http://daisy-model.googlecode.com/files/NO3.avi]
 
 
+
+
+
 = 2D water movement in a drained soil =
 
 
