@@ -13,13 +13,13 @@ In the simulations is winter barley grown in to different soils: A sandy and a c
 
 == Water movement ==
 
-The two first graphs shows the water content in the upper 250 of a sandy and a clayey soil respectively. The last graph shows the precipitation during the year.
+The two first graphs shows the water content in the upper 250 cm of a sandy and a clayey soil respectively. The last graph shows the precipitation during the year.
 
 [http://daisy-model.googlecode.com/files/WaterContent.avi]
 
 == NO3 movement ==
 
-The two first graphs shows the nitrate concentration in the upper 250 of a sandy and clayey soil respectively. The last graph shows the precipitation during the year.
+The two first graphs shows the nitrate concentration in the upper 250 cm of a sandy and clayey soil respectively. The last graph shows the precipitation during the year.
 
 [http://daisy-model.googlecode.com/files/NO3.avi]
 
