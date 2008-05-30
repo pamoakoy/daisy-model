@@ -13,7 +13,7 @@ For the tertiary domain we cannot even use Richard's Equation.
 
 The horizon parameter `secondary_domain` is used for enabling solute transport in the secondary domain.  The default is that no secondary domain exists.
 
-= Tertiary =
+= Tertiary Domain =
 
 The tertiary transport mechanism is specified by `Tertiary` column parameter.  To get the old (pre-4.30) behavior, specify
 
