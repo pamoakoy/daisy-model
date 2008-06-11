@@ -1,3 +1,4 @@
 #summary Partial rootzone drying
+#labels Subject-Daisy
 
-The basic idea behind partial rootzone drying (PRD) is that by keeping part of the rootzone dry, the plant will generate water stress hormones (ABA), which will cause the leaf stomata to close, which will reduce both transpiration and production.  
+The basic idea behind partial rootzone drying (PRD) is that by keeping part of the rootzone dry, the plant will generate water stress hormones (ABA), which will cause the leaf stomata to close, which will reduce both transpiration and production.  For low concentrations, the reductions in transpiration will be much larger than the reduction in production, making it desirable in situation where water supply for irrigation is limited.
