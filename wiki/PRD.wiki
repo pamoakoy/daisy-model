@@ -21,7 +21,7 @@ In Daisy version 4.31, a setup file named "test-prd.dai" can be found in the "sa
 
 In order to actually make usable predictions, some models and refinements must be implemented first:
 
-  # Transpiration should be affected by the stomata conductivity calculated by the Farquhar-Ball model.  Currently, a simple energy balance is used, thus ignoring the positive effect on transpiration we want to achieve.
+  # Transpiration should be affected by the stomata conductivity calculated by the Farquhar-Ball model.  Currently, a simple energy balance is used, thus ignoring the positive effect on transpiration we want to achieve.  The problem is that transpiration is also an input to the Farquhar-Ball model.
   # Initial growth should be fueled by applied seeds, rather than a forced LAI as is the case now.
 
 = Long terms goals ==
@@ -30,8 +30,6 @@ These requires addition funding:
 
   # The user interface for specifying PRD should be simplified.
   # Better ABA effect models.
-
-
 
 
 
