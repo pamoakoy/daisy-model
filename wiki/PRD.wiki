@@ -24,12 +24,11 @@ In order to actually make usable predictions, some models and refinements must b
   # Transpiration should be affected by the stomata conductivity calculated by the Farquhar-Ball model.  Currently, a simple energy balance is used, thus ignoring the positive effect on transpiration we want to achieve.  The problem is that transpiration is also an input to the Farquhar-Ball model.
   # Initial growth should be fueled by applied seeds, rather than a forced LAI as is the case now.
 
+This work is funded by the [SAFIR] project.
 = Long terms goals ==
 
 These requires addition funding:
 
   # The user interface for specifying PRD should be simplified.
   # Better ABA effect models.
-
-
 
