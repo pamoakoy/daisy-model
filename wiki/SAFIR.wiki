@@ -4,6 +4,10 @@
 
 SAFIR is an [EU] project to help provide _saf_e _ir_rigation.  
 
+The two main components of this project is 
+  # health issues related to use of low quality water for irrigation.
+  # use of [PRD partial rootzone drying] (PRD) for conserving water.
+
 Some Daisy related tasks include:
 
   # Support for row crops.
