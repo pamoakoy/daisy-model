@@ -15,20 +15,16 @@ The horizon parameter `secondary_domain` is used for enabling solute transport i
 
 = Tertiary Domain =
 
-The tertiary transport mechanism is specified by `Tertiary` column parameter.  To get the old (pre-4.30) behavior, specify
+The tertiary transport mechanism is specified by `Tertiary` movement parameter.  The default value for 1D simulations is `old`, which work as it used to, that is macropore flow for horizons with more than 5% clay.  You can also specify the old macropore model directly, like this:
 
-  (Tertiary old)
+  (Tertiary old (macro none)).  
 
-This must be specified to get what used to be "default" behavior, that is macropore flow for horizons with more than 5% clay.  You can also specify the old macropore model directly, like this:
-
-  (Tertiary old (macro none))
-
-which has the same effect as 
+wich has the same effect as 
 
   (Tertiary none)
 
 The `macro` parameter used to be located under `SoilWater` under the same name, and was then moved to `Movement`.
 
-The `old` tertiary model only works with the `vertical` movement model, therefore `none` is the default for now.
+The `old` tertiary model only works with the `vertical` movement model, therefore `none` is the default value for 2D simulations for now.
 
 New models for tertiary transport are under active construction.
