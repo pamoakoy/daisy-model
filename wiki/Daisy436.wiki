@@ -3,7 +3,7 @@
 
 = Changes =
 
-== The `SeedN` `CrpN parameter removed ==
+== The `SeedN` `CrpN` parameter removed ==
 
 It has been marked obsolete for some time.  Use the `NCrop` Production parameter instead.
 
