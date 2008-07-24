@@ -63,18 +63,19 @@ These three functions allows you to extract the current state of the tertiary wa
 
 `TertwaterNone` and `TertiaryBiopores`
 
-= The `tertiary` component.
+= The `tertiary` component =
 
 == The large timestep interface to water ==
 
 == The large timestep interface to solutes ==
 
-= The `TertiaryBiopores` class
+= The `TertiaryBiopores` class =
 
 == The `biopore` component ==
 
-== The `drain` model
+=== The `drain` model ===
 
+=== The `matrix` model ===
 
 
 
