@@ -35,7 +35,7 @@ These three functions allows you to extract the current state of the tertiary wa
   virtual void update_active (const std::vector<double>& h_matrix) = 0;
 }}}
 
-The pressure in the matrix changes between the small timesteps, which means that biopores may be activated (when the pressure is high) or deactivated (when the pressure is low).  This function is responsible for handling that. 
+The pressure in the matrix changes between the small timesteps, which means that biopores may be activated (when the pressure is high) or deactivated (when the pressure is low).  
 
 == Finding a solution ==
 
@@ -48,6 +48,8 @@ The pressure in the matrix changes between the small timesteps, which means that
                                     const double dt) = 0;
 }}}
 
+This is the main function for finding the solution.  If a solution is found, the function will return true, and the state of the `Tertwater` object will be the state of the solution.  If no solution is found, the function will return false, and the state will be reverted to `old_state`.
+
 == Finding the sink terms ==
 
 {{{
@@ -58,8 +60,35 @@ The pressure in the matrix changes between the small timesteps, which means that
                             std::vector<double>& S_drain) const = 0;
 }}}
 
+Knowing the solution, we can find the matching sink terms.  `S_matrix` is the sink term for those biopores that end in the matrix, and can be both negative and positive.  It will be positive in the cells where there are active biopores, and negative in those cells where the water move back into the matrix.
+
 == Putting it all together ==
 
+Shouldn't update_active be called?  Maybe step 3b, if we found a solution.
+
+=== Step 1: At the beginning of each  ===
+
+{{{
+  const Anystate h3_previous = tertiary.get_state ();
+}}}
+
+=== Step 2 ===
+
+{{{
+  if (!tertiary.find_implicit_water (h3_previous, geo, soil, soil_heat, h_std, ddt))
+    {  //We need smaller timesteps
+      iterations_used = max_iterations + 1;
+      break;
+    }
+                          
+  tertiary.matrix_sink (geo, soil, soil_heat, h_std, S_matrix, S_drain);
+}}}
+
+=== Step 3:  If we failed to find a solution ===
+
+{{{
+  tertiary.set_state (h3_previous);
+}}}
 
 == Implementations ==
 
