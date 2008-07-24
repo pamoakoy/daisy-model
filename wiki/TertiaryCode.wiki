@@ -35,6 +35,8 @@ These three functions allows you to extract the current state of the tertiary wa
   virtual void update_active (const std::vector<double>& h_matrix) = 0;
 }}}
 
+The pressure in the matrix changes between the small timesteps, which means that biopores may be activated (when the pressure is high) or deactivated (when the pressure is low).  This function is responsible for handling that. 
+
 == Finding a solution ==
 
 {{{
