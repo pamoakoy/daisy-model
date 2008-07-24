@@ -17,11 +17,63 @@ In fact, to get solute transport right it will often be necessary to reduce the 
 
 The small timestep interface is called `Tertsmall` and can be found in the [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.h tertsmall.h] file.
 
-= The large timestep interface to water =
+== State ==
 
-= The large timestep interface to solutes =
+The first three functions in the interface builds upon the [Anystate] abstraction.  Basically, the `Anystate` class is an opaque representation of the state of any class that supports it.  It has value semantics, which means that it can be copied, but no other operations are possible on it.   
+
+{{{
+  virtual Anystate get_state () const = 0;
+  virtual void set_state (const Anystate&) = 0;
+  virtual bool converge (const Anystate& old) = 0; // Are current, old state close?
+}}}
+
+These three functions allows you to extract the current state of the tertiary water, restore it, and see if the current state is "sufficiently close" to a previously extracted state.
+
+== Finding changes in active cells == 
+
+{{{
+  virtual void update_active (const std::vector<double>& h_matrix) = 0;
+}}}
+
+== Finding a solution ==
+
+{{{
+ virtual bool find_implicit_water (const Anystate& old_state, 
+                                    const Geometry& geo, 
+                                    const Soil& soil,  
+                                    const SoilHeat& soil_heat, 
+                                    const std::vector<double>& h,
+                                    const double dt) = 0;
+}}}
+
+== Finding the sink terms ==
+
+{{{
+  virtual void matrix_sink (const Geometry& geo, const Soil& soil,  
+                            const SoilHeat& soil_heat, 
+                            const std::vector<double>& h,
+                            std::vector<double>& S_matrix,
+                            std::vector<double>& S_drain) const = 0;
+}}}
+
+== Putting it all together ==
 
 
+== Implementations ==
+
+`TertwaterNone` and `TertiaryBiopores`
+
+= The `tertiary` component.
+
+== The large timestep interface to water ==
+
+== The large timestep interface to solutes ==
+
+= The `TertiaryBiopores` class
+
+== The `biopore` component ==
+
+== The `drain` model
 
 
 
