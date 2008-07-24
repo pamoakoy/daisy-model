@@ -38,7 +38,7 @@ These three functions allows you to extract the current state of the tertiary wa
 == Finding a solution ==
 
 {{{
- virtual bool find_implicit_water (const Anystate& old_state, 
+  virtual bool find_implicit_water (const Anystate& old_state, 
                                     const Geometry& geo, 
                                     const Soil& soil,  
                                     const SoilHeat& soil_heat, 
