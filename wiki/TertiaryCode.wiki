@@ -1,0 +1,30 @@
+#summary Structure of the code for implementing tertiary transport
+#labels Subject-Daisy
+
+= Introduction =
+
+This page describes the code for implementing tertiary transport in Daisy.  Tertiary transport here is the transport of water and solutes in "large" macropores, as described in the [SoilDomains soil domains] page.  The "large" macropores are macropores where the capillary forces no longer dominates, typically biopores as made by earthworms or old root channels.  Their diameter are typically in the millimeter range.
+
+== Small and large timesteps ==
+
+There are two different interfaces for tertiary transport, one for water transport alone in the small timesteps inside the solution of Richard's equation, and one for both water and solute transport in the large timesteps outside of the matrix water transport solution.  Solute transport always happens in the large timesteps, and water transport should only happen in one of the two, despite there being two interfaces.
+
+Note that "small and large timesteps" doesn't actually refer to the absolute size of the timesteps, but to the fact that the model has a base timestep, which we call the large timestep, and that some processes, in this case the solutions to Richard's equation, may have to divide the large timestep into smaller units, called small timesteps.
+
+In fact, to get solute transport right it will often be necessary to reduce the large timestep when the tertiary domain first gets activated, typically during heavy rainfall or irrigation.   But this reduction does not guarantee that the solution to Richard's equation won't require further reductions, so the small timestep interface is still needed. 
+
+= The small timestep Interface =
+
+= The large timestep interface to water =
+
+= The large timestep interface to solutes =
+
+
+
+
+
+
+
+
+
+ 
