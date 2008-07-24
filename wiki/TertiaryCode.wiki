@@ -15,7 +15,7 @@ In fact, to get solute transport right it will often be necessary to reduce the 
 
 = The small timestep Interface =
 
-The small timestep interface is called `Tertsmall` and can be found in the `[http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.h tertsmall.h]` file.
+The small timestep interface is called `Tertsmall` and can be found in the [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.h tertsmall.h] file.
 
 = The large timestep interface to water =
 
