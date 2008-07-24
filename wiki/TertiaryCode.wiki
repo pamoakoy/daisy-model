@@ -64,7 +64,9 @@ Knowing the solution, we can find the matching sink terms.  `S_matrix` is the si
 
 == Putting it all together ==
 
-Shouldn't update_active be called?  Maybe step 3b, if we found a solution.
+TODO: Shouldn't update_active be called?  Maybe step 3b, if we found a solution.
+
+TODO: This should be refphrased in terms of the two loops in the solution to Richard's equation, the time step loop, and the convergence loop.
 
 === Step 1: At the beginning of each  ===
 
