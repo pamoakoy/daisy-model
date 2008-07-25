@@ -24,10 +24,9 @@ The first three functions in the interface builds upon the [Anystate] abstractio
 {{{
   virtual Anystate get_state () const = 0;
   virtual void set_state (const Anystate&) = 0;
-  virtual bool converge (const Anystate& old) = 0; // Are current, old state close?
 }}}
 
-These three functions allows you to extract the current state of the tertiary water, restore it, and see if the current state is "sufficiently close" to a previously extracted state.
+These functions allows you to extract the current state of the tertiary water and restore it again.
 
 == Finding changes in active cells == 
 
