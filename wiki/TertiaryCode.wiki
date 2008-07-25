@@ -63,17 +63,18 @@ Knowing the solution, we can find the matching sink terms.  `S_matrix` is the si
 
 == Putting it all together ==
 
-TODO: Shouldn't update_active be called?  Maybe step 3b, if we found a solution.
+The solution to Richard's equation basically consist of two nested loops.  The outer loop is the small timestep loop, the simulation proceeds until we reach the end of the large timestep.  The inner loop is the convergence loop, we try to better and better solutions, until we either found one that is good enough, or we have used too many iterations.  If we found a solution, we proceed to the next small timestep, otherwise we restart the convergence loop with a smaller timestep.
 
-TODO: This should be refphrased in terms of the two loops in the solution to Richard's equation, the time step loop, and the convergence loop.
-
-=== Step 1: At the beginning of each  ===
+=== Step 1: At the beginning of each small timestep ===
 
 {{{
   const Anystate h3_previous = tertiary.get_state ();
 }}}
 
-=== Step 2 ===
+At the beginning of each small timestep, we need to store the state of the biopores.  This is used both in case we need to restart the convergence loop with a small timestep, and quite similar to how we need to store the state of the soil matrix.
+
+
+=== Step 2: At the beginning of the convergence loop ===
 
 {{{
   if (!tertiary.find_implicit_water (h3_previous, geo, soil, soil_heat, h_std, ddt))
@@ -81,14 +82,32 @@ TODO: This should be refphrased in terms of the two loops in the solution to Ric
       iterations_used = max_iterations + 1;
       break;
     }
-                          
+}}}
+
+Before trying to find a new solution for the matrix potential, we try to find a new solution for the water content in the biopores.  It might not be possible to find such a solution, in which case we want to break out of the convergence loop, and retry with small timesteps.  We set the number if iterations used to one more than the maximal number allowed, to signal that convergence was not reached.  
+
+{{{                          
   tertiary.matrix_sink (geo, soil, soil_heat, h_std, S_matrix, S_drain);
 }}}
 
-=== Step 3:  If we failed to find a solution ===
+After finding an implicit solution for the state of the biopores, we need to find the corresponding source terms for use in finding the matrix potentials.
+
+=== Step 3: After the convergence loop ===
+
+Once we have finished the convergence loop, what happens depends on whether we found a solution or not.
+
+==== If we failed to find a solution ====
 
 {{{
   tertiary.set_state (h3_previous);
+}}}
+
+If we didn't found a solution, we have to reset the state of the biopores to what they were at the beginning of the timestep.
+
+==== If we succeeded in finding a solution ====
+
+{{{
+  tertiary.update_active (h_std);
 }}}
 
 == Implementations ==
