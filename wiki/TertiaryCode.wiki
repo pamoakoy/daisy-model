@@ -110,9 +110,16 @@ If we didn't found a solution, we have to reset the state of the biopores to wha
   tertiary.update_active (h_std);
 }}}
 
+If we found a solution, we should activate or deactivate biopores according to the new matrix potential.
+
 == Implementations ==
 
-`TertwaterNone` and `TertiaryBiopores`
+The `Tertsmall` interface is implemented by 
+`TertwaterNone` (in [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.C tertsmall.C]) and `TertiaryBiopores` which will be described later.  `TertwaterNone` is a dummy version of the interface, which provided no tertiary transport, and is used by tertiary transport models that rely solely on large timesteps.  A static instance is available through the `Tertsmall` interface, via the following function:
+
+{{{
+  static Tertsmall& none ();
+}}}
 
 = The `tertiary` component =
 
