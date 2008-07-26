@@ -15,7 +15,21 @@ In fact, to get solute transport right it will often be necessary to reduce the 
 
 = The `tertiary` component =
 
+The interface to the `tertiary` component is the `Tertiary` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary.h tertiary.h].
+
 == The small timestep interface to water ==
+
+To access the small timestep interface, the following function should be called.
+
+{{{
+  virtual Tertsmall& implicit () = 0;
+}}}
+
+Note that the small timestep interface is only used by some matrix transport models, the rest will ignore it.  Neither need all tertiary models support it, those that don't can simply return {{{Tertsmall::none ()}}}.  
+
+The small timestep interface only handles interaction with matrix water, not infiltration from the surface, which is always handled by the large timestep interface.  Furthermore, if the small timestep interface handles interaction with matrix water, the large timestep interface shouldn't.
+
+You can read more about [CodeTertsmall the small timstep interface].
 
 == The large timestep interface to water ==
 
