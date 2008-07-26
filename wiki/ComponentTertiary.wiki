@@ -63,10 +63,20 @@ The {{{check}}}, {{{initialize}}}, and {{{output}}} functions have their usual m
 
 = Models =
 
-= The `TertiaryBiopores` class =
+== The none model ==
 
-== The `biopore` component ==
+The none model does nothing, and is implemented by the `TertiaryNone` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary.C tertiary.C].
 
-=== The `drain` model ===
+== The old model ==
 
-=== The `matrix` model ===
+The old model is implemented by the `TertiaryOld` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary_old.C tertiary_old.C].
+
+== The biopores model ==
+
+The biopores model is implemented by the `TertiaryBiopores` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary_biopores.C tertiary_biopores.C].
+
+= The biopore component =
+
+== The drain model ==
+
+== The matrix model ==
