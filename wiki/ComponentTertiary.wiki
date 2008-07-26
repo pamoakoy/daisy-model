@@ -13,9 +13,9 @@ Note that "small and large timesteps" doesn't actually refer to the absolute siz
 
 In fact, to get solute transport right it will often be necessary to reduce the large timestep when the tertiary domain first gets activated, typically during heavy rainfall or irrigation.   But this reduction does not guarantee that the solution to Richard's equation won't require further reductions, so the small timestep interface is still needed. 
 
-= The `tertiary` component =
+= The tertiary component =
 
-The interface to the `tertiary` component is the `Tertiary` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary.h tertiary.h].
+The interface to the tertiary component is the `Tertiary` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary.h tertiary.h].
 
 == The small timestep interface to water ==
 
@@ -29,7 +29,7 @@ Note that the small timestep interface is only used by some matrix transport mod
 
 The small timestep interface only handles interaction with matrix water, not infiltration from the surface, which is always handled by the large timestep interface.  Furthermore, if the small timestep interface handles interaction with matrix water, the large timestep interface shouldn't.
 
-You can read more about [CodeTertsmall the small timstep interface].
+You can read more about [CodeTertsmall the small timestep interface].
 
 == The large timestep interface to water ==
 
