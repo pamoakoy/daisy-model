@@ -49,7 +49,7 @@ This function have two purposes, first it should extract any water from the surf
                        Chemical&, Treelog&) = 0;
 }}}
 
-This function will be called once for each chemical that is tracked by Daisy.  The `J_tertiary` parameter contains information about how much of the chemical enter directly to the biopores from the surface.  It is implemented as a map of edge -> flux. 
+This function will be called once for each chemical that is tracked by Daisy.  The `J_tertiary` parameter contains information about how much of the chemical enter directly to the biopores from the surface.  It is implemented as a map of edge -> flux.  When implementing a model you should iterate over all the map entries, to be sure all the fluxes are added to the biopore domain.
 
 == Other functions == 
 
