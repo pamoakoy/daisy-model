@@ -33,7 +33,35 @@ You can read more about [CodeTertsmall the small timestep interface].
 
 == The large timestep interface to water ==
 
+{{{
+  virtual void tick (const Geometry&, const Soil&, const SoilHeat&,
+                     const double dt, SoilWater&, Surface&, Treelog&) = 0;
+}}}
+
+This function have two purposes, first it should extract any water from the surface that should go to the biopores, and the second is the interaction with the matrix water if that is not handled by the small timesteps.
+
 == The large timestep interface to solutes ==
+
+{{{
+  virtual void solute (const Geometry&, const SoilWater&, 
+                       const std::map<size_t, double>& J_tertiary,
+                       const double dt,
+                       Chemical&, Treelog&) = 0;
+}}}
+
+This function will be called once for each chemical that is tracked by Daisy.  The `J_tertiary` parameter contains information about how much of the chemical enter directly to the biopores from the surface.  It is implemented as a map of edge -> flux. 
+
+== Other functions == 
+
+{{{
+  virtual bool has_macropores () = 0;
+}}}
+
+This should return true, unless you are implementing a model with no tertiary transport.  It is used by the heuristics for discretization of the soil.
+
+The {{{check}}}, {{{initialize}}}, and {{{output}}} functions have their usual meanings. 
+
+= Models =
 
 = The `TertiaryBiopores` class =
 
@@ -42,10 +70,3 @@ You can read more about [CodeTertsmall the small timestep interface].
 === The `drain` model ===
 
 === The `matrix` model ===
-
-
-
-
-
-
- 
