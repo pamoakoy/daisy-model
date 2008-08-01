@@ -3,7 +3,7 @@
 
 = Interface =
 
-You may want to read the general description of the division of the soil into [SoilDomains three domains], as well as the desicription of the [ComponentTertiary tertiary] component, for context. This page documents the small timestep interface to tertiary transport.  The interface class is called `Tertsmall` and can be found in the [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.h tertsmall.h] file. The purpose of the `Tertsmall` interface is to allow those solution to matrix water transport that relies on dividing the problem into smaller timesteps, to have access to the tertiary domain transport mechanism between the small timesteps.
+You may want to read the general description of the division of the soil into [SoilDomains three domains], as well as the desicription of the [CodeTertiary tertiary] component, for context. This page documents the small timestep interface to tertiary transport.  The interface class is called `Tertsmall` and can be found in the [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.h tertsmall.h] file. The purpose of the `Tertsmall` interface is to allow those solution to matrix water transport that relies on dividing the problem into smaller timesteps, to have access to the tertiary domain transport mechanism between the small timesteps.
 
 == State ==
 
