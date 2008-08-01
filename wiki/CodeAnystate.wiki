@@ -1,0 +1,15 @@
+#summary A generic copyable state.
+#labels Subject-Code
+
+The `Anystate` abstraction can be used for storing and restoring the state of a object, without knowing the exact class of the object.
+
+The basic idea is that a base class (the "component") can provide the interface functions
+
+{{{
+  virtual Anystate get_state () const = 0;
+  virtual void set_state (const Anystate&) = 0;
+}}}
+
+for users to get and set the state of the object.  The only thing the user can do with an Anystate` object apart from calling `set_state` is to copy it.
+
+The derived class (the "model") must then implement these functions.
