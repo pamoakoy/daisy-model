@@ -12,4 +12,11 @@ The basic idea is that a base class (the "component") can provide the interface 
 
 for users to get and set the state of the object.  The only thing the user can do with an Anystate` object apart from calling `set_state` is to copy it.
 
-The derived class (the "model") must then implement these functions.
+
+The derived class (the "model") must then implement these functions.    It is the duty of the user to ensure that argument to `set_state` is an `Anystate` object was retrieved with `get_state` from the same model.  The interface cannot be used for morphing the class of a model.
+
+1. Declare a new class derived from `Anystate::Content` which can contain the state of the model, and implements the 'clone' method for making a copy of itself.
+
+2. Use the constructor to Anystate that accepts an `std::auto_ptr<Anystate::Content>` to create the `Anystate` instance for use with `get_state`.
+
+3. Use the `Anystate::inpect` function to retrieve the content for use in `set_state`.  Use `dynamic_cast` to convert it to the right type.
