@@ -15,6 +15,12 @@ on MS Windows, or
 }}}
 on GNU/Linux.
 
+The GUI is build with
+{{{
+  daisyw.exe
+}}}
+on MS Windows.  There are not yet any rules for building it under GNU/Linux.
+
 The compiler used for development is GNU GCC.  From time to time Daisy is ported to other compilers (Visual C++, C++Builder, and Intel ICC) but these tend to break again very soon.   We do use other building environments at all.
 
 The C# interface has only been compiled with Microsoft `csc.exe` under Cygwin.
@@ -25,7 +31,15 @@ The boost libraries is used and must always be available, allthough only `boost:
 
 = Accessing Daisy = 
 
-Here will eventually be information about accessing Daisy through C++, C, C#, .net, and OpenMI.
+Here will eventually be information about accessing Daisy from other programs through C++, C, C#, .net, and OpenMI.
+
+= Changing the Daisy source code =
+
+Here will be information about changing the Daisy source code.  
+
+Currently, we have information about the code that implements [CodeTertiary tertiary] [SoilDomains soil domain]. 
+
+In general, we mostly follow the [http://www.gnu.org/prep/standards/standards.html GNU Coding Standards].
 
 = See also =
 
