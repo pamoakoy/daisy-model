@@ -17,7 +17,7 @@ The main parameter is `classes`, which contains both parameters and state for ea
 
 == Active cells ==
 
-An important concept in the biopores model is *active and inactive cells*.  The idea is that cells are marked active once the matrix potential surpass `pressure_initiate` and stay active until it becomes lower than `pressure_end`.  While the cell is active, water can (but doesn't have to, the biopores might be full) move from the matrix domain to the tertiary domain.  Thet state is stored in the `active` state variable, and updated by the `update_active` member function.
+An important concept in the biopores model is *active and inactive cells*.  The idea is that cells are marked active once the matrix potential surpass `pressure_initiate` and stay active until it becomes lower than `pressure_end`.  While the cell is active, water can (but doesn't have to, the biopores might be full) move from the matrix domain to the tertiary domain.  The state is stored in the `active` state variable, and updated by the `update_active` member function.
 
 {{{
   const double pressure_initiate;// Pressure needed to init pref.flow [cm]
@@ -28,13 +28,15 @@ An important concept in the biopores model is *active and inactive cells*.  The 
 
 == Surface infiltration ==
 
-Water may infiltrate through the surface if the pond is higher than `pond_max` at the beginning of the timestep.
+Water may infiltrate through the surface if the pond is higher than `pond_max` at the beginning of the timestep, and the biopores reaches the soil surface..
 
 {{{
   const double pond_max;         // Pond height before activating pref.flow [mm]
   double capacity (const Geometry&, size_t e, double dt); // Max flux.
   void infiltrate (const Geometry&, size_t e, double amount, double dt);
 }}}
+
+Related to this is the two functions `capacity` and `infiltrate`.  The first simply calculate how much "free space" there is in the tertiary domain, by accumulating the capacity of individual classes.  The second actually divide the incoming water among the classes.  The division is done relatively to the numeric biopore density, so that a class with twice as many biopores will receive twice as much water, at first independently of the size of the biopores.  However, care is also taken that biopore classes doesn't receive more than their capacity (which depend on the size), and that the extra water is divided among the remaining classes by the same rules.
 
 == Small  or large timesteps? ==
 
