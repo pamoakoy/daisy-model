@@ -11,7 +11,7 @@ In Daisy, we often divide code into three classes:
 
 2) A *model* implements the interface, and would typically be a specific mathematical description of the physical process.
 
-3) *Client code* can only access the models through the component interface.  
+3) *Client code* can only access instances of the models through the component interface.  
 
 This separation allows us in theory (and occasionally also in practice) to introduce new models to Daisy without altering the existing code.   
 
