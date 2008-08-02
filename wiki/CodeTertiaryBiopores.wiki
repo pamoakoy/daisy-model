@@ -1,0 +1,6 @@
+#summary The biopores tertiary model.
+#labels Subject-Code
+
+= Introduction =
+ 
+The biopores [CodeTertiary tertiary model] is implemented by the `TertiaryBiopores` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary_biopores.C tertiary_biopores.C].  It implements both the [CodeTertsmall small] and large timestep interfaces, using multiple inheritance.  The biopores model divides the [SoilDomains tertiary domain] into a number of classes, each represented by a biopore model.  The biopores instantly transport water, either to the bottom of the biopore (where it might slowly leak back to the matrix domain), or to drain pipes where it is lost from the system.
