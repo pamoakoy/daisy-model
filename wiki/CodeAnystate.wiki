@@ -13,7 +13,7 @@ In Daisy, we often divide code into three classes:
 
 3) *Client code* can only access instances of the models through the component interface.  
 
-This separation allows us in theory (and occasionally also in practice) to introduce new models to Daisy without altering the existing code.   
+This separation allows us in theory (and occasionally also in practice) to introduce new models to Daisy without altering the existing client code.   
 
 The `Anystate` abstraction allows of to save the state of a model, without violating the component interface boundary.
 
