@@ -1,7 +1,32 @@
 #summary Information for programmers.
 #labels Subject-Code
 
-Here will eventually be information about building Daisy with GNU Make, and about accessing Daisy through C++, C, C#, .net, or OpenMI.
+= Building Daisy =
 
-See also:
-* [http://www.ohloh.net/projects/daisy-model Ohloh source analysis]
+Daisy is build with GNU Make, and requires a Unix-like environment, such as GNU/Linux or Cygwin.  Cygwin is what is used for development, so GNU/Linux compilation may fail.
+
+The main target for building the command line executable is
+{{{
+  make daisy.exe
+}}}
+on MS Windows, or
+{{{
+  make daisy
+}}}
+on GNU/Linux.
+
+The compiler used for development is GNU GCC.  From time to time Daisy is ported to other compilers (Visual C++, C++Builder, and Intel ICC) but these tend to break again very soon.   We do use other building environments at all.
+
+The C# interface has only been compiled with Microsoft `csc.exe` under Cygwin.
+
+The GUI libraries used is Qt, only the free MinGW version for have been tested.
+
+The boost libraries is used and must always be available, allthough only `boost::noncopyable` is used outside the 2D code.  The 2D code also use `boost::ublas`, and Tim Davis' [CXSparse generic sparse matrix library http://www.cise.ufl.edu/research/sparse/CXSparse/].
+
+= Accessing Daisy = 
+
+Here will eventually be information about accessing Daisy through C++, C, C#, .net, and OpenMI.
+
+= See also =
+
+[http://www.ohloh.net/projects/daisy-model Ohloh source analysis].
