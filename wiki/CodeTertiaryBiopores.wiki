@@ -4,3 +4,53 @@
 = Introduction =
  
 The biopores [CodeTertiary tertiary model] is implemented by the `TertiaryBiopores` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary_biopores.C tertiary_biopores.C].  It implements both the [CodeTertsmall small] and large timestep interfaces, using multiple inheritance.  The biopores model divides the [SoilDomains tertiary domain] into a number of classes, each represented by a biopore model.  The biopores instantly transport water, either to the bottom of the biopore (where it might slowly leak back to the matrix domain), or to drain pipes where it is lost from the system.
+
+= Parameters and state variables =
+
+== Biopore classes ==
+
+The main parameter is `classes`, which contains both parameters and state for each biopore class.  
+
+{{{
+  const auto_vector<Biopore*> classes; // List of biopore classes.
+}}}
+
+== Active cells ==
+
+An important concept in the biopores model is *active and inactive cells*.  The idea is that cells are marked active once the matrix potential surpass `pressure_initiate` and stay active until it becomes lower than `pressure_end`.  While the cell is active, water can (but doesn't have to, the biopores might be full) move from the matrix domain to the tertiary domain.  Thet state is stored in the `active` state variable, and updated by the `update_active` member function.
+
+{{{
+  const double pressure_initiate;// Pressure needed to init pref.flow [cm]
+  const double pressure_end;     // Pressure after pref.flow has been init [cm]
+  std::vector<bool> active;      // Biopore activity 
+  void update_active (const std::vector<double>& h);
+}}}
+
+== Surface infiltration ==
+
+Water may infiltrate through the surface if the pond is higher than `pond_max` at the beginning of the timestep.
+
+{{{
+  const double pond_max;         // Pond height before activating pref.flow [mm]
+  double capacity (const Geometry&, size_t e, double dt); // Max flux.
+  void infiltrate (const Geometry&, size_t e, double amount, double dt);
+}}}
+
+== Small  or large timesteps? ==
+
+The user must select whether exchange with matrix domain should be calculated at the beginning of the large timesteps, or at the beginning of the small timesteps inside the solution to Richard's equation.
+
+{{{
+  const bool use_small_timesteps_; // True, iff we want to calculate S in R.E.
+  Tertsmall& implicit ();
+}}}
+
+If the user select small timesteps, the `implicit` will return `*this`, otherwise it will return `Tertsmall::none ()`, and the `tick` function called at the beginning or each large timestep will calculate the matrix water exchange.
+
+= Small timestep interface =
+
+TODO
+
+= Large timestep interface =
+
+TODO
