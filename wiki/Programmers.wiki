@@ -37,7 +37,7 @@ Here will eventually be information about accessing Daisy from other programs th
 
 Here will be information about changing the Daisy source code.  
 
-Currently, we have information about the code that implements [CodeTertiary tertiary] [SoilDomains soil domain]. 
+Currently, we have information about the code that implements the [CodeTertiary tertiary] [SoilDomains soil domain]. 
 
 In general, we mostly follow the [http://www.gnu.org/prep/standards/standards.html GNU Coding Standards].
 
