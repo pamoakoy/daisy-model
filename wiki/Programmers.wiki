@@ -21,7 +21,7 @@ The C# interface has only been compiled with Microsoft `csc.exe` under Cygwin.
 
 The GUI libraries used is Qt, only the free MinGW version for have been tested.
 
-The boost libraries is used and must always be available, allthough only `boost::noncopyable` is used outside the 2D code.  The 2D code also use `boost::ublas`, and Tim Davis' [CXSparse generic sparse matrix library http://www.cise.ufl.edu/research/sparse/CXSparse/].
+The boost libraries is used and must always be available, allthough only `boost::noncopyable` is used outside the 2D code.  The 2D code also use `boost::ublas`, and Tim Davis' [http://www.cise.ufl.edu/research/sparse/CXSparse/ CXSparse generic sparse matrix library].
 
 = Accessing Daisy = 
 
