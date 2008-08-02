@@ -75,8 +75,4 @@ The old model is implemented by the `TertiaryOld` class in [http://code.google.c
 
 The biopores model is implemented by the `TertiaryBiopores` class in [http://code.google.com/p/daisy-model/source/browse/trunk/tertiary_biopores.C tertiary_biopores.C].  It implements both the small and large timestep interfaces, using multiple inheritance.  The biopores model divides the tertiary domain into a number of classes, each represented by a biopore model.
 
-= The biopore component =
-
-== The drain model ==
-
-== The matrix model ==
+It is described in more details in CodeTertiaryBiopores.
