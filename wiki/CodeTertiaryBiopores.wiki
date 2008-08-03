@@ -15,6 +15,8 @@ The main parameter is `classes`, which contains both parameters and state for ea
   const auto_vector<Biopore*> classes; // List of biopore classes.
 }}}
 
+Each class is an instance of the biopore component, for which two models exists.  The *matrix* model for biopores that end in the matrix, and the *drain* model for biopores that ends in drain pipes.  Much of the work of the biopores tertiary model is delegated to the individual biopore classes.
+
 == Active cells ==
 
 An important concept in the biopores model is *active and inactive cells*.  The idea is that cells are marked active once the matrix potential surpass `pressure_initiate` and stay active until it becomes lower than `pressure_end`.  While the cell is active, water can (but doesn't have to, the biopores might be full) move from the matrix domain to the tertiary domain.  The state is stored in the `active` state variable, and updated by the `update_active` member function.
@@ -25,6 +27,8 @@ An important concept in the biopores model is *active and inactive cells*.  The 
   std::vector<bool> active;      // Biopore activity 
   void update_active (const std::vector<double>& h);
 }}}
+
+The `update_active` function is also part of the [Tertsmall small timestep interface].
 
 == Surface infiltration ==
 
@@ -50,6 +54,13 @@ The user must select whether exchange with matrix domain should be calculated at
 If the user select small timesteps, the `implicit` will return `*this`, otherwise it will return `Tertsmall::none ()`, and the `tick` function called at the beginning or each large timestep will calculate the matrix water exchange.
 
 = Small timestep interface =
+
+{{{
+get_state, set_state, (converge) 
+update_active
+find_implicit_water
+matrix_sink (done)
+}}}
 
 TODO
 
