@@ -55,9 +55,16 @@ If the user select small timesteps, the `implicit` will return `*this`, otherwis
 
 = Small timestep interface =
 
-{{{
-get_state, set_state, (converge) 
-update_active
+The biopores tertiary model inherits from the `Tertsmall` class, and implements the small timestep interface.
+
+== State ==
+
+The only state we care about is the water content in the biopores, and only the matrix biopore model has any water.  The states of the biopores are stored in an [CodeMemutils auto_vector], and the `get_state` and `set_state` functions simply delegates to biopores stored in `classes`.
+
+An additional `converge` function allows the user to check if two states are sufficiently close.  All also delegates the real work to the biopore classes.
+
+The `update_active` function has already been described.
+
 find_implicit_water
 matrix_sink (done)
 }}}
