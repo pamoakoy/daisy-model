@@ -1,0 +1,4 @@
+#summary Utilities for memory management.
+#labels Subject-Code
+
+The [http://code.google.com/p/daisy-model/source/browse/trunk/memutils.h memutils.h] file contains some utilities to make memory management easier.
