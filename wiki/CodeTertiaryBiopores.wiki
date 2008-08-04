@@ -52,7 +52,7 @@ The user must select whether exchange with matrix domain should be calculated at
 
 If the user select small timesteps, the `implicit` will return `*this`, otherwise it will return `Tertsmall::none ()`, and the `tick` function called at the beginning or each large timestep will calculate the matrix water exchange.
 
-= Finding an implicit solution =
+= Small timestep interface =
 
 The main function in the small timestep interface may be `find_implicit_water`.  The purpose of this function is to find the solution to 
 {{{
@@ -68,20 +68,44 @@ The only state we care about is the water content in the biopores, and only the 
 
 An additional `converge` function allows the user to check if two states are sufficiently close.  All also delegates the real work to the biopore classes.
 
-== Update active == 
+== Helper function ==
 
-The `update_active` function has already been described.
+The `find_implicit_water` function is build upon the state functions described above, and two helper functions.
 
-== Find implicit water ==
+{{{
+  void update_biopores (const Geometry& geo, 
+                        const Soil& soil,  
+                        const SoilHeat& soil_heat, 
+                        const std::vector<double>& h,
+                        const double dt);
+}}}
 
-The `find_implicit_water` function 
+The `update_biopores` function calls `update_matrix_sink`, which does two things.  First, it calculates an matrix sink term called for all cells.  This sink term is stored in a log variable named `S`.  Secondly, it calculates how much water should be added to the tertiary domain based on `S` and `dt`.
+
+{{{
+  void update_water ();
+}}}
+
+The `update_water` function is delegated to the biopore classes.  It takes the water to be removed from the matrix via `S` term calculated by ``update_matrix_sink`, and adds it to the tertiary domain.  Or rather, so it does for biopore classes that ends in the matrix, it does nothing for biopore classes that ends in drains, as the water removed by these biopores are considered lost to the system.
+
+The big trick to `find_implicit_water` is that the biopore state is reset the state of the beginning ot the timestep, between the calls to `update_biopore` and `update_water`.  This ensures that the new guess for `h3_next` is based on the value of `h3_prev`, plus the sink we got based on the previous guess for `h3_next`.
 
 == Matrix sink ==
 
-matrix_sink (done)
+The `matrix_sink` function call `add_matrix_sink` for all biopore classes, which will add the `S` term calculated by `update_matrix_sink` to either `S_matrix` or `S_drain`, depending on the biopore model.
 
-TODO
+= Large timestep interface to water =
 
-= Large timestep interface =
+The `tick` functions will calculate infiltration from surface for all cell near the top, using the `capacity` and `infiltrate` functions.
 
-TODO
+If the user has selected small timesteps, it is finished.  If not, the `tick` function has to calculate the interaction between the matrix and tertiary domains.  Since this interaction is often far to fast to do for a large timestep, the `tick` function will cheat and pretend the timestep is smaller.  The effect of this is that tertiary transport will be much slower than what our understanding of the physics dictates.  But it will still bypass the matrix, and thus preserve one important aspect.
+
+First, `find_implicit_water` is called repeatedly with decreasing values of `ddt`, until we wind a timestep small enough to get a solution.
+
+Then the resulting matrix sink term is examined, and `ddt` is further adjusted so that the amount of water removed from an active cell will never put the pressure below `pressure_end`.  Note that the cell will continue to be active, so if additional water is added through matrix flow, it may be removed in the next large timestep.
+
+Finally, `find_implicit_water` is called again with the adjusted value of `ddt`to find the final tertiary state, and the resulting source terms.
+
+= Large timestep interface to solutes = 
+
+The large timestep interface to solutes has not been implemented yet.
