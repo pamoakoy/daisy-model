@@ -28,7 +28,7 @@ An important concept in the biopores model is *active and inactive cells*.  The 
   void update_active (const std::vector<double>& h);
 }}}
 
-The `update_active` function is also part of the [Tertsmall small timestep interface].
+The `update_active` function is also part of the [CodeTertsmall small timestep interface].
 
 == Surface infiltration ==
 
