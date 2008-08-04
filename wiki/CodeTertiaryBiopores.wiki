@@ -68,7 +68,7 @@ The only state we care about is the water content in the biopores, and only the 
 
 An additional `converge` function allows the user to check if two states are sufficiently close.  All also delegates the real work to the biopore classes.
 
-== Helper function ==
+== Helper functions ==
 
 The `find_implicit_water` function is build upon the state functions described above, and two helper functions.
 
