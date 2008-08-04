@@ -40,14 +40,11 @@ This is the main function for finding the solution.  If a solution is found, the
 == Finding the sink terms ==
 
 {{{
-  virtual void matrix_sink (const Geometry& geo, const Soil& soil,  
-                            const SoilHeat& soil_heat, 
-                            const std::vector<double>& h,
-                            std::vector<double>& S_matrix,
+  virtual void matrix_sink (std::vector<double>& S_matrix,
                             std::vector<double>& S_drain) const = 0;
 }}}
 
-Knowing the solution, we can find the matching sink terms.  `S_matrix` is the sink term for those biopores that end in the matrix, and can be both negative and positive.  It will be positive in the cells where there are active biopores, and negative in those cells where the water move back into the matrix.
+This functions returns the matrix sink terms that corresponds to the solution found by `find_implicit_solution`.   It is only meaningful after `find_implicit_solution` has successfully managed to find a solution.
 
 = Putting it all together =
 
@@ -75,7 +72,7 @@ At the beginning of each small timestep, we need to store the state of the biopo
 Before trying to find a new solution for the matrix potential, we try to find a new solution for the water content in the biopores.  It might not be possible to find such a solution, in which case we want to break out of the convergence loop, and retry with small timesteps.  We set the number if iterations used to one more than the maximal number allowed, to signal that convergence was not reached.  
 
 {{{                          
-  tertiary.matrix_sink (geo, soil, soil_heat, h_std, S_matrix, S_drain);
+  tertiary.matrix_sink (S_matrix, S_drain);
 }}}
 
 After finding an implicit solution for the state of the biopores, we need to find the corresponding source terms for use in finding the matrix potentials.
