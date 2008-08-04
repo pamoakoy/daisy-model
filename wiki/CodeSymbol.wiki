@@ -1,0 +1,5 @@
+#summary An immutable, unique identifier.
+
+The `symbol` type defined in [http://code.google.com/p/daisy-model/source/browse/trunk/symbo.h symbol.h] is an alternative to `const std::string` where comparison and copying is O(1), in fact, as fast as comparing or copying integers, but all substring operations are prohibited.  
+
+Their main purpose is for [CodeLog logging], which depends heavily on fast comparison of identifies, but are also used in other situations where immutable, unique identifiers are called for.  [CodeUnit Unit dimensions] are typically symbols as well.
