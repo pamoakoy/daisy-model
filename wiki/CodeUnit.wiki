@@ -1,0 +1,4 @@
+#summary Converting between dimensional units.
+#labels Subject-Code
+
+The code for converting between dimensional units can be found in [http://code.google.com/p/daisy-model/source/browse/trunk/units.h units.h].
