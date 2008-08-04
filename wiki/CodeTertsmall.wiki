@@ -103,10 +103,8 @@ If we found a solution, we should activate or deactivate biopores according to t
 = Implementations =
 
 The `Tertsmall` interface is implemented by 
-`TertwaterNone` (in [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.C tertsmall.C]) and in the `TertiaryBiopores` class, descibed in ComponentTertiary.  `TertwaterNone` is a dummy version of the interface, which provided no tertiary transport, and is used by tertiary transport models that rely solely on large timesteps.  A static instance is available through the `Tertsmall` interface, via the following function:
+`TertwaterNone` (in [http://code.google.com/p/daisy-model/source/browse/trunk/tertsmall.C tertsmall.C]) and in the [CodeTertiaryBiopores TertiaryBiopores] class.  `TertwaterNone` is a dummy version of the interface, which provided no tertiary transport, and is used by tertiary transport models that rely solely on large timesteps.  A static instance is available through the `Tertsmall` interface, via the following function:
 
 {{{
   static Tertsmall& none ();
 }}}
-
- 
