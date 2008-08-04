@@ -63,11 +63,17 @@ The only state we care about is the water content in the biopores, and only the 
 
 An additional `converge` function allows the user to check if two states are sufficiently close.  All also delegates the real work to the biopore classes.
 
+== Update active == 
+
 The `update_active` function has already been described.
 
-find_implicit_water
+== Find implicit water ==
+
+The `find_implicit_water` function 
+
+== Matrix sink ==
+
 matrix_sink (done)
-}}}
 
 TODO
 
