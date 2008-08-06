@@ -3,9 +3,9 @@
 
 = Primary, secondary and tertiary transport =
 
-Intra-aggregate pores constitute the primary domain, and inter-aggregate pores the secondary domain.  Both the primary and secondary domain are dominated by cabalitory forces.  Pores large enough for the cabalitory forces to become insignificant constitute the tertiary domain.  The primary and secondary domain together also constitute the soil matrix.
+Intra-aggregate pores constitute the primary domain, and inter-aggregate pores the secondary domain.  Both the primary and secondary domain are dominated by capillary forces.  Pores large enough for the capillary forces to become insignificant constitute the tertiary domain.  The primary and secondary domain together also constitute the soil matrix.
 
-In practice, this means we can use Richard's Equation for the soil matrix.  The convection-dispertion equation assumes equilibrium between pore sizes, which we doesn't believe is a good assumption between the primary and secondary domains.  Therefore, transport in each of those domains are considered seperate, with an exchange rate between them.
+In practice, this means we can use Richard's Equation for the soil matrix.  The convection-dispersion equation assumes equilibrium between pore sizes, which we doesn't believe is a good assumption between the primary and secondary domains.  Therefore, solute transport in each of those domains are considered separate, with an exchange rate between them.
 
 For the tertiary domain we cannot even use Richard's Equation.
 
@@ -17,9 +17,9 @@ The horizon parameter `secondary_domain` is used for enabling solute transport i
 
 The tertiary transport mechanism is specified by `Tertiary` movement parameter.  The default value for 1D simulations is `old`, which work as it used to, that is macropore flow for horizons with more than 5% clay.  You can also specify the old macropore model directly, like this:
 
-  (Tertiary old (macro none)).  
+  (Tertiary old (macro none))
 
-wich has the same effect as 
+which has the same effect as 
 
   (Tertiary none)
 
