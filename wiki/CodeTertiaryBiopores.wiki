@@ -88,7 +88,7 @@ The `update_biopores` function calls `update_matrix_sink`, which does two things
 
 The `update_water` function is delegated to the biopore classes.  It takes the water to be removed from the matrix via `S` term calculated by ``update_matrix_sink`, and adds it to the tertiary domain.  Or rather, so it does for biopore classes that ends in the matrix, it does nothing for biopore classes that ends in drains, as the water removed by these biopores are considered lost to the system.
 
-The big trick to `find_implicit_water` is that the biopore state is reset the state of the beginning ot the timestep, between the calls to `update_biopore` and `update_water`.  This ensures that the new guess for `h3_next` is based on the value of `h3_prev`, plus the sink we got based on the previous guess for `h3_next`.
+The big trick to `find_implicit_water` is that the biopore state is reset the state of the beginning of the timestep, between the calls to `update_biopore` and `update_water`.  This ensures that the new guess for `h3_next` is based on the value of `h3_prev`, plus the sink we got based on the previous guess for `h3_next`.
 
 == Matrix sink ==
 
