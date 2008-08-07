@@ -44,7 +44,7 @@ This is the main function for finding the solution.  If a solution is found, the
                             std::vector<double>& S_drain) const = 0;
 }}}
 
-This functions returns the matrix sink terms that corresponds to the solution found by `find_implicit_solution`.   It is only meaningful after `find_implicit_solution` has successfully managed to find a solution.
+This functions returns the matrix sink terms that corresponds to the solution found by `find_implicit_water`.   It is only meaningful after `find_implicit_water` has successfully managed to find a solution.
 
 = Putting it all together =
 
@@ -69,7 +69,7 @@ At the beginning of each small timestep, we need to store the state of the biopo
     }
 }}}
 
-Before trying to find a new solution for the matrix potential, we try to find a new solution for the water content in the biopores.  It might not be possible to find such a solution, in which case we want to break out of the convergence loop, and retry with small timesteps.  We set the number if iterations used to one more than the maximal number allowed, to signal that convergence was not reached.  
+Before trying to find a new solution for the matrix potential, we try to find a new solution for the water content in the biopores.  It might not be possible to find such a solution, in which case we want to break out of the convergence loop, and retry with smaller timesteps.  We set the number of iterations used to one more than the maximal number allowed, to signal that convergence was not reached.  
 
 {{{                          
   tertiary.matrix_sink (S_matrix, S_drain);
