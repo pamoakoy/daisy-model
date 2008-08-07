@@ -7,7 +7,7 @@ The biopores [CodeTertiary tertiary model] is implemented by the `TertiaryBiopor
 
 = Biopore classes =
 
-The biopores model divides the [SoilDomains tertiary domain] into a number of classes, each represented by a [CodeBiopore biopore model].  The biopores instantly transport water, either to the bottom of the biopore (where it might slowly leak back to the matrix domain), or to drain pipes where it is lost from the system.  The main parameter is `classes`, which contains both parameters and state for each biopore class.  
+The biopores model divides the [SoilDomains tertiary domain] into a number of classes, each represented by a biopore model.  The biopores instantly transport water, either to the bottom of the biopore (where it might slowly leak back to the matrix domain), or to drain pipes where it is lost from the system.  The main parameter is `classes`, which contains both parameters and state for each biopore class.  
 
 {{{
   const auto_vector<Biopore*> classes; // List of biopore classes.
