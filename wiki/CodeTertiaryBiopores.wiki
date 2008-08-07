@@ -104,7 +104,7 @@ First, `find_implicit_water` is called repeatedly with decreasing values of `ddt
 
 Then the resulting matrix sink term is examined, and `ddt` is further adjusted so that the amount of water removed from an active cell will never put the pressure below `pressure_end`.  Note that the cell will continue to be active, so if additional water is added through matrix flow, it may be removed in the next large timestep.
 
-Finally, `find_implicit_water` is called again with the adjusted value of `ddt`to find the final tertiary state, and the resulting source terms.
+Finally, `find_implicit_water` is called again with the adjusted value of `ddt` to find the final tertiary state, and the resulting source terms.
 
 = Large timestep interface to solutes = 
 
