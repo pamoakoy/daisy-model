@@ -32,7 +32,7 @@ specify how to convert to the SI base units `[m/s]`.
 
 See the reference manual for a full list of SI dimensions and base units.
 
-You can also define your own base units, independently of the eight SI
+You can also define your own base and derived units, independently of the eight SI
 defined dimensions.
 {{{
   (defunit EUR base "European currency.")
