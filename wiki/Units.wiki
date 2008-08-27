@@ -1,6 +1,8 @@
 #summary How to define your own units.
 #labels Subject-Daisy
 
+= User defined units =
+
 You can define your own units.  The most useful way to do this is to derive from `SIfactor`, like this:
 {{{
   (defunit [mph] SIfactor
@@ -44,3 +46,7 @@ defined dimensions.
 }}}
 However, there is little point in doing this, as none of the existing
 Daisy code expects these units.
+
+= Caveat =
+
+When converting between units, only the 8 SI dimensions are considered.  This mean that Daisy will happily convert `[kg N/ha]` to `[g C/m^2]`, and worse, that Daisy will consider the convertion factor between `[kg NO3]` and `[kg NO3-N]` to be 1.0, as both have the same SI base `[kg]`.
