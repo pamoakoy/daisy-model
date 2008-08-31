@@ -27,7 +27,7 @@ The pressure in the matrix changes between the small timesteps, which means that
 == Finding a solution ==
 
 {{{
-  virtual bool find_implicit_water (const Anystate& old_state, 
+  virtual void find_implicit_water (const Anystate& old_state, 
                                     const Geometry& geo, 
                                     const Soil& soil,  
                                     const SoilHeat& soil_heat, 
@@ -35,7 +35,7 @@ The pressure in the matrix changes between the small timesteps, which means that
                                     const double dt) = 0;
 }}}
 
-This is the main function for finding the solution.  If a solution is found, the function will return true, and the state of the `Tertwater` object will be the state of the solution.  If no solution is found, the function will return false, and the state will be reverted to `old_state`.
+This is the main function for finding the solution.  
 
 == Finding the sink terms ==
 
@@ -44,7 +44,8 @@ This is the main function for finding the solution.  If a solution is found, the
                             std::vector<double>& S_drain) const = 0;
 }}}
 
-This functions returns the matrix sink terms that corresponds to the solution found by `find_implicit_water`.   It is only meaningful after `find_implicit_water` has successfully managed to find a solution.
+This functions returns the matrix sink terms that corresponds to the solution found by `find_implicit_water`.   It is only meaningful after a call to `find_implicit_water`.
+
 
 = Putting it all together =
 
@@ -62,14 +63,10 @@ At the beginning of each small timestep, we need to store the state of the biopo
 == Step 2: At the beginning of the convergence loop ==
 
 {{{
-  if (!tertiary.find_implicit_water (h3_previous, geo, soil, soil_heat, h_std, ddt))
-    {  //We need smaller timesteps
-      iterations_used = max_iterations + 1;
-      break;
-    }
+  tertiary.find_implicit_water (h3_previous, geo, soil, soil_heat, h_std, ddt);
 }}}
 
-Before trying to find a new solution for the matrix potential, we try to find a new solution for the water content in the biopores.  It might not be possible to find such a solution, in which case we want to break out of the convergence loop, and retry with smaller timesteps.  We set the number of iterations used to one more than the maximal number allowed, to signal that convergence was not reached.  
+Before trying to find a new solution for the matrix potential, we find a new solution for the water content in the biopores.  
 
 {{{                          
   tertiary.matrix_sink (S_matrix, S_drain);
