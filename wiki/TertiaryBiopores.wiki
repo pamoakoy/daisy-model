@@ -23,16 +23,16 @@ As you see, the main, and only mandatory, parameter is `classes`.  There are mor
 
 = The `biopore` component =
 
-There are some parameters that are shared by both biopore models, notable where they start (`height_start`) and ends (`height_end`), their diameter, and how common they are (`density).  
+There are some parameters that are shared by both biopore models, notable where they start (`height_start`) and ends (`height_end`), their diameter, and how common they are (`density`).  
 
-The last has a specific twist, as the density may vary with the *x* dimension if you have a two dimensional setup.  For example, if you have the drain pipe located at *x = 0 [cm]*, you may want to decrease the density of biopores ending in the drain pipe as a function of *x*.  One way to do this is with the `plf` function.
+The last has a specific twist, as the density may vary with the _x_ dimension if you have a two dimensional setup.  For example, if you have the drain pipe located at _x = 0_ cm, you may want to decrease the density of biopores ending in the drain pipe as a function of _x_.  One way to do this is with the `plf` function.
 {{{
   (density (plf x (range [m^-2])
                   (domain [cm])
                   (points (20 10)
                           (30 0))))
 }}}
-Here, we specify that there are 10 biopores (of the given class) per square meter in the area from 0 to 20 cm from the drain pipes (at *x = 0*), no biopores when you are more than 30 cm from the drain pipes, and linear interpolation in between.  That means there will be a density of 5 biopores per square meter at 25 cm from the drain pipe.
+Here, we specify that there are 10 biopores (of the given class) per square meter in the area from 0 to 20 cm from the drain pipes (at _x = 0_), no biopores when you are more than 30 cm from the drain pipes, and linear interpolation in between.  That means there will be a density of 5 biopores per square meter at 25 cm from the drain pipe.
 
 Look in the `number` component of the reference manual for alternatives to the `plf` function.
 
