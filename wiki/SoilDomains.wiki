@@ -27,6 +27,6 @@ The `macro` parameter used to be located under `SoilWater` under the same name, 
 
 The `old` tertiary model only works with the `vertical` movement model, therefore `none` is the default value for 2D simulations for now.
 
-New models for tertiary transport are under active construction.
+New models for tertiary transport are under active construction, the first one being the [TertiaryBiopores  biopores model].
 
 See CodeTertiary for information on the C++ implementation of tertiary transport.
