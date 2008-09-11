@@ -17,7 +17,7 @@ on GNU/Linux.
 
 The GUI is build with
 {{{
-  daisyw.exe
+  make daisyw.exe
 }}}
 on MS Windows.  There are not yet any rules for building it under GNU/Linux.
 
