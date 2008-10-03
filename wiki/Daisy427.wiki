@@ -13,7 +13,7 @@ This one match the simulation at a user specified interval.  It takes the same p
 
 == The optional `step` parameter removed from the ..`ly` conditions ==
 
-This affects conditions `hourly`, `daily` `weekly`, `monthly` and `yearly` conditions.  They now always matches once at the last time step of the interval they are named after.
+This affects conditions `hourly`, `daily`, `weekly`, `monthly` and `yearly` conditions.  They now always matches once at the last time step of the interval they are named after.
 
 == New `minutely` and `secondly` conditions ==
 
