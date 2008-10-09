@@ -22,6 +22,11 @@ to the column definition.
 
 The *Penman-Monteith Shuttleworth-Wallace* model was written primarily by [PeterVanDerKeur Peter van der Keur] for the [RSModel RS-Model] [EU] project.
 
+The model should only be used when you have hourly weather data, inclusive wind speed and humidity.  
+
+The model will deliver temperature for the leaves (not partitioned in dark and light) and canopy air (a hypothetical point in the middle of the canopy), as well production stress based on estimated canopy resistances.  It will not actually change the transpiration, only the production.
+
+
 {{{
   (Bioclimate original (svat PMSW))
 }}}
@@ -30,6 +35,12 @@ The *Penman-Monteith Shuttleworth-Wallace* model was written primarily by [Peter
 
 The *Sun Shade Open Canopy* model.
 
+The model should only be used when you have hourly weather data, inclusive wind speed and humidity.  Also, the crops should be based on the FCC3 or or FCC4 photosynthesis models.
+
 {{{
-  (Bioclimate original (svat SSOC))
+  (Bioclimate original
+    (svat SSOC)
+    (raddist sun-shade))
 }}}
+
+Farquhar 
