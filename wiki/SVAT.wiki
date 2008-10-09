@@ -1,0 +1,27 @@
+#summary The *S*oil *V*egetation and *At*mosphere system
+#labels Subject-Daisy
+
+= The `svat` component =
+
+The SVAT component is repsonsible for maintaining energy balance in the area between the soil and the free atmosphere.   In Daisy, it is located in the default Bioclimate module.  In Daisy, it is responsible for calculating temperatures for canopy (both dark and light leaves), suggesting transpiration (which may be modified if the root system is unable to deliver), and can optionally calculate a water stress that will limit crop production.  The individual models may calculate further fluxes, as well as resistances between the components of the system, but these will not be used outside the model.
+
+== The `none` model ==
+
+The none model will say that the canopy and soil surface both have the temperature of free air (above the canopy) read from the weather module.   No resistances will be calculated.  transpiration will be based on potential evapotranspiration further limited by available soil water.  No stress will be suggested, the root model will calculate its own stress.
+
+This model is enables by default, but can be enabled explicitly by adding 
+
+{{{
+  (Bioclimate original (svat none))
+}}}
+
+to the column definition.
+
+
+== The `PMSW` model ==
+
+The *Penman-Monteith Shuttleworth-Wallace* model was written primarily by [PeterVanDerKeur Peter van der Keur] for the [RSModel RS-Model] [EU] project.
+
+== The `SSOC` model == 
+
+The *Sun Shade Open Canopy* model.
