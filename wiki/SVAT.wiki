@@ -3,7 +3,7 @@
 
 = The `svat` component =
 
-The *S*oil *V*egetation and *At*mosphere component is repsonsible for maintaining energy balance in the area between the soil and the free atmosphere.   In Daisy, it is located in the default Bioclimate module.  In Daisy, it is responsible for calculating temperatures for canopy (both dark and light leaves), suggesting transpiration (which may be modified if the root system is unable to deliver), and can optionally calculate a water stress that will limit crop production.  The individual models may calculate further fluxes, as well as resistances between the components of the system, but these will not be used outside the model.
+The *Soil Vegetation and ATmosphere* component is repsonsible for maintaining energy balance in the area between the soil and the free atmosphere.   In Daisy, it is located in the default Bioclimate module.  In Daisy, it is responsible for calculating temperatures for canopy (both dark and light leaves), suggesting transpiration (which may be modified if the root system is unable to deliver), and can optionally calculate a water stress that will limit crop production.  The individual models may calculate further fluxes, as well as resistances between the components of the system, but these will not be used outside the model.
 
 == The `none` model ==
 
