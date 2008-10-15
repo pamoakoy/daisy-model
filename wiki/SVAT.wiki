@@ -26,7 +26,6 @@ The model should only be used when you have hourly weather data, inclusive wind 
 
 The model will deliver temperature for the leaves (not partitioned in dark and light) and canopy air (a hypothetical point in the middle of the canopy), as well production stress based on estimated canopy resistances.  It will not actually change the transpiration, only the production.
 
-
 {{{
   (Bioclimate original (svat PMSW))
 }}}
@@ -43,4 +42,4 @@ The model should only be used when you have hourly weather data, inclusive wind 
     (raddist sun-shade))
 }}}
 
-Farquhar 
+Sunlit and dark leaves will be given separate temperatures, and transpiration will be adjusted to match energy balance.
