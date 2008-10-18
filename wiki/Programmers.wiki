@@ -43,4 +43,4 @@ In general, we mostly follow the [http://www.gnu.org/prep/standards/standards.ht
 
 = See also =
 
-[http://www.ohloh.net/projects/daisy-model Ohloh source analysis].
+<wiki:gadget url="http://www.ohloh.net/projects/daisy-model/widgets/project_basic_stats.xml" height="240" border="1" />
