@@ -1,0 +1,12 @@
+#summary 2D root density model based on Gerwitz and Page
+#labels Subject-Daisy
+
+Here should be information about
+
+  * The physical/mathematical model.
+  * The Daisy `rootdens` model named `GP2D`.
+  * The Daisy `program` model named `GP2D`.
+  * The paper written on the model.
+  * The Excel utility.
+
+Maybe also an honorable mention to the [SAFIR] project that financed it.
