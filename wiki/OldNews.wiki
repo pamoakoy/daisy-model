@@ -1,5 +1,5 @@
 #summary Notable older news bullets.
-#labels Structure
+#labels Structure,Subject-Daisy
 
   * 2008-08-29: Daisy 4.45 released, with [OpenMI] [http://www.openmi.org/reloaded/users/using-openmi.php 1.4] support.
   * 2008-08-26: Daisy 4.43 released, with [Units user definable units].
