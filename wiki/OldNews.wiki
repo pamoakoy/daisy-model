@@ -1,0 +1,11 @@
+#summary Notable older news bullets.
+#labels Structure
+
+  * 2008-08-29: Daisy 4.45 released, with [OpenMI] [http://www.openmi.org/reloaded/users/using-openmi.php 1.4] support.
+  * 2008-08-26: Daisy 4.43 released, with [Units user definable units].
+  * 2008-07-15: Daisy 4.36 released.  See the [Daisy436 release notes].
+  * 2008-05-30: Daisy 4.30 released, part way to [SoilDomains better macropore support].
+  * 2008-03-29: [Animations] of water and nitrate flow are available.
+  * 2008-03-24: If you have trouble downloading, [http://www.dina.kvl.dk/~daisy/setup/daisy-4.28-setup.exe fetch Daisy 4.28 from Dina] instead.
+  * 2008-03-11: This is our new home page.  Isn't it cute?
+  * 2008-03-07: Daisy 4.27 released.  See the [Daisy427 release notes].
