@@ -10,7 +10,8 @@ The two main components of this project is
 
 Some Daisy related tasks include:
 
-  # Support for row crops.
+  # Support for row crops, including a [GP2D 2D root density] model.
   # Two dimensional soil description.
   # One or more tomato parameterization
+  # A [SVAT Soil Vegetation Atmosphere Transpher] (SVAT) model.
   # Much more.
