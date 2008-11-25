@@ -1,0 +1,16 @@
+#summary Colloids and colloid facilitated transport
+#labels Subject-Daisy,Proposal
+
+= Introduction =
+
+Chemicals in Daisy can appear in two forms, dissolved into the soil water, or sorbed to the soil minerals or organic matter.  Dissolved chemicals are transported using an algorithm chosen by the user, by default convection-dispersion.  Chemicals sorbed to the soil or organic matter may be transported as well, if the stuff it is sorbed to itself is mobile.   We call this "stuff" for _colloids_, it can be extracted from the soil water with a filter.  In Daisy, colloids are represented as a pseudo-chemical, and is transported using the same algorithm as used for dissolved chemicals.
+
+
+
+
+
+= TODO =
+
+Effekt: transport af stærkt sorberende kemikalier.
+
+
