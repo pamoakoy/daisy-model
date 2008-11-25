@@ -3,14 +3,27 @@
 
 = Introduction =
 
-Chemicals in Daisy can appear in two forms, dissolved into the soil water, or sorbed to the soil minerals or organic matter.  Dissolved chemicals are transported using an algorithm chosen by the user, by default convection-dispersion.  Chemicals sorbed to the soil or organic matter may be transported as well, if the stuff it is sorbed to itself is mobile.   We call this "stuff" for _colloids_, it can be extracted from the soil water with a filter.  In Daisy, colloids are represented as a pseudo-chemical, and is transported using the same algorithm as used for dissolved chemicals.
+Chemicals in Daisy can appear in two forms, dissolved into the soil water, or sorbed to the soil minerals or organic matter.  Dissolved chemicals are transported using an algorithm chosen by the user, by default a solution to the convection-dispersion equation.  Chemicals sorbed to the soil or organic matter may be transported as well, if the stuff it is sorbed to itself is mobile.   We call this "stuff" for _colloids_, it can be extracted from the soil water with a filter.  In Daisy, colloids are represented as a pseudo-chemical, and is transported using the same algorithm as used for dissolved chemicals.
 
+The effect of this is that we need to distinguish between three states for sorbing chemicals.  
+# Dissolved
+# Sorbed to colloids
+# Sorbed to immobile soil.
+The two first states are transported with the same algorithm, the third state is immobile.  
 
 
 
 
 = TODO =
 
+3 forms: P-solute, P-colloid, P-soil
+3 exchanges
+  P-solute with P-colloid: equilibrium
+  P-solute with P-soil: equilibrium
+  P-colloid with P-soil: follow colloids
+
+"Pure colloids"
+
+Instant vs. kinetic sorption.
+
 Effekt: transport af stærkt sorberende kemikalier.
-
-
