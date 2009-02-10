@@ -3,6 +3,10 @@
 
 = Changes =
 
+== OpenMI interface doesn't work ==
+
+Making it work again will be a priority for the comming work.
+
 == Major internal restructuring ==
 
 A lot of code has been modified, which potentially could mean many new
