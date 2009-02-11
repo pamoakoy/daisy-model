@@ -5,7 +5,7 @@
 
 == OpenMI interface doesn't work ==
 
-Making it work again will be a priority for the comming work.
+Fixed in 4.59.
 
 == Major internal restructuring ==
 
