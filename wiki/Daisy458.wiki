@@ -44,7 +44,7 @@ be found in the reference manual.
 == The vernalization crop submodule has been made into a component ==
 
 This means you have to specify `default` before the vernalization
-parameters in the crop parameterisation, like this:
+parameters in the crop parametrization, like this:
 
 {{{
    (Vernal default (DSLim 0.33) (TaLim 5.00) (TaSum -50.0))
@@ -60,7 +60,7 @@ still find them in the daisy.log file, and the new "Failure" log
 paramterization will also include information about when the failures
 occured in an easy parsable format.
 
-== Sample taastrup.dwf extendended and renamed to dk-taastrup.dwf ==
+== Sample taastrup.dwf extended and renamed to dk-taastrup.dwf ==
 
 In now contains weather data until 2008-10-31.  Note that the level of
 quality control of the newer data has been reduced.
@@ -96,7 +96,7 @@ to imoobile soil.  See `test-colloids.dai` for an example.
 == Colloids work ==
 
 The `colloid` chemical and the `colloids` chemistry have been removed
-from the `chemistry.dai` file, and move to the `test-colloids.dai`
+from the `chemistry.dai` file, and moved to the `test-colloids.dai`
 file instead.  The later now contains an example with both colloids
 and a colloid bound pesticide
 
