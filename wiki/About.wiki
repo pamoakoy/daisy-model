@@ -10,3 +10,5 @@ The timescale go from hourly fluxes to changes in soil carbon pools over centuri
 The Daisy model assumes homogeneous fields, that is no significant horizontal transport, with exceptions made for simulating row crops or drain pipes.  To model larger areas, Daisy should be coupled with a GIS system.
 
 The input to Daisy is through text files.  Output is also text files, with the exception of simple progress messages during the simulation.  The code can be accesses from a command line utility, a simple GUI (Qt based), or from another program through C, C++, C# or [OpenMI] interfaces.
+
+Daisy is developed by members of the [Agrohydrology] group at [IGM Department of Basic Sciences and Environment], [LIFE  Faculty of Life Sciences], [KU University of Copenhagen].  The primary responsible scientist is [SorenHansen Søren Hansen].
