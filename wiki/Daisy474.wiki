@@ -4,7 +4,7 @@
 = Changes =
 * 4.74
 
-== New 'area' column parameter ==
+== New `area` column parameter ==
 
 When you log multiple columns to the same log file, the values will be
 weighted with this parameter.  Example: If you have one column
@@ -28,7 +28,7 @@ Specifically, biopores.
 
 == More units and expressions ==
 
-== New 'accumulate' plot parameter ==
+== New `accumulate` plot parameter ==
 
 == Changes to `dk-soil.dai` ==
 
