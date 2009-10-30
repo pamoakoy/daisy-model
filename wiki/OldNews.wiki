@@ -1,6 +1,11 @@
 #summary Notable older news bullets.
 #labels Structure,Subject-Daisy
 
+  * 2008-11-20: Daisy 4.57 released, introducing [Colloids colloids] support.
+  * 2008-11-12: Daisy 4.55 released, with new [GP2D] program for 2D root density.
+  * 2008-11-10: Daisy 4.54 released. See the [Daisy454 release notes].
+  * 2008-10-15: Daisy 4.52 released, with the Sun-Shade Open Canopy [SVAT] model.
+  * 2008-09-03: Daisy 4.46 released, introducing the [TertiaryBiopores biopores tertiary model].
   * 2008-08-29: Daisy 4.45 released, with [OpenMI] [http://www.openmi.org/reloaded/users/using-openmi.php 1.4] support.
   * 2008-08-26: Daisy 4.43 released, with [Units user definable units].
   * 2008-07-15: Daisy 4.36 released.  See the [Daisy436 release notes].
