@@ -2,7 +2,6 @@
 #labels Subject-Release
 
 = Changes =
-* 4.74
 
 == New `area` column parameter ==
 
