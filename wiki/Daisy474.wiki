@@ -35,7 +35,7 @@ Specifically, biopores.
 The "Jyndevad Ap" and "Jyndevad C" now parameterised for Brooks and
 Corey hydraulic model.
 
-== New `pipes tertiary model ==
+== New `pipes` tertiary model ==
 
 This works like `pipe` groundwater model, but can be combined with any
 lower boundary.
