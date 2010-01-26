@@ -31,7 +31,7 @@ Note that two additional changes has been made to this model:
 
 1) The `LeafAIMod` parameter is taken into account when deciding when to switch from the forced LAI model to the leaf mass based model, which will avoid mysterious jumps in LAI when switching model.  
 
-2) The forced LAI is now treated like other kinds of forced LAI, which mean the initial LAI can be found in the `ForcedCAI` log variable, and the mass based CAI can be found in the `SimCAI` log variable.  The LAI actually used can, as always, be found in the `CAI` log variable.
+2) The initial LAI is now treated like other kinds of forced LAI, which mean the initial LAI can be found in the `ForcedCAI` log variable, and the mass based CAI can be found in the `SimCAI` log variable.  The LAI actually used can, as always, be found in the `CAI` log variable.
 
 == New `release` seed model ==
 
