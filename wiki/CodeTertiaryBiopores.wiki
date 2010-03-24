@@ -40,18 +40,6 @@ Water may infiltrate through the surface if the pond is higher than `pond_max` a
 
 Related to this is the two functions `capacity` and `infiltrate`.  The first simply calculate how much "free space" there is in the tertiary domain, by accumulating the capacity of individual classes.  The second actually divide the incoming water among the classes.  The division is done relatively to the numeric biopore density, so that a class with twice as many biopores will receive twice as much water, at first independently of the size of the biopores.  However, care is also taken that biopore classes doesn't receive more than their capacity (which depend on the size), and that the extra water is divided among the remaining classes by the same rules.  Biopores that end in drain pipes have an infinite storage capacity in the model, but the infiltration is still limited by how fast the biopores can transport the water, which depends on the density and diameter.
 
-
-= Small  or large timesteps? =
-
-The user must select whether exchange with matrix domain should be calculated at the beginning of the large timesteps, or at the beginning of the small timesteps inside the solution to Richard's equation.
-
-{{{
-  const bool use_small_timesteps_; // True, iff we want to calculate S in R.E.
-  Tertsmall& implicit ();
-}}}
-
-If the user select small timesteps, the `implicit` will return `*this`, otherwise it will return `Tertsmall::none ()`, and the `tick` function called at the beginning or each large timestep will calculate the matrix water exchange.
-
 = Small timestep interface =
 
 The main function in the small timestep interface may be `find_implicit_water`.  The purpose of this function is to find the solution to 
@@ -96,16 +84,10 @@ The `matrix_sink` function call `add_matrix_sink` for all biopore classes, which
 
 = Large timestep interface to water =
 
-The `tick` functions will calculate infiltration from surface for all cell near the top, using the `capacity` and `infiltrate` functions.
-
-If the user has selected small timesteps, it is finished.  If not, the `tick` function has to calculate the interaction between the matrix and tertiary domains.  Since this interaction is often far to fast to do for a large timestep, the `tick` function will cheat and pretend the timestep is smaller.  The effect of this is that tertiary transport will be much slower than what our understanding of the physics dictates.  But it will still bypass the matrix, and thus preserve one important aspect.
+The `tick` functions will calculate infiltration from surface for all cell near the top, using the `capacity` and `infiltrate` functions. The `tick` function then has to calculate the interaction between the matrix and tertiary domains.  Since this interaction is often far to fast to do for a large timestep, the `tick` function will cheat and pretend the timestep is smaller.  The effect of this is that tertiary transport will be much slower than what our understanding of the physics dictates.  But it will still bypass the matrix, and thus preserve one important aspect.
 
 First, `find_implicit_water` is called repeatedly with decreasing values of `ddt`, until we wind a timestep small enough to get a solution.
 
 Then the resulting matrix sink term is examined, and `ddt` is further adjusted so that the amount of water removed from an active cell will never put the pressure below `pressure_end`.  Note that the cell will continue to be active, so if additional water is added through matrix flow, it may be removed in the next large timestep.
 
 Finally, `find_implicit_water` is called again with the adjusted value of `ddt` to find the final tertiary state, and the resulting source terms.
-
-= Large timestep interface to solutes = 
-
-The large timestep interface to solutes has not been implemented yet.
