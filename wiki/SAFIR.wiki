@@ -16,7 +16,7 @@ Some Daisy related tasks include:
   # A [SVAT Soil Vegetation Atmosphere Transpher] (SVAT) model.
   # Much more.
 
-The documentation can be found in the SAFIR deliverables listed below
+The documentation can be found on the [http://www.safir4eu.org/ SAFIR home page] in the deliverables linked to below.
 
 == [http://www.safir4eu.org/Lib/SAFIR/Deliverable/D3_2.pdf D3.2] ==
 
