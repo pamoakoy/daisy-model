@@ -6,7 +6,7 @@
 The basic idea behind partial rootzone drying (PRD) is that by keeping part of the rootzone dry, the plant will generate water stress hormones (ABA), which will cause the leaf stomata to close, which will reduce both transpiration and production.  For low concentrations, the reductions in transpiration will be much larger than the reduction in production, making it desirable in situation where water supply for irrigation is limited.
 In practice, one divide the root zone for each plant in two side, and keep one side dry and the other wet, by selective irrigation.  The two sides must be switched during the irrigation period, to keep the effect working.
 
-To support this in Daisy, a number of new models must be introduced:
+To support this in Daisy, a number of new models have been introduced:
 
   * Farquhar-Ball photosynthesis.
   * ABA effect on photosynthesis.
@@ -18,7 +18,7 @@ To support this in Daisy, a number of new models must be introduced:
 
 In Daisy version 4.31, a setup file named "test-prd.dai" can be found in the "sample" directory.  The file demonstrates how to enable all these models in order to simulate a PRD experiment. 
 
-This work is funded by the [SAFIR] project.
+This work was funded by the [SAFIR] project, where the work has been documented.
 
 = Long terms goals ==
 
