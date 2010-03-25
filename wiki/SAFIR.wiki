@@ -15,3 +15,17 @@ Some Daisy related tasks include:
   # One or more tomato parameterization
   # A [SVAT Soil Vegetation Atmosphere Transpher] (SVAT) model.
   # Much more.
+
+The documentation can be found in the SAFIR deliverables listed below
+
+== [http://www.safir4eu.org/Lib/SAFIR/Deliverable/D3_2.pdf D3.2] ==
+
+  * Annex 3.1: 2D Water movement
+  * Annex 3.3: Advanced photosynthesis module
+  * Annex 3.4: 2D Root density ([GP2D])
+  * Annex 3.5: Plant hormone [ABA] production in roots (for [PRD]).
+  * Annex 3.6: Advanced [SVAT] module.
+
+== [http://www.safir4eu.org/Lib/SAFIR/Deliverable/D7_1_D7_2.pdf D7.1 & D7.2] ==
+
+  * Section 3.4: [OpenMI] interface for Daisy.
