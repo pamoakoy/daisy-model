@@ -9,4 +9,4 @@ Here should be information about
   * The paper written on the model.
   * The Excel utility.
 
-Maybe also an honorable mention to the [SAFIR] project that financed it.
+Maybe also an honorable mention to the [SAFIR] project that financed it, and where the model is documented.
