@@ -47,3 +47,5 @@ The model should only be used when you have hourly weather data, inclusive wind 
 Sunlit and dark leaves will be given separate temperatures, and transpiration will be adjusted to match energy balance.
 
 The `SSOC` log parametrization will give you lots of information about the internal state of the SVAT system.
+
+The development was funded by the [SAFIR] project, where you can also find more detailed documentation.
