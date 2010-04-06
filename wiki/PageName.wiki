@@ -17,7 +17,7 @@ the Taastrup agrometeorological station.
 The effect of is that transpiration and soil evaporation increase, and
 evaporation from ponded and intercepted water decreases.
 
-== Most management actions are now instantanious ==
+== Most management actions are now instantaneous ==
 
 They used to take one timestep (1 hour).
 
@@ -45,38 +45,39 @@ specified.  For example
                       (NH4_fraction 0.5 [])))
 }}}
 
-will start the irrigation and then immidiately fertilize in the first
+will start the irrigation and then immediately fertilize in the first
 hour.  The irrigation will then continue for two more hours, without
 need for further manager involvement.
 
-This affects the 'activity' action model.  The change was made to make
+This affects the `activity` action model.  The change was made to make
 management more independent of the selected timestep, and because the
 old semantics could be problematic to get right.
 
-== New EpFacWet canopy parameter ==
+== New `EpFacWet` canopy parameter ==
 
-Specifies K_c for wet surface.  By default it is identical to EpFac.
+Specifies `K_c` for wet surface.  By default it is identical to `EpFac`.
 
-== The FAO_PM reference evapotranpiration model used actual albedo ==
+== The `FAO_PM` reference evapotranpiration model used actual albedo ==
 
 Not it used the reference value.
 
-== The FAO_PM model will now use wet surface reference ==
+== The `FAO_PM` model will now use wet surface reference ==
 
-== New biopores tertiary model parameter 'active_msg' ==
+== New `biopores` tertiary model parameter `active_msg` ==
 
-Set this to 'cell' (old style), 'range' (new default) or 'none' to control
+Set this to `cell` (old style), `range` (new default) or `none` to control
 message when biopores are activated or deactivated.
 
-== New hydraulic model 'B_C_inverse' ==
+== New hydraulic model `B_C_inverse` ==
 
-This is an version of the Burdine/Campbell model where the 'b' and
-'h_b' parameters are found from the soil wilting point and field
+This is an version of the Burdine/Campbell model where the `b` and
+`h_b` parameters are found from the soil wilting point and field
 capacity.
 
-The 'b' and 'h_b' parameter values will be written to the daisy.log
+The `b` and `h_b` parameter values will be written to the daisy.log
 file.
 
+{{{
 (defhorizon Ap FAO3
   "Andeby top soil."
   (clay 8.0 [%]) (silt 10.5 [%]) (sand 81.5 [%])
@@ -87,14 +88,15 @@ file.
              (Theta_wp 0.03 [])
              (Theta_fc 0.2 [])
              (Theta_sat 0.4 [])))
+}}}
 
-== New 'sorption' reaction model ==
+== New `sorption` reaction model ==
 
-Faster than 'equilibrium', more flexible than 'adsorption'
+Faster than `equilibrium`, more flexible than `adsorption`.
 
-== The 'aperture' secondary model take new 'use_secondary' parameter ==
+== The `aperture` secondary model take new `use_secondary` parameter ==
 
-Set this to false to make 'aperture' only affect hydraulic
+Set this to false to make `aperture` only affect hydraulic
 conductivity, without introducing a secondary domain for solute
 transport.
 
