@@ -1,0 +1,260 @@
+\documentclass[a4paper]{article}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[danish]{babel}
+\usepackage{natbib}
+\bibliographystyle{apalike}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{placeins}
+\pagestyle{fancy}
+\rhead{\today}
+
+\newcommand{\horfig}[2]{
+\begin{figure}[htbp] 
+  \includegraphics[width=0.5\columnwidth]{fig/#1-#2-Theta}\includegraphics[width=0.5\columnwidth]{fig/#1-#2-K}
+  \caption{Hydrauliske egenskaber for #1 #2.  MACRO angiver den
+    oprindelige parameterisering, Daisy den modificerede
+    parameterisering, og HYPRES refererer til parametre estimeret med
+    pedotransferfunktionen beskrevet i \citet{hypres}.}
+  \label{fig:#1-#2}
+\end{figure}
+}
+
+\begin{document}
+
+\section*{Daisy simulation for Silstrup og Estrup}
+
+\subsection*{Silstrup}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-weather}
+  \end{center}
+  \caption{Akkumuleret nedbør og fordampning, samt timeværdier for
+    temperatur for målestationen i Silstrup.  Potentiel og aktuel
+    fordamppning er identiske når der ikke er vandstress.}
+  \label{fig:Silstrup-weather}
+\end{figure}
+
+\horfig{Silstrup}{Ap}
+
+\horfig{Silstrup}{B}
+
+\horfig{Silstrup}{C}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-gw}
+  \end{center}
+  \caption{Grundvandsstand for Silstrup.}
+  \label{fig:Silstrup-gw}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-theta-SW025cm}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-theta-SW060cm}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-theta-SW110cm}
+  \end{center}
+  \caption{Jordvand for målepunkt S1 i Silstrup.}
+  \label{fig:Silstrup-theta}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-sc-bromide}
+  \end{center}
+  \caption{Bromid i jorden i en meters dybde ved S1 i Silstrup.}
+  \label{fig:Silstrup-sc-bromide}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-horizontal}
+  \end{center}
+  \caption{Pesticider i jorden i 3,5 meters dybde i Silstrup.}
+  \label{fig:Silstrup-horizontal}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-drain}
+  \end{center}
+  \caption{Drænafstrøming i Silstrup.}
+  \label{fig:Silstrup-drain}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-drain-acc}
+  \end{center}
+  \caption{Akkumuleret drænafstrømning i Silstrup.}
+  \label{fig:Silstrup-drain-acc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Bromide-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Dimethoate-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Fenpropimorph-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Glyphosate-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Metamitron-weekly}
+  \end{center}
+  \caption{Weekly drain flow of Bromide and selected pesticides.}
+  \label{fig:Silstrup-weekly}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Bromide-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Dimethoate-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Fenpropimorph-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Glyphosate-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-Metamitron-acc}
+  \end{center}
+  \caption{Accumulated drain flow of Bromide and selected pesticides.}
+  \label{fig:Silstrup-acc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-leak150bromide}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-leak150}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-leak150acc}
+  \end{center}
+  \caption{Simuleret udvaskning i 150 cm, 30 cm under bioporer.}
+  \label{fig:Silstrup-leak150}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Silstrup-colloid}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-biopore}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-biopore-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-biopore-drain}\\
+    \includegraphics[width=\columnwidth]{fig/Silstrup-biopore-drain-acc}
+  \end{center}
+  \caption{Kolloider i drænvand, samt bioporeaktivitet i 5 forskellige
+    jordlag.}
+  \label{fig:Silstrup-biopore}
+\end{figure}
+
+\end{document}
+\FloatBarrier
+\subsection*{Estrup}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-weather}
+  \end{center}
+  \caption{Akkumuleret nedbør og fordampning, samt timeværdier for
+    temperatur for målestationen i Estrup.  Potentiel og aktuel
+    fordamppning er identiske når der ikke er vandstress.}
+  \label{fig:Estrup-weather}
+\end{figure}
+
+\horfig{Estrup}{Ap}
+
+\horfig{Estrup}{B}
+
+\horfig{Estrup}{C1}
+
+\horfig{Estrup}{C2}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-gw}
+  \end{center}
+  \caption{Grundvandsstand for Estrup.}
+  \label{fig:Estrup-gw}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-theta-SW025cm}
+  \end{center}
+  \caption{Jordvand for målepunkt S1 i Estrup.}
+  \label{fig:Estrup-theta}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-sc-bromide}
+  \end{center}
+  \caption{Bromid i jorden i en meters dybde ved S1 i Estrup.}
+  \label{fig:Estrup-sc-bromide}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-horizontal}
+  \end{center}
+  \caption{Pesticider i jorden i 3,5 meters dybde i Estrup.}
+  \label{fig:Estrup-horizontal}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-drain}
+  \end{center}
+  \caption{Drænafstrøming i Estrup.}
+  \label{fig:Estrup-drain}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-drain-acc}
+  \end{center}
+  \caption{Akkumuleret drænafstrømning i Estrup.}
+  \label{fig:Estrup-drain-acc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-Bromide-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Dimethoate-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Fenpropimorph-weekly}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Glyphosate-weekly}\\
+  \end{center}
+  \caption{Weekly drain flow of Bromide and selected pesticides.}
+  \label{fig:Estrup-weekly}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-Bromide-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Dimethoate-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Fenpropimorph-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-Glyphosate-acc}\\
+  \end{center}
+  \caption{Accumulated drain flow of Bromide and selected pesticides.}
+  \label{fig:Estrup-acc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-leak150bromide}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-leak150}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-leak150acc}
+  \end{center}
+  \caption{Simuleret udvaskning i 150 cm, 30 cm under bioporer.}
+  \label{fig:Estrup-leak150}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\columnwidth]{fig/Estrup-colloid}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-biopore}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-biopore-acc}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-biopore-drain}\\
+    \includegraphics[width=\columnwidth]{fig/Estrup-biopore-drain-acc}
+  \end{center}
+  \caption{Kolloider i drænvand, samt bioporeaktivitet i 5 forskellige
+    jordlag.}
+  \label{fig:Estrup-biopore}
+\end{figure}
+
+\end{document}
