@@ -1,10 +1,7 @@
 #summary Variable timestep support in Daisy.
 #labels Subject-Daisy
 
-= Variable timestep = 
-
-
-Yo can now allow Daisy to temporarily decrease timesteps in order to achieve more stable results.  You do this by setting the parameter `minimal_timesteps`, like this:
+You can now allow Daisy to temporarily decrease timesteps in order to achieve more stable results.  You do this by setting the parameter `minimal_timesteps`, like this:
 
 {{{
   (minimal_timestep (microseconds 1))
