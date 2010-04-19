@@ -11,8 +11,7 @@ Here is an example with two biopore classes.
                                        (height_end -145 [cm])
                                        (density 100 [m^-2])
                                        (diameter 10 [mm])
-                                       (R_primary 100 [h])
-                                       (R_secondary 10 [h]))
+                                       (K_wall_relative 1 [%]))
                                (drain  (height_start -5 [cm])
                                        (height_end -100 [cm])
                                        (diameter 10 [mm])
@@ -38,7 +37,7 @@ Look in the `number` component of the reference manual for alternatives to the `
 
 == The `matrix` model ==
 
-The `matrix` model furthermore adds resistances for water leaving the biopore to the primary domain (`R_primary`) or secondary domain (`R_secondary`).  Which one of the two is used depends on whether the soil at the place where the water is leaving the biopore has a secondary domain or not.  
+The `matrix` model furthermore adds resistances for water leaving the biopore to the primary domain (K_wall_relative).  The parameter denote the conductivity of the biopore wall, compare to the surrounding matrix.  The wall thickness is assumed to be 10% of the biopore diameter.
 
 == The `drain` model ==
 
