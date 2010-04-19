@@ -37,7 +37,7 @@ Look in the `number` component of the reference manual for alternatives to the `
 
 == The `matrix` model ==
 
-The `matrix` model furthermore adds resistances for water leaving the biopore to the primary domain (K_wall_relative).  The parameter denote the conductivity of the biopore wall, compare to the surrounding matrix.  The wall thickness is assumed to be 10% of the biopore diameter.
+The `matrix` model furthermore adds resistances for water leaving the biopore to the primary domain (K_wall_relative).  The parameter denote the conductivity of the biopore wall, compare to the surrounding matrix.  The wall thickness is assumed to be 10% of the biopore radius.
 
 == The `drain` model ==
 
