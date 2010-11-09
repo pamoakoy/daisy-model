@@ -1,6 +1,14 @@
 #summary Notable older news bullets.
 #labels Structure,Subject-Daisy
 
+  * 2010-04-13: Daisy 4.86 Some internal changes.
+  * 2010-04-09: Daisy 4.85 Made albedo logable.
+  * 2010-04-09: Daisy 4.84 Drain moved, surface decompose changed.
+  * 2010-04-07: Daisy 4.83 fixes bug in new functionality.
+  * 2010-04-06: [Daisy481 Daisy 4.81] with changes to rain and evapotranspiration.
+  * 2010-03-02: Daisy 4.79 with less bare soil and litter evaporation.
+  * 2009-10-23: [Daisy474 Daisy 4.74] released. 
+  * 2009-02-10: [Daisy458 Daisy 4.58] released with major restructuring.
   * 2008-11-20: Daisy 4.57 released, introducing [Colloids colloids] support.
   * 2008-11-12: Daisy 4.55 released, with new [GP2D] program for 2D root density.
   * 2008-11-10: Daisy 4.54 released. See the [Daisy454 release notes].
