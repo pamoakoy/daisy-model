@@ -1,9 +1,9 @@
-#summary Daisy 4.01 is the latest stable version.
+#summary Daisy 4.01 is no longer recommended.
 #labels Subject-Release
 
-Daisy is currently undergoing a lot of changes, the most significant being support for 2D geometries.  The latest version before these changes may therefore be preferred for stability reasons.
+Daisy have been significantly changed since 4.01, the most significant being (optional) support for 2D geometries.  These changes have mostly stabilized by now, so we no longer recommend version 4.01.  Currently, we recommend new users to get the latest version.
 
-You can [http://daisy-model.googlecode.com/files/Daisy%204.01.zip fetch version 4.01 here].
+You can still [http://daisy-model.googlecode.com/files/Daisy%204.01.zip fetch version 4.01 here].
 
 Note that the MS Windows installer was not written back then, so you have to unpack the archive yourself.  Version 4.01 of "sample" and "lib" directories are also included, as well as version 4.00 of the reference manual and tutorial.
 
