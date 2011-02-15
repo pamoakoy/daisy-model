@@ -70,13 +70,12 @@ If you specify a single number, it is assumed to represent the whole year.
 
 The new `table` model differs from the `default` model on three points.
 
-# The file name is specified with an explicit `file` parameter.  E.g. 
+  # The file name is specified with an explicit `file` parameter.  E.g. 
 {{{
   (weather table (file "dk-taastrup.dwf"))
 }}}
-# The `missing_years' parameter is not supported.
-
-# The `table` model can be used with the `combine` and `time` models, explained below.
+  # The `missing_years' parameter is not supported.
+  # The `table` model can be used with the `combine` and `time` models, explained below.
 
 == New `const` model ==
 
