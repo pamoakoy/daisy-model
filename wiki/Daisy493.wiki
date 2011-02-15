@@ -134,7 +134,7 @@ only a selected period.  For example
                            (source table (file "dk-taastrup.dwf"))))
                   ((source table (file "dk-taastrup.dwf")))))
 }}}
-will use data from "dk-taastrup.dwf", with the exception that 2002
+will use data from `dk-taastrup.dwf`, with the exception that 2002
 data will be used for 2006.
 
 Note that while dates until the 28 of February will be an exact match
@@ -146,7 +146,7 @@ instead of `from` and `to`.
 {{{
   (weather time (source table (file "dk-taastrup.dwf"))
            (offset (days 1) (hours 0) (minutes 0) (seconds 0) (microseconds 0)))
-
+}}}
 This will use yesterdays weather data.  So will this
 {{{
   (weather time (source table (file "dk-taastrup.dwf"))
