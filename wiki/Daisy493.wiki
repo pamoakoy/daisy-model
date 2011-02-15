@@ -113,7 +113,7 @@ we instead use data from file `dk-taastrup-hourly.dwf`.
                   ((source table (file "dk-taastrup.dwf")))))
 }}}
 
-*** New `time` model.
+== New `time` model ==
 
 The time model allows you to use weather data from a different period.
 E.g.
