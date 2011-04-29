@@ -1,6 +1,0 @@
-#summary Daisy 2D Numerics
-#labels Subject-Paper
-
-This paper gives an overview of the 2D numerics in Daisy.
-
-[http://daisy-model.googlecode.com/files/Num2D-v2.pdf Daisy 2D Numerics]
