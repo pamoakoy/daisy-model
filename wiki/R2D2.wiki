@@ -1,4 +1,4 @@
 #summary Preferential flow in Daisy - for tile drained soil
 #labels Subject-Paper
 
-[http://code.google.com/p/daisy-model/downloads/detail?name=R2D2v1.pdf Preferential flow in Daisy - for tile drained soil]
+[http://daisy-model.googlecode.com/files/R2D2v1.pdf Preferential flow in Daisy - for tile drained soil]
