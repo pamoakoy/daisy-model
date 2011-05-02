@@ -1,6 +1,6 @@
-#summary Preferential flow in Daisy - for tile drained soil
+#summary Preferential flow in Daisy 2D - Concept and model for tile drained soil
 #labels Subject-Paper
 
 This note gives and overview of the concept, math, and code behind the support for preferential flow in tile drained soil in Daisy.
 
-[http://daisy-model.googlecode.com/files/R2D2v2.pdf Preferential flow in Daisy - for tile drained soil]
+[http://daisy-model.googlecode.com/files/R2D2v3.pdf Preferential flow in Daisy 2D - Concept and model for tile drained soil]
