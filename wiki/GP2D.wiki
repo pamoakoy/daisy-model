@@ -3,7 +3,7 @@
 
 Daisy includes a 2D root density model for row crops, based on Gerwitz and Page.
 
-We have a [GP2Dsheet standalone excel sheet] for fitting the model to your data.
+We have a [GP2Dsheet Excel sheet] for fitting the model to your data.
 
 ...
 
