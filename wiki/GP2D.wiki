@@ -1,12 +1,17 @@
 #summary 2D root density model based on Gerwitz and Page
 #labels Subject-Daisy
 
+Daisy includes a 2D root density model for row crops, based on Gerwitz and Page.
+
+We have a [GP2Dsheet standalone excel sheet] for fitting the model to your data.
+
+...
+
 Here should be information about
 
   * The physical/mathematical model.
   * The Daisy `rootdens` model named `GP2D`.
   * The Daisy `program` model named `GP2D`.
   * The paper written on the model.
-  * The Excel utility.
 
 Maybe also an honorable mention to the [SAFIR] project that financed it, and where the model is documented.
