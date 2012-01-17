@@ -1,17 +1,23 @@
 #summary 2D root density model based on Gerwitz and Page
 #labels Subject-Daisy
 
-Daisy includes a 2D root density model for row crops, based on Gerwitz and Page.
+Daisy includes a 2D root density model for row crops, based on Gerwitz and Page (1977). The model is quite simple, where Gerwitz and Pages showed a exponential decrease in root density with depth
+{{{
+    L(z) = L0 * exp(-a * z)
+}}}
+the 2D extension postulates a similar decrease with horizontal distance from the row
+{{{
+    L(x, z) = L00 * exp(-ax |x|) * exp(-az z)
+}}}
+where `L` is the root density, `|x|` is distance from row, `z` is depth below surface, and `L0`, `L00`, `a`, `ax`, and `az` are constants.
 
-We have an [GP2Dsheet Excel sheet] for fitting the model to your data.
+Daisy will calculate the constants given information row geometry, specific root length, root density at the edge of the root zone, the width and depth of the root zone, and the total root mass. The root mass and the size of the root zone are dynamic in the model, the rest are static parameters. This is described in a [GO2Dpaper scientific article].
 
-...
+These calculations are also available in static form in a [GP2Dsheet Excel sheet].  This sheet can be used for either estimating the spatial distribution of root density from the root zone size and total root mass, or alternatively, for estimating root zone size and total root mass from measurements of root density.
 
-Here should be information about
+Here should be information about:
 
-  * The physical/mathematical model.
   * The Daisy `rootdens` model named `GP2D`.
   * The Daisy `program` model named `GP2D`.
-  * The paper written on the model.
 
-Maybe also an honorable mention to the [SAFIR] project that financed it, and where the model is documented.
+The model was developed as part of the [SAFIR] project in order to better model and optimize [PRD] irrigation.
