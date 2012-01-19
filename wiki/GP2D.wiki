@@ -15,11 +15,13 @@ Daisy will calculate the constants given information row geometry, specific root
 
 These calculations are also available in static form in a [GP2Dsheet Excel sheet].  This sheet can be used for either estimating the spatial distribution of root density from the root zone size and total root mass, or alternatively, for estimating root zone size and total root mass from measurements of root density.
 
-Alternatively, you can use Daisy to calculate a static solution. You can find an example in the text file '[http://code.google.com/p/daisy-model/source/browse/trunk/sample/test-GP2D.dai test-GP2D.dai]' in the sample directory distributed together with Daisy.  The file should be self explaining. You run the example by dragging the file to the daisyw executable in the bin directory.  Or more comfortable from TextPad. Using Daisy additionally allows you to specify a soil limit for the root penetration.
+Alternatively, you can use Daisy to calculate a static solution. You can find an example in the text file '[http://code.google.com/p/daisy-model/source/browse/trunk/sample/test-GP2D.dai test-GP2D.dai]' in the 'sample' directory distributed together with Daisy.  The file should be self explaining. You run the example by dragging the file to the daisyw executable in the bin directory.  Or more comfortable from TextPad. Using Daisy additionally allows you to specify a soil limit for the root penetration.
 
-Here should be information about:
-
-  * The Daisy `rootdens` model named `GP2D`.
-  * The Daisy `program` model named `GP2D`.
-
-The model was developed as part of the [SAFIR] project in order to better model and optimize [PRD] irrigation.
+Daisy can also perform inverse modeling based on root density measurements. Again, a slightly more advanced model including soil limited root penetration is performed. Additionally, Daisy will calculate parameters for an 1D model, and perform an F-test to see if the 2D model is significantly better. The file '[http://code.google.com/p/daisy-model/source/browse/trunk/sample/rootdata.ddf rootdata.ddf]' shows the format expected for the file with root density measurments, and '[http://code.google.com/p/daisy-model/source/browse/trunk/sample/rootmatch.dai rootmatch.dai]' file contains an self explained example. Both can be found in the 'sample' directory. Running the example will produce the following output:
+  * A comparison of the measured and modeled root densities for the 2D model.
+  * A comparison of the measured and modeled root densities for the 1D model.
+  * The coefficient of determination for the 2D model.
+  * The estimated parameters for the 2D model.
+  * The coefficient of determination for the 1D model.
+  * The estimated parameters for the 1D model.
+  * The values for the F test.
