@@ -15,7 +15,7 @@ Daisy will calculate the constants given information row geometry, specific root
 
 These calculations are also available in static form in a [GP2Dsheet Excel sheet].  This sheet can be used for either estimating the spatial distribution of root density from the root zone size and total root mass, or alternatively, for estimating root zone size and total root mass from measurements of root density.
 
-Alternatively, you can use Daisy to calculate a static solution. You can find an example in the text file 'test-GP2D.dai' ([http://code.google.com/p/daisy-model/source/browse/trunk/sample/test-GP2D.dai 'test-GP2D.dai']) in the sample directory distributed together with Daisy.  The file should be self explaining. You run the example by dragging the file to the daisyw executable in the bin directory.  Or more comfortable from TextPad.
+Alternatively, you can use Daisy to calculate a static solution. You can find an example in the text file '[http://code.google.com/p/daisy-model/source/browse/trunk/sample/test-GP2D.dai test-GP2D.dai]' in the sample directory distributed together with Daisy.  The file should be self explaining. You run the example by dragging the file to the daisyw executable in the bin directory.  Or more comfortable from TextPad.
 
 Here should be information about:
 
