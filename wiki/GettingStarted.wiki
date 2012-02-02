@@ -3,7 +3,7 @@
 
 Note: These instructions assume you use MS Windows, there is another page for [Unix Linux, MacOS X and other Unix users].
 
-Fetch the latest Daisy version from the *Featured Downloads* box at the rigth side of the [http://code.google.com/p/daisy-model/ front page], and then follow the [TextPad instructions for configuring TextPad].  You should also fetch and install [ShowDaisyOutput].
+Fetch the latest Daisy version from the *Featured Downloads* box at the rigth side of the [http://code.google.com/p/daisy-model/ front page], and then follow the [TextPad instructions for configuring TextPad]. 
 
   * Examine what the installer installs. Explore the directory structure.
   * Read the [Tutorial tutorial].
