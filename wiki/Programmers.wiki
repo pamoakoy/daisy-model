@@ -3,31 +3,55 @@
 
 = Building Daisy =
 
-Daisy is build with GNU Make, and requires a Unix-like environment, such as GNU/Linux or Cygwin.  Cygwin is what is used for development, so GNU/Linux compilation may fail.
+Daisy is build with GNU Make, and requires a Unix-like environment, such as GNU/Linux or Cygwin.  The current (as of 2012-05-14) development environment is Ubuntu 10.04, while an old version Cygwin is used for building an executable for MS Windows. The code in CVS (post 5.11, pre 5.12) has been updated to compile with [http://www.ubuntu.com/ Ubuntu] 12.04 and the current (as of 2012-05-14) [http://www.cygwin.com/ Cygwin].
 
-The main target for building the command line executable is
-{{{
-  make daisy.exe
-}}}
-on MS Windows, or
-{{{
-  make daisy
-}}}
-on GNU/Linux.
+== Tools == 
 
-The GUI is build with
-{{{
-  make daisyw.exe
-}}}
-on MS Windows.  There are not yet any rules for building it under GNU/Linux.
+You need to install make and svn under both Cygwin and Ubuntu, they both come with the package manager.
 
-The compiler used for development is GNU GCC.  From time to time Daisy is ported to other compilers (Visual C++, C++Builder, and Intel ICC) but these tend to break again very soon.   We do use other building environments at all.
+=== Daisy source ===
+
+Fetch the Daisy source by clicking in the "Source" tab above, and follow the instructions.  Renamed the "daisy-model" directory to "daisy".
+
+=== Ubuntu ===
+
+Install boost and cxsparse from the package manager.
+
+Change the Makefile so CXSPARSELIB points the right place.
+
+    CXSPARSELIB = /usr/lib/libcxsparse.so.2.2.3
+
+You should now be able to build the daisy executable with 
+
+    make linux 
+
+Set the DAISYHOME environment variable to point to the Daisy directory, and you are ready to go.
+
+=== Cygwin ===
+
+Install i686-w64-mingw32-g++.exe from the package manager.
+
+Install [http://nsis.sourceforge.net/Main_Page NSIS]. Edit MAKENSIS in the Makefile to point to the right place.
+
+Fetch and unpack [http://www.boost.org/ boost], [http://www.cise.ufl.edu/research/sparse/UFconfig/ UFconfig], and [http://www.cise.ufl.edu/research/sparse/CXSparse/ CXSparse] from their sources. They should be unpacked in your Cygwin home directory.
+
+Compile UFconfig and CXSparse with the command "make CC=i686-w64-mingw32-g++.exe".
+
+Create a "libdeps" directory under daisy, and move CXSparse/Lib/libcxsparse.a there.
+
+Boost doesn't need compilation, but edit the "win64" target in the Makefile so BOOSTINC points in the right direction.
+
+You should now be able to create an installer by typing 
+
+    make setup-native
+
+in the daisy diretcory.
+
+== Misc ==
 
 The C# interface has only been compiled with Microsoft `csc.exe` under Cygwin.
 
-The GUI libraries used is Qt, only the free MinGW version for have been tested.
-
-The boost libraries is used and must always be available.  The 2D code also use `boost::ublas`, and Tim Davis' [http://www.cise.ufl.edu/research/sparse/CXSparse/ CXSparse generic sparse matrix library].
+The GUI libraries used is Qt.
 
 = Accessing Daisy = 
 
