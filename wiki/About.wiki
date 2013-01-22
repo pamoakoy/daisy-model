@@ -11,6 +11,7 @@ The default one dimensional Daisy transport model assumes homogeneous fields, wi
 
 The input to Daisy is through text files.  Output is also text files, with the exception of simple progress messages during the simulation.  The code can be accesses from a command line utility, a simple GUI (Qt based), or from another program through C, C++, C# or [OpenMI] interfaces.
 
-Daisy is developed by members of the [Agrohydrology] group at [IGM Department of Basic Sciences and Environment], [LIFE  Faculty of Life Sciences], [KU University of Copenhagen].  The primary responsible scientist is [SorenHansen Søren Hansen].
+Daisy is developed by members of the [Agrohydrology] research group at the Section for Environmental Chemistry and Physics at the Institute for Plant and Environmental Sciences at the Faculty of Science at [KU University of Copenhagen].  The primary responsible scientist is [SorenHansen Søren Hansen].
 
+[IGM Department of Basic Sciences and Environment], [LIFE  Faculty of Life Sciences], 
 See [Literature the Daisy bibliography] for additional (mostly external) references.
