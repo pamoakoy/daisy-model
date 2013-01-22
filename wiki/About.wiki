@@ -13,5 +13,4 @@ The input to Daisy is through text files.  Output is also text files, with the e
 
 Daisy is developed by members of the [Agrohydrology] research group at the Section for Environmental Chemistry and Physics at the Institute for Plant and Environmental Sciences at the Faculty of Science at [KU University of Copenhagen].  The primary responsible scientist is [SorenHansen Søren Hansen].
 
-[IGM Department of Basic Sciences and Environment], [LIFE  Faculty of Life Sciences], 
 See [Literature the Daisy bibliography] for additional (mostly external) references.
