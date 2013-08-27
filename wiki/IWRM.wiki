@@ -1,0 +1,11 @@
+#summary Instructional videos from IWRM
+#labels Subject-Demo
+
+= Instructional videos from IWRM =
+
+[http://tu-dresden.de/die_tu_dresden/fakultaeten/fakultaet_forst_geo_und_hydrowissenschaften/fachrichtung_wasserwesen/ifhm/hydrologie/Lehrstuhl/Mitarbeiter/homepages/sabineseidel Dr. Sabine Seidel] of [http://tu-dresden.de/ TU Dresden] has released two English language instructional videos on Daisy as part of [http:www.iwrm-education.de/ IWRM-education].
+
+
+[http://www.iwrm-education.de/#!seidel1 Crop growth modeling for improved irrigation scheduling - Part I]
+
+[http://www.iwrm-education.de/#!seidel2 Crop growth modeling for improved irrigation scheduling - Part II]
