@@ -46,7 +46,7 @@ If you open a Daisy setup file with a file name suffix of ".dai" with !TextPad, 
  # Now open "Configure" and "Preferences" again.
  # This time, click the box next to "Tools" to view the available tools.
  # Select "Daisy".
- # Copy the exact string {{{^\(..[^:]+\):\([0-9]+\):\([0-9]+\):}}} to text field named "Regular expression to match output", replacing the old content.  Use cut and paste to get it right.
+ # Copy the exact string {{{([^:\\]+):(\d+):(\d+)}}} to text field named "Regular expression to match output", replacing the old content.  Use cut and paste to get it right.
  # Choose "3" from the "Column" drop down menu.
  # Press Apply.
  # Exit !TextPad to make the changes take effect.
